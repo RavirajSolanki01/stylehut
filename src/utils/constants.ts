@@ -601,24 +601,24 @@ export const PRODUCT_DETAIL_CONSTANTS = {
   ],
   PRODUCT_RATING_PROGRESS_BAR_COLOR: [
     {
-      star: 1,
-      color: "#f16565",
-    },
-    {
-      star: 2,
-      color: "#fcb301",
-    },
-    {
-      star: 3,
-      color: "#72bfbc",
+      star: 5,
+      color: "#14958f",
     },
     {
       star: 4,
       color: "#14958f",
     },
     {
-      star: 5,
-      color: "#14958f",
+      star: 3,
+      color: "#72bfbc",
+    },
+    {
+      star: 2,
+      color: "#fcb301",
+    },
+    {
+      star: 1,
+      color: "#f16565",
     },
   ],
   CUSTOMER_PRODUCT_REVIEW: [

@@ -3,7 +3,7 @@ export const PUBLIC_ROUTES = {
   HOME: "/home",
   LOGIN: "/login",
   VERIFY_OTP: "/verify-otp",
-  PRODUCT_DETAIL: "product-detail/:id",
+  PRODUCT_DETAIL: "product-detail",
 };
 
 export const PRIVATE_ROUTES = {

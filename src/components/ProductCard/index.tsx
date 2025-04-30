@@ -28,9 +28,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [slideDirection, setSlideDirection] = useState<"left" | "right">(
-    "left"
-  );
+  // const [slideDirection, setSlideDirection] = useState<"left" | "right">(
+  //   "left"
+  // );
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const allImages = [imageUrl, imageUrl, ...additionalImages];
@@ -38,7 +38,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   useEffect(() => {
     if (isHovered && allImages.length > 1) {
       timerRef.current = setInterval(() => {
-        setSlideDirection("left");
         setCurrentImageIndex((prevIndex) =>
           prevIndex === allImages.length - 1 ? 0 : prevIndex + 1
         );

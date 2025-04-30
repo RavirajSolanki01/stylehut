@@ -97,7 +97,7 @@ export const ProductList = () => {
   });
 
   const handleGotoProduct = (product_id: number) => {
-    navigate(`/product-detail/${product_id}`);
+    navigate(`/product-detail?product_id=${product_id}`);
   };
 
   const handleAddToWishlist = async (product_id: number) => {

@@ -7,10 +7,7 @@ declare module "axios" {
   }
 }
 
-import {
-  GET_PRODUCT_DETAIL_API_ENDPOINT,
-  GET_PRODUCT_LIST_API_ENDPOINT,
-} from "./endpoints";
+import { GET_PRODUCT_LIST_API_ENDPOINT } from "./endpoints";
 
 export const getProductList = (params: {
   page?: number;
@@ -20,9 +17,4 @@ export const getProductList = (params: {
   maxPrice?: number;
 }) => {
   return api.get(GET_PRODUCT_LIST_API_ENDPOINT, { params, withAuth: true });
-};
-export const getProductDetails = (id: number) => {
-  return api.get(`${GET_PRODUCT_DETAIL_API_ENDPOINT}/${id}`, {
-    withAuth: true,
-  });
 };

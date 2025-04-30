@@ -3,34 +3,7 @@ import StarIcon from "@mui/icons-material/Star";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
 import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 
-const ProductRating = ({
-  averageRating,
-  distribution,
-  totalRating,
-}: {
-  averageRating: number;
-  totalRating: number;
-  distribution: { 1: number; 2: number; 3: number; 4: number; 5: number };
-}) => {
-  const productRating =
-    distribution &&
-    Object.entries(distribution).map(([key, value]) => ({
-      id: Number(key),
-      star: 6 - Number(key), // Reverse the star (1 => 5, 2 => 4, etc.)
-      count: value,
-    }));
-
-  const totalCount = productRating?.reduce(
-    (sum, rating) => sum + rating.count,
-    0
-  );
-
-  const ratingWithPercentages = productRating?.map((rating) => ({
-    ...rating,
-    percentage: totalCount > 0 ? (rating.count / totalCount) * 100 : 0,
-  }));
-  console.log(">><< ratingWithPercentages", ratingWithPercentages);
-
+const ProductRating = () => {
   return (
     <div className="text-start">
       <div className="flex gap-[8px] justify-start items-center my-[16px]">
@@ -42,18 +15,16 @@ const ProductRating = ({
       <div className="flex max-w-[350px] w-full justify-between">
         <div className="flex justify-center flex-col">
           <div className="min-w-[80px] flex gap-[10px]">
-            <span className="font-[400] text-[48px] text-[#282c3f]">
-              {averageRating}
-            </span>
+            <span className="font-[400] text-[48px] text-[#282c3f]">4.1</span>
             <StarIcon className="text-[#14958f] h-[24px] w-[24px]" />
           </div>
           <p className="font-[400] text-[14px] text-[#282c3f] mt-[12px]">
-            {totalRating} Verified Buyers
+            77 Verified Buyers
           </p>
         </div>
         <div className="w-px bg-[#eaeaec]"></div>
         <div className="flex flex-col items-start">
-          {ratingWithPercentages?.map((rating) => {
+          {PRODUCT_DETAIL_CONSTANTS.PRODUCT_RATING.map((rating) => {
             const progressColor =
               PRODUCT_DETAIL_CONSTANTS.PRODUCT_RATING_PROGRESS_BAR_COLOR.find(
                 (item) => item.star === rating.star
@@ -69,11 +40,11 @@ const ProductRating = ({
                   </span>
                   <GradeRoundedIcon className="text-[#a9abb3] !text-[12px]" />
                 </div>
-                <div className="mb-0 h-[3px] w-[120px] bg-[#f5f5f6]">
+                <div className="mb-6 h-[3px] w-[120px] bg-[#f5f5f6]">
                   <div
                     className="h-[3px]"
                     style={{
-                      width: `${rating.percentage}%`,
+                      width: `${rating.count}%`,
                       backgroundColor: progressColor?.color,
                     }}
                   ></div>
@@ -86,7 +57,7 @@ const ProductRating = ({
           })}
         </div>
       </div>
-      {/* <div className="mt-[20px]">
+      <div className="mt-[20px]">
         <div className="flex gap-[8px] justify-start items-center mb-[16px]">
           <p className="font-[700] text-[16px] m-[0px] leading-1 text-[#282c3f] uppercase">
             What Customers Said
@@ -122,10 +93,10 @@ const ProductRating = ({
             })}
           </div>
         </div>
-      </div> */}
-      {/* <button className="mb-[18px] button-none text-[#ff3f6c] text-[14px]/normal font-[700] hover:border-[transparent] p-[0px] bg-[#fff]">
+      </div>
+      <button className="mb-[18px] button-none text-[#ff3f6c] text-[14px]/normal font-[700] hover:border-[transparent] p-[0px] bg-[#fff]">
         View Details
-      </button> */}
+      </button>
     </div>
   );
 };
