@@ -1,0 +1,224 @@
+
+html,body,#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.menuIcon {
+  display: none;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+}
+.responsive-header {
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+}
+.header-less-content {
+  padding-top: 84px;
+  height: 100vh;
+  overflow: auto;
+  scrollbar-width: thin;
+  -ms-overflow-style: none; 
+}
+.custom-box-shadow {
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.overview-responsive-container {
+  display: none;
+}
+
+@media (max-width: 1530px) {
+}
+
+@media (max-width: 1380px) {
+  .responsive-home-page {
+    padding-top: 150px;
+  }
+  .responsive-profile-page {
+    max-width: 650px;
+  }
+  .responsive-header {
+    margin-bottom: 50px;
+    justify-content: unset;
+    padding: 20px 40px 0px;
+  }
+
+  .header-less-content {
+    padding-top: 110px;
+  }
+  .responsive-login-component {
+    margin-top: 120px;
+    padding-top: 0px;
+  }
+  .responsive-verify-otp-component {
+    margin-top: 120px;
+  }
+  .headerItem {
+    align-items: center !important;
+  }
+  .profile-sidebar,
+  .login-popover,
+  .account-section {
+    display: none;
+  }
+  .overview-container {
+    max-width: 655px;
+  }
+  .header-popover {
+    margin-top: 15px;
+  }
+  .search-input {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1025px) {
+  .bottom-container {
+    margin-top: 60px;
+    min-height: 875px;
+  }
+  .dialog-container {
+    padding-top: 135px;
+  }
+  .responsive-home-page {
+    padding-top: 150px;
+  }
+}
+
+@media (max-width: 800px) {
+  .menuIcon {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    height: 100%;
+    max-height: 60px;
+  }
+  .responsive-header {
+    padding: 0px 20px;
+  }
+
+  .header-less-content {
+    padding-top: 58px;
+  }
+  .bottom-container {
+    margin-top: 60px;
+    min-height: 740px;
+  }
+  .headerItem, .header-popover {
+    display: none;
+  }
+  .responsive-login-component {
+    margin-top: 0px;
+  }
+  .responsive-verify-otp-component {
+    margin-top: 0px;
+    max-width: 300px;
+    padding: 40px;
+  }
+  .dialog-container {
+    padding-top: 0px;
+  }
+  .responsive-home-page {
+    padding-top: 70px;
+  }
+  .responsive-profile-page {
+    max-width: none;
+    padding-top: 0;
+  }
+  .profile-section {
+    max-width: none;
+    margin: 0px;
+    display: block;
+    width: 100%;
+  }
+  .overview-container {
+    display: none;
+  }
+  .overview-responsive-container {
+    display: block;
+  }
+  .logout-button {
+    margin: 0px 10px;
+  }
+  .delete-account {
+    margin: 15px;
+  }
+  .custom-box-shadow {
+    margin: 20px;
+    padding: 25px 10px 10px;
+  }
+}
+
+@media (max-width: 650px) {
+  .responsive-verify-otp-component {
+    max-width: 300px;
+    width: 100%;
+    padding: 30px;
+  }
+  .login-container {
+    max-width: 300px;
+    width: 100%;
+  }
+  .offer-image-container {
+    max-width: 300px;
+    width: 100%;
+  }
+  .continue-login-button {
+    max-width: 230px;
+    padding: 8px;
+  }
+  .dialog-container {
+    padding-top: 0px;
+  }
+  .delete-account-buttons {
+   font-size: 12px;
+   padding: 7px;
+   text-transform: capitalize;
+  }
+  .delete-account {
+    margin: 15px;
+  }
+  .delete-account div > img {
+    width: 70%;
+  }
+}
+
+@media (max-width: 400px) {
+  .responsive-verify-otp-component {
+    max-width: 250px;
+    max-height: 455px;
+    width: 100%;
+    padding: 30px;
+  }
+  .login-container {
+    max-width: 250px;
+    max-height: 390px;
+    width: 100%;
+  }
+  .offer-image-container {
+    max-width: 250px;
+    width: 100%;
+  }
+  .continue-login-button {
+    max-width: 180px;
+  }
+  .delete-account-actions {
+    flex-direction: column;
+  }
+}

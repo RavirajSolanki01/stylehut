@@ -1,0 +1,93 @@
+/* ----------------------------- Product --------------------------- */
+
+/* best offer */
+.offers-linkButton {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ff3f6c;
+    margin-top: 4px;
+    cursor: pointer;
+}
+/* Product details */
+.product-description-content {
+    color: #282c3f;
+    line-height: 1.4;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0px;
+}
+
+.product-description-title {
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0px;
+    margin-top: 16px;
+    padding-bottom: 5px;
+    color: #282c3f,
+}
+
+/* Product price */
+.size-button-default {
+    background-color: #fff;
+    border: 1px solid #bfc0c6;
+    border-radius: 50px;
+    padding: 0;
+    min-width: 50px;
+    height: 50px;
+    text-align: center;
+    cursor: pointer;
+    color: #282c3f;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    position: relative;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.size-button-default:hover {
+    border: 1px solid #ff3f6c;
+}
+
+.size-button-disabled {
+    color: #d5d6d9;
+    border: 1px solid #d5d6d9;
+    cursor: default;
+    font-weight: 700;
+    outline: none;
+    overflow: hidden;
+}
+
+.size-button-disabled:hover {
+    border: 1px solid #d5d6d9;
+}
+
+.size-strike-show {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #d5d6d9;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.size-left-item {
+    font-size: 12px;
+    font-weight: 400;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    width: 90%;
+    left: 7%;
+    background-color: #ff905a;
+    color: #fff;
+    border-radius: 2px;
+    text-align: center;
+    bottom: -1px;
+    height: 15px;
+}
+
+/* ----------------------------- End Product --------------------------- */
