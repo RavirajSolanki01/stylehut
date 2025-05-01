@@ -30,6 +30,29 @@ import SimilarProduct2 from "./Product/similar-product-2.webp";
 import SimilarProduct3 from "./Product/similar-product-3.webp";
 import LikeIcon from "./Product/like.svg";
 import DislikeIcon from "./Product/dislike.svg";
+import ShopByCategory from "./Home/shoup_by_category.png";
+import OfferTitleImage from "./Home/offer_title.png";
+import FashionCarnivalImage from "./Home/fashion_carnival.png";
+import FootWearImage from "./Home/foot_wear.png";
+import BagsImage from "./Home/bags.png";
+import ActiveWear from "./Home/active_wear.png";
+import EthnicWear from "./Home/ethnic_wear.png";
+import HeadPhones from "./Home/headphones.png";
+import Home from "./Home/home.png";
+import JewelleryImage from "./Home/jewellery.png";
+import KidsWear from "./Home/kids_wear.png";
+import Makeup from "./Home/makeup.png";
+import SizeInclusive from "./Home/size_inclusive.png";
+import SleepWear from "./Home/sleep_wear.png";
+import Sunglasses from "./Home/sunglasses.png";
+import WesternWear from "./Home/western_wear.png";
+import CasualWear from "./Home/casual_wear_offer.png";
+import Watches from "./Home/watches.png";
+import KnockoutOffers from "./Home/knockout_image.png";
+import PaymentMethods from "./Home/Payments.gif";
+import CouponsTitle from "./Home/coupons.png";
+import Coupon1 from "./Home/coupon1.png";
+import Coupon2 from "./Home/coupon2.png";
 
 export {
   Logo,
@@ -64,4 +87,27 @@ export {
   SimilarProduct3,
   LikeIcon,
   DislikeIcon,
+  FashionCarnivalImage,
+  OfferTitleImage,
+  ShopByCategory,
+  CasualWear,
+  ActiveWear,
+  BagsImage,
+  EthnicWear,
+  FootWearImage,
+  HeadPhones,
+  Home,
+  JewelleryImage,
+  KidsWear,
+  Makeup,
+  SizeInclusive,
+  SleepWear, 
+  Sunglasses,
+  WesternWear,
+  Watches,
+  KnockoutOffers,
+  PaymentMethods,
+  CouponsTitle,
+  Coupon1,
+  Coupon2
 };

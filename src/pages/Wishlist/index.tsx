@@ -1,14 +1,27 @@
 import { Box, Typography, Divider, IconButton } from "@mui/material";
-import { wishlist_page_data } from "../../utils/constants";
 import CloseIcon from "@mui/icons-material/Close";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { getWishlist, postWishlist } from "../../services/wishlistService";
+import { setLoading } from "../../store/slice/loading.slice";
+import { useDispatch } from "react-redux";
 
 const ProductCard = ({
   product,
   onRemove,
 }: {
   product: any;
-  onRemove?: () => void;
+  onRemove: (product_id: number) => void;
 }) => {
+  const products = product.products;
+  const getDiscountedPrice = (
+    price: number,
+    discountPercent: number
+  ): number => {
+    const discountAmount = (price * discountPercent) / 100;
+    return Math.floor(price - discountAmount);
+  };
+
   return (
     <Box
       sx={{
@@ -23,8 +36,8 @@ const ProductCard = ({
       <Box sx={{ position: "relative" }}>
         <Box
           component="img"
-          src={product.imageLink}
-          alt={product.productType}
+          src={products.image[0]}
+          alt={products.name}
           sx={{
             width: "100%",
             height: 280,
@@ -34,7 +47,7 @@ const ProductCard = ({
 
         <IconButton
           size="small"
-          onClick={onRemove}
+          onClick={() => onRemove(product.product_id)}
           sx={{
             position: "absolute",
             top: 8,
@@ -66,7 +79,7 @@ const ProductCard = ({
             maxWidth: "100%",
           }}
         >
-          {product.productType}
+          {products.description}
         </Typography>
 
         <Box
@@ -77,18 +90,18 @@ const ProductCard = ({
           mt={1}
         >
           <Typography variant="body2" fontWeight="bold" color="text.primary">
-            ₹{product.price.discountedPrice}
+            Rs.{getDiscountedPrice(products.price, products.discount)}
           </Typography>
 
           <Typography
             variant="body2"
             sx={{ textDecoration: "line-through", color: "#7e818c" }}
           >
-            ₹{product.price.originalPrice}
+            ₹{products.price}
           </Typography>
 
           <Typography variant="body2" fontWeight="bold" color="#ff905a">
-            ({product.price.discountPercentage})
+            ({products.discount}% OFF)
           </Typography>
         </Box>
       </Box>
@@ -110,33 +123,67 @@ const ProductCard = ({
 };
 
 export const Wishlist = () => {
+  const dispatch = useDispatch();
+  const [wishlist_page_data, setWishlist_page_data] = useState<any>([]);
+
+  const handleRemoveFromWishlist = (product_id: number) => {
+    dispatch(setLoading(true));
+    postWishlist({ product_id })
+      .then((res) => {
+        fetchWishlist();
+        toast.success(res.data?.message);
+      })
+      .catch((err) => {
+        const errorMessage =
+          err?.response?.data?.message ||
+          err?.response?.data ||
+          "Something went wrong.";
+        toast.error(`Remove item from wishlist Failed: ${errorMessage}`);
+      })
+      .finally(() => dispatch(setLoading(false)));
+  };
+
+  const fetchWishlist = () => {
+    dispatch(setLoading(true));
+    getWishlist({ page: 1, pageSize: 100 })
+      .then((res) => {
+        const wishlist_data = res?.data?.data?.items;
+        if (wishlist_data) {
+          setWishlist_page_data(wishlist_data);
+        }
+      })
+      .catch((err) => {
+        const errorMessage =
+          err?.response?.data?.message ||
+          err?.response?.data ||
+          "Something went wrong.";
+        toast.error(`Fetch wishlist data Failed: ${errorMessage}`);
+      })
+      .finally(() => dispatch(setLoading(false)));
+  };
+
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
+
   return (
-    <Box p={3}>
-      <Typography
-        fontWeight={700}
-        fontSize={18}
-        gutterBottom
-        sx={{
-          color: "#282c3f",
-          textAlign: "left",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+    <div className="max-w-[1640px] w-full mx-auto">
+      <p className="mx-8 my-4 font-bold text-[18px] text-[#282c3f] text-left flex items-center align-middle wishlist-items">
         My Wishlist &nbsp;
-        <Typography
-          fontWeight={400}
-          fontSize={18}
-          color={"#282c3f"}
-        >{`${wishlist_page_data.length} items`}</Typography>
-      </Typography>
-      <Box display="flex" gap={3}>
-        <Box width="100%" display="flex" flexWrap="wrap">
-          {wishlist_page_data.map((item, index) => (
-            <ProductCard key={`${item.id}-${index}`} product={item} />
+        <span className="font-[400] text-[18px] text-[#282c3f]">{`${wishlist_page_data.length} items`}</span>
+      </p>
+      <div className="flex mx-7 wishlist-items-container">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 custom-grid">
+          {wishlist_page_data.map((item: any, index: number) => (
+            <div
+              key={`${item.id}-${index}`}
+              className="flex justify-center items-center my-1"
+            >
+              <ProductCard product={item} onRemove={handleRemoveFromWishlist} />
+            </div>
           ))}
-        </Box>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
