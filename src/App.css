@@ -38,7 +38,7 @@ html,body,#root {
   margin-top: 20px;
 }
 
-.overview-responsive-container {
+.overview-responsive-container, .add-address-button {
   display: none;
 }
 
@@ -184,6 +184,19 @@ html,body,#root {
   .coupons {
     max-height: 70px;
   }
+  .responsive-address-page {
+    max-width: 740px;
+    margin: 0 auto;
+    padding-inline: 20px;
+  }
+  .add-address-button {
+    display: block;
+    max-width: 90px;
+    padding: 5px;
+  }
+  .add-address-new-button {
+    display: none;
+  }
 }
 
 @media (max-width: 650px) {
@@ -233,6 +246,14 @@ html,body,#root {
     align-items: center;
     gap: 15px;
     margin: 20px 0px;
+  }
+  .responsive-address-page {
+    max-width: 740px;
+    margin: 0 auto;
+    padding-inline: 35px;
+  }
+  .pincode-container {
+    gap: 0;
   }
 }
 

@@ -736,3 +736,32 @@ export const sortByOptions = [
   "Price: Low to High",
   "Customer rating",
 ];
+
+export const updatedAddresses = [
+  {
+    name: "Makwana Neha",
+    mobile: "9876543210",
+    address: "Tatvasoft House, Rajpath rangoli road",
+    cityOrDisctrict: "Ahmedabad",
+    pincode: "360006",
+    state: "Gujarat",
+    town: "Bodakdev",
+    typeOfAddress: "Office",
+    isOfficeOpenOnSaturday: true,
+    isOfficeOpenOnSunday: true,
+    makeThisAsDefaultAddress: true,
+  },
+  {
+    name: "Makwana Neha",
+    mobile: "9876543210",
+    address: "Abc society, abc road",
+    cityOrDisctrict: "Ranpur",
+    pincode: "382245",
+    state: "Gujarat",
+    town: "Ranpur",
+    typeOfAddress: "Home",
+    isOfficeOpenOnSaturday: false,
+    isOfficeOpenOnSunday: false,
+    makeThisAsDefaultAddress: false,
+  },
+];
