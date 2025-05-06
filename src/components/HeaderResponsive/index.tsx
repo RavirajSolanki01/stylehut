@@ -85,10 +85,12 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
       <CustomBox
         ref={sidebarRef}
         className={`${isOpen ? "open sidebar-open" : "closed"}`}
+        onMouseLeave={() => setIsOpen(false)}
       >
         <div>
           {menuItems.map((item, index) => (
             <div key={`menu-item-${index}-${item.label}`}>
+              {item.label.toLowerCase() !== "studio" && <div>
               <CustomAccordion
                 key={index}
                 expanded={hoveredIndex === index}
@@ -137,9 +139,10 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
                   ))}
                 </SmoothAccordionDetails>
               </CustomAccordion>
-              {index === menuItems.length - 1 && (
+              {index === menuItems.length - 2 && (
                 <div className="border-t border-[#ff3f6c]"></div>
               )}
+            </div>}
             </div>
           ))}
         </div>

@@ -173,7 +173,7 @@ export const Wishlist = () => {
         <span className="font-[400] text-[18px] text-[#282c3f]">{`${wishlist_page_data.length} items`}</span>
       </p>
       <div className="flex mx-7 wishlist-items-container">
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 custom-grid">
           {wishlist_page_data.map((item: any, index: number) => (
             <div
               key={`${item.id}-${index}`}

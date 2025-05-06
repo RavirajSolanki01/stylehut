@@ -19,6 +19,21 @@ import {
   SimilarProduct1,
   SimilarProduct2,
   SimilarProduct3,
+  CasualWear,
+  EthnicWear,
+  WesternWear,
+  SleepWear,
+  ActiveWear,
+  Makeup,
+  KidsWear,
+  FootWearImage,
+  BagsImage,
+  Watches,
+  JewelleryImage,
+  Home,
+  SizeInclusive,
+  Sunglasses,
+  HeadPhones
 } from "../assets";
 
 export const colorMap: Record<string, string> = {
@@ -30,6 +45,99 @@ export const colorMap: Record<string, string> = {
   Genz: "#ff3f6c",
   Studio: "#f26a10",
 };
+
+export const ShopByCategoryData = [
+  {
+    imageUrl: CasualWear,
+    category: "Casual Wear",
+    discount: "40-80% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: EthnicWear,
+    category: "Ethnic Wear",
+    discount: "50-70% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: WesternWear,
+    category: "Western Wear",
+    discount: "50-70% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: SleepWear,
+    category: "Innerwear & Sleepwear",
+    discount: "UP TO 70% OFF ",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: ActiveWear,
+    category: "Activewear",
+    discount: "30-70% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: Makeup,
+    category: "Beauty & Makeup",
+    discount: "UP TO 80% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: KidsWear,
+    category: "Kids Wear",
+    discount: "40-70% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: FootWearImage,
+    category: "Foot Wear",
+    discount: "40-80% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: BagsImage,
+    category: "Bags & Handbags",
+    discount: "40-80% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: Watches,
+    category: "Watches",
+    discount: "UP TO 70% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: JewelleryImage,
+    category: "Jewellery",
+    discount: "UP TO 80% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: Home,
+    category: "Home Furnishings",
+    discount: "40-70% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: HeadPhones,
+    category: "Headphones & Speakers",
+    discount: "UP TO 70% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: SizeInclusive,
+    category: "Size-Inclusive Styles",
+    discount: "UP TO 70% OFF",
+    text: "Shop Now",
+  },
+  {
+    imageUrl: Sunglasses,
+    category: "Sunglasses",
+    discount: "UP TO 70% OFF",
+    text: "Shop Now",
+  },
+];
 
 export const headerMenuItems = [
   { id: 0,label: "Men", color: "#ff3f6c" },
@@ -140,7 +248,7 @@ export const ProfileSection = [
     path: "my-profile",
     subtitle: "Change your profile details",
   },
-]
+];
 
 export const ordersAndCollection = [
   {
@@ -155,7 +263,7 @@ export const ordersAndCollection = [
     path: "orders",
     subtitle: "All your curated product collections",
   },
-]
+];
 
 export const PaymentSections = [
   {
@@ -200,15 +308,15 @@ export const PaymentSections = [
     path: "coupons",
     subtitle: "Manage coupons for additional discounts",
   },
-]
+];
 
 export const FooterSections = [
   "FAQs",
   "About",
   "Terms of use",
   "Customer policies",
-  "Useful Links"
-]
+  "Useful Links",
+];
 
 export const listing_page_data = [
   {

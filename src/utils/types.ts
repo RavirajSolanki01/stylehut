@@ -30,3 +30,30 @@ export interface ISearchOption {
   name: string;
   group: string;
 }
+
+// User Addresses-------------------------------------------------------------------------------------------------------------->
+export interface FormAddressData {
+  id?: number;
+  full_name: string;
+  phone: string;
+  address_line1: string;
+  city: string;
+  postal_code: string;
+  state: string;
+  address_line2: string;
+  address_type: string;
+  is_open_saturday: boolean;
+  is_open_sunday: boolean;
+  is_default: boolean;
+}
+
+export interface AddressCardProps {
+  address: FormAddressData;
+  isDefault: boolean;
+  selectedIndex: number;
+  onMakeDefault: () => void;
+  isSelected: boolean;
+  onClick: () => void;
+  onEdit: () => void;
+  handleDeleteClick: (index: number) => void;
+}
