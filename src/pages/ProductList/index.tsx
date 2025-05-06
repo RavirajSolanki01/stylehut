@@ -7,6 +7,7 @@ import { getProductList } from "../../services/productService";
 import { getWishlist, postWishlist } from "../../services/wishlistService";
 import { SkeletonProduct } from "../../components/ProductCard/SkeletonPorduct";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const ProductList = () => {
   const navigate = useNavigate();
@@ -18,7 +19,6 @@ export const ProductList = () => {
   const sub_category_type = queryParams
     .get("sub_category_type")
     ?.split("requestid")[0];
-
 
   const [sortBy, setSortBy] = useState("Recommended");
 
@@ -114,11 +114,16 @@ export const ProductList = () => {
     try {
       const wishlistResponse = await postWishlist({ product_id });
 
-      if (wishlistResponse?.data?.success) {
+      if (wishlistResponse?.data?.message.startsWith("Add")) {
         setWishlistIDs((prevIDs) => [...prevIDs, product_id]);
+      } else {
+        setWishlistIDs((prevIDs) => prevIDs.filter(item=> item  != product_id));
       }
+      toast.success(wishlistResponse?.data?.message)
     } catch (error) {
+      toast.error("Please login to add product to wishlist");
       console.error("Failed to add to wishlist", error);
+      navigate("/login");
     }
   };
   const fetchWishlist = async () => {
@@ -177,7 +182,7 @@ export const ProductList = () => {
     return () => {
       clearTimeout(handler);
     };
-  }, [priceRange, category, subcategory, sub_category_type, wishlistIDs]);
+  }, [priceRange, category, subcategory, sub_category_type]);
   return (
     <React.Fragment>
       <div>

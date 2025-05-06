@@ -257,7 +257,7 @@ export const Header: React.FC = () => {
           {isUserLoggedIn ? (
             <LoggedInUserProfileMenu
               id={id as string}
-              handleNavigate={handleNavigate}
+              handleNavigate={() => navigate("/profile/my-profile")}
               handlePopoverClose={handlePopoverClose}
               handlePopoverOpen={handlePopoverOpen}
               hoveredProfile={hoveredProfile}
@@ -266,7 +266,7 @@ export const Header: React.FC = () => {
           ) : (
             <ProfileMenu
               id={id as string}
-              handleNavigate={handleNavigate}
+              handleNavigate={() => navigate("/login")}
               handlePopoverClose={handlePopoverClose}
               handlePopoverOpen={handlePopoverOpen}
               hoveredProfile={hoveredProfile}

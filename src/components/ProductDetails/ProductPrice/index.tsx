@@ -5,7 +5,8 @@ import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
 import { DeliveryIcon } from "../../../assets";
 import { getRatingColor } from "../../../utils/reusable-functions";
-import { Favorite } from "@mui/icons-material";
+import { ArrowRightAltSharp, Favorite } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const ProductPrice = ({
   productName,
@@ -16,7 +17,9 @@ const ProductPrice = ({
   totalRatings,
   productRatingClick,
   addToWishlist,
+  addToCart,
   isWishlisted = false,
+  isAddedToCart,
 }: {
   productName: string;
   brandName: string;
@@ -26,8 +29,11 @@ const ProductPrice = ({
   totalRatings: number;
   productRatingClick?: () => void;
   addToWishlist?: () => void;
+  addToCart?: () => void;
   isWishlisted?: boolean;
+  isAddedToCart?: boolean;
 }) => {
+  const navigate = useNavigate()
   return (
     <div className="flex items-center flex-col items-start">
       {/* product info */}
@@ -124,16 +130,30 @@ const ProductPrice = ({
       {/* product size */}
 
       {/* add bag and wishlist button */}
-      <div className="flex flex-wrap gap-[10px] h-[54px] w-full mb-[23px]">
-        <button className="cursor-pointer bg-[#ff3f6c] max-w-[313px] w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#ff527b] hover:border-transparent">
-          <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
-          <span>ADD TO BAG</span>
-        </button>
+      <div className="flex gap-[10px] h-[54px] w-full mb-[23px]  flex-wrap sm:flex-nowrap ">
+        {isAddedToCart ? (
+          <button
+            onClick={()=>navigate("/cart")}
+            className="cursor-pointer bg-[#ff3f6c]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#ff527b] hover:border-transparent h-10"
+          >
+            <span>GO TO BAG</span>
+            <ArrowRightAltSharp className="!w-[20px] !h-[20px]" />
+          </button>
+        ) : (
+          <button
+            onClick={addToCart}
+            className="cursor-pointer bg-[#ff3f6c]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#ff527b] hover:border-transparent h-10"
+          >
+            <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
+            <span>ADD TO BAG</span>
+          </button>
+        )}
+
         <button
           onClick={addToWishlist}
-          className={` ${
+          className={`h-10  ${
             isWishlisted ? "!bg-[#535766] text-[#fff]" : ""
-          } cursor-pointer border border-[#d4d5d9] text-[#282c3f] bg-[#fff] font-bold text-[14px]  rounded-[4px] flex items-center justify-center gap-[6px] hover:border-[#535766] w-full max-w-[207px]`}
+          } cursor-pointer border border-[#d4d5d9] text-[#282c3f] bg-[#fff] font-bold text-[14px]  rounded-[4px] flex items-center justify-center gap-[6px] hover:border-[#535766] w-full`}
         >
           {isWishlisted ? (
             <Favorite

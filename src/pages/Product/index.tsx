@@ -14,11 +14,14 @@ import {
 import { useParams } from "react-router-dom";
 import { postWishlist } from "../../services/wishlistService";
 import ProductDetailSkeleton from "./skeletonDetails";
+import { toast } from "react-toastify";
+import { postAddToCart } from "../../services/cartService";
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams();
   const ratingRef = useRef<HTMLDivElement>(null);
   const [productData, setProductData] = useState<{
+    id: number;
     ratings?: {
       description: string;
       ratings: number;
@@ -34,9 +37,9 @@ const ProductDetailPage: React.FC = () => {
       };
     }[];
     name: string;
-    category: { name: string };
+    category: { name: string; id: number };
     sub_category: { name: string; id: number };
-    sub_category_type: { name: string };
+    sub_category_type: { name: string; id: number };
     brand: { name: string };
     price?: number;
     discount?: number;
@@ -55,13 +58,15 @@ const ProductDetailPage: React.FC = () => {
     };
   }>({
     brand: { name: "" },
-    sub_category_type: { name: "" },
+    sub_category_type: { name: "", id: 0 },
     sub_category: { name: "", id: 0 },
-    category: { name: "" },
+    category: { name: "", id: 0 },
     name: "",
+    id: 0,
   });
   const [productsList, setProducts] = useState([]);
   const [isWishlisted, setIsWishlist] = useState<boolean>(false);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchProductDetail = async () => {
@@ -94,13 +99,41 @@ const ProductDetailPage: React.FC = () => {
     try {
       const wishlistResponse = await postWishlist({ product_id: Number(id) });
       if (wishlistResponse.data.message.startsWith("Added")) {
-        fetchProductDetail();
+        // fetchProductDetail();
         setIsWishlist(true);
       } else {
         setIsWishlist(false);
       }
     } catch (error) {
+      toast.error("Failed to add to wishlist");
       console.error("Failed to add to wishlist", error);
+    }
+  };
+
+  const handleAddToCard = async () => {
+    try {
+      const addCartResponse = await postAddToCart({
+        product_id: Number(id),
+        quantity: 1,
+      });
+      toast.success("Product added to cart");
+      console.log(addCartResponse, ">><<<add to cart");
+      setIsAddedToCart(true);
+    } catch (error: unknown) {
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        typeof (error as any).response?.data?.message === "string"
+          ? (error as any).response.data.message
+          : "";
+
+      if (errorMessage.startsWith("Unauthorized")) {
+        toast.error("Please login to add to cart");
+      } else {
+        toast.error("Unexpected error occurred. Please try again later!");
+        console.log("Unexpected error", error);
+      }
     }
   };
 
@@ -116,24 +149,45 @@ const ProductDetailPage: React.FC = () => {
           {/* breadcrumbs container */}
           <div className="flex gap-[7px] w-full pb-[22px]">
             {productData?.name && (
-              <>
-                <Link to="/Home">Home</Link> /
-                <Link to="/">{productData.category.name}</Link> /
-                <Link to="/">{productData.sub_category.name}</Link> /
-                <Link to="/">{productData.sub_category_type.name}</Link> /
-                <Link to="/">{productData.name}</Link>
-              </>
+              <div className="text-gray-400">
+                <Link className="text-gray-400 capitalize" to="/Home">
+                  Home
+                </Link>
+                {" / "}
+                <Link
+                  className="text-gray-400 capitalize"
+                  to={`/product-list?category=${productData.category.name}requestid${productData.category.id}`}
+                >
+                  {productData.category.name.toLocaleLowerCase()}
+                </Link>
+                {" / "}
+                <Link
+                  className="text-gray-400 capitalize"
+                  to={`/product-list?category=${productData.category.name}requestid${productData.category.id}&subcategory=${productData.sub_category.name}requestid=${productData.sub_category.id}`}
+                >
+                  {productData.sub_category.name.toLocaleLowerCase()}
+                </Link>
+                {" / "}
+                <Link
+                  className="text-gray-400 capitalize"
+                  to={`/product-list?category=${productData.category.name}requestid${productData.category.id}&subcategory=${productData.sub_category.name}requestid${productData.sub_category.id}&sub_category_type=${productData.sub_category_type.name}requestid${productData.sub_category_type.id}`}
+                >
+                  {productData.sub_category_type.name}
+                </Link>{" "}
+                {" / "}
+                <span className="text-black">{productData.name}</span>
+              </div>
             )}
           </div>
           {/* end breadcrumbs container */}
           {/* product details container */}
-          <div className="grid grid-cols-5 gap-4 w-full">
+          <div className="grid grid-cols-5 gap-4 w-full mb-10">
             {/* product image container */}
-            <div className="col-span-3 mr-[26px]">
+            <div className="col-span-12 md:col-span-3 mr-[26px]">
               <ProductImage images={productData.image as []} />
             </div>
             {/* end product image container */}
-            <div className="col-span-2">
+            <div className="col-span-12 md:col-span-2 ">
               <ProductPrice
                 productName={productData.name}
                 brandName={productData?.brand?.name}
@@ -151,6 +205,8 @@ const ProductDetailPage: React.FC = () => {
                 }
                 addToWishlist={handleAddToWishlist}
                 isWishlisted={isWishlisted}
+                addToCart={handleAddToCard}
+                isAddedToCart={isAddedToCart}
               />
               <BestOffers />
               <hr className="border-t-[0px] w-full border-[#d2d2d2] mt-[0px]" />

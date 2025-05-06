@@ -84,7 +84,7 @@ function App() {
         <Route
           path={PRIVATE_ROUTES.PRODUCT_LIST}
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <ProtectedRoute isAuthenticated={true}>
               <ProductList />
             </ProtectedRoute>
           }
@@ -92,7 +92,7 @@ function App() {
         <Route
           path={PUBLIC_ROUTES.PRODUCT_DETAIL}
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <ProtectedRoute isAuthenticated={true}>
               <ProductDetailPage />
             </ProtectedRoute>
           }
