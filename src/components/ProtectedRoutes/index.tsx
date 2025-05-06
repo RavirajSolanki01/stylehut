@@ -5,11 +5,13 @@ import { Header } from "../Header";
 interface ProtectedRouteProps {
   isAuthenticated: boolean;
   children: React.ReactNode;
+  path?: string;
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   isAuthenticated,
   children,
+  path,
 }) => {
   const navigate = useNavigate();
 
@@ -25,7 +27,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   return (
     <>
-      <Header />
+      {path === "cart" ? null : <Header />}
       <div className="header-less-content">{children}</div>
     </>
   );

@@ -6,6 +6,16 @@ import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
 import { DeliveryIcon } from "../../../assets";
 import { getRatingColor } from "../../../utils/reusable-functions";
 import { Favorite } from "@mui/icons-material";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../../store/slice/loading.slice";
+import {
+  getCartProducts,
+  postCartProduct,
+} from "../../../services/productCartService";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import { CartResponse } from "../../../utils/types";
 
 const ProductPrice = ({
   productName,
@@ -28,6 +38,37 @@ const ProductPrice = ({
   addToWishlist?: () => void;
   isWishlisted?: boolean;
 }) => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const [buttonText, setButtonText] = useState<string>("ADD TO BAG");
+
+  const addToBeg = () => {
+    dispatch(setLoading(true));
+    postCartProduct({ product_id: Number(id), quantity: 1 })
+      .then((res) => {
+        if(res.status === 200){
+          setButtonText("GO TO BEG")
+        }
+      })
+      .catch((err) => {
+        const errorMessage =
+          err?.response?.data?.message ||
+          err?.response?.data ||
+          "Something went wrong.";
+        toast.error(`Add to cart Failed: ${errorMessage}`);
+      })
+      .finally(() => dispatch(setLoading(false)));
+  };
+
+  const handleAddToCart = () => {
+    if(buttonText === "GO TO BEG"){
+      navigate("/cart")
+    }else{
+      addToBeg();
+    }
+  };
+
   return (
     <div className="flex items-center flex-col items-start">
       {/* product info */}
@@ -125,9 +166,12 @@ const ProductPrice = ({
 
       {/* add bag and wishlist button */}
       <div className="flex flex-wrap gap-[10px] h-[54px] w-full mb-[23px]">
-        <button className="cursor-pointer bg-[#ff3f6c] max-w-[313px] w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#ff527b] hover:border-transparent">
+        <button
+          onClick={() => handleAddToCart()}
+          className="cursor-pointer bg-[#ff3f6c] max-w-[313px] w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#ff527b] hover:border-transparent"
+        >
           <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
-          <span>ADD TO BAG</span>
+          <span>{buttonText}</span>
         </button>
         <button
           onClick={addToWishlist}
@@ -167,7 +211,7 @@ const ProductPrice = ({
             name="pincode"
           />
           <button
-            type="submit"
+            // type="submit"
             className="text-sm font-medium text-[#ff3f6c] bg-transparent px-4 py-2 hover:bg-transparent hover:border-transparent"
           >
             Check
