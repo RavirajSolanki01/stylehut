@@ -1,15 +1,14 @@
-
-html,body,#root {
+html,
+body,
+#root {
   width: 100%;
   margin: 0;
   padding: 0;
 }
 
-*{
+* {
   box-sizing: border-box;
 }
-
-
 
 .card {
   padding: 2em;
@@ -31,14 +30,15 @@ html,body,#root {
   height: 100vh;
   overflow: auto;
   scrollbar-width: thin;
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
 }
 .custom-box-shadow {
   box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
   margin-top: 20px;
 }
 
-.overview-responsive-container, .add-address-button {
+.overview-responsive-container,
+.add-address-button {
   display: none;
 }
 
@@ -131,7 +131,8 @@ html,body,#root {
     margin-top: 60px;
     min-height: 740px;
   }
-  .headerItem, .header-popover {
+  .headerItem,
+  .header-popover {
     display: none;
   }
   .responsive-login-component {
@@ -221,9 +222,9 @@ html,body,#root {
     padding-top: 0px;
   }
   .delete-account-buttons {
-   font-size: 12px;
-   padding: 7px;
-   text-transform: capitalize;
+    font-size: 12px;
+    padding: 7px;
+    text-transform: capitalize;
   }
   .delete-account {
     margin: 15px;
@@ -232,7 +233,7 @@ html,body,#root {
     width: 70%;
   }
   .custom-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr))
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .home-page-image {
     width: 630px;
@@ -279,8 +280,8 @@ html,body,#root {
   .delete-account-actions {
     flex-direction: column;
   }
-  .custom-grid {  
-    grid-template-columns: repeat(1, minmax(0, 1fr))
+  .custom-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
   .wishlist-items {
     justify-content: center;
