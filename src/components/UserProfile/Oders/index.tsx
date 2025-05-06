@@ -179,7 +179,7 @@ export const Orders = () => {
                 <StyledRating
                   name="simple-controlled"
                   value={review.rating || value}
-                  onChange={(event, newValue) => {
+                  onChange={(_, newValue) => {
                     setValue(newValue);
                   }}
                 />
@@ -221,7 +221,7 @@ export const Orders = () => {
         <StyledIconButton
           aria-label="close"
           onClick={handleFilterClose}
-          sx={(theme) => ({
+          sx={() => ({
             position: "absolute",
             right: 8,
             top: 8,
