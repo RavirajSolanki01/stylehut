@@ -30,6 +30,7 @@ import SimilarProduct2 from "./Product/similar-product-2.webp";
 import SimilarProduct3 from "./Product/similar-product-3.webp";
 import LikeIcon from "./Product/like.svg";
 import DislikeIcon from "./Product/dislike.svg";
+import ErrorV2Icon from "./Home/ErroScreenV2.svg";
 
 export {
   Logo,
@@ -64,4 +65,5 @@ export {
   SimilarProduct3,
   LikeIcon,
   DislikeIcon,
+  ErrorV2Icon,
 };

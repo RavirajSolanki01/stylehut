@@ -3,7 +3,7 @@ export const PUBLIC_ROUTES = {
   HOME: "/home",
   LOGIN: "/login",
   VERIFY_OTP: "/verify-otp",
-  PRODUCT_DETAIL: "product-detail",
+  PRODUCT_DETAIL: "product-detail/:id",
 };
 
 export const PRIVATE_ROUTES = {
@@ -22,6 +22,7 @@ export const PRIVATE_ROUTES = {
   DELETEACCOUNT: "delete-account",
   TERMSOFUSE: "terms",
   PRIVACYPOLICY: "privacy-policy",
+  // PRODUCT_LIST: "/product-list/:category/:subcategory/:sub_category_type",
   PRODUCT_LIST: "/product-list",
   WISHLIST: "/wishlist",
 };

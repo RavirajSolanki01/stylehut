@@ -3,7 +3,7 @@ import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 import { useState } from "react";
 
-const ProductDetail = () => {
+const ProductDetail = ({description}:{description: string}) => {
   const [expanded, setExpanded] = useState(false);
   const VISIBLE_COUNT = 8;
 
@@ -20,8 +20,7 @@ const ProductDetail = () => {
       </div>
       <div>
         <p className="product-description-content">
-          White vertical stripes opaque formal shirt ,has a spread collar,
-          button placket, long regular sleeves, curved hem
+          {description}
         </p>
       </div>
       <div>

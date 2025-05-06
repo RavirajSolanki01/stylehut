@@ -32,13 +32,13 @@ export const colorMap: Record<string, string> = {
 };
 
 export const headerMenuItems = [
-  { label: "Men", color: "#ff3f6c" },
-  { label: "Women", color: "#fb56c1" },
-  { label: "Kids", color: "#f26a10" },
-  { label: "Home", color: "#f2c210" },
-  { label: "Beauty", color: "#0db7af" },
-  { label: "Genz", color: "#ff3f6c" },
-  { label: "Studio", color: "#f26a10" },
+  { id: 0,label: "Men", color: "#ff3f6c" },
+  { id: 0,label: "Women", color: "#fb56c1" },
+  { id: 0,label: "Kids", color: "#f26a10" },
+  { id: 0,label: "Home", color: "#f2c210" },
+  { id: 0,label: "Beauty", color: "#0db7af" },
+  { id: 0,label: "Genz", color: "#ff3f6c" },
+  { id: 0,label: "Studio", color: "#f26a10" },
 ];
 
 export const ProfileMenuItems = [
@@ -403,113 +403,6 @@ export const brandsData = [
   { label: "LULU & SKY", count: 7907 },
 ];
 
-export const wishlist_page_data = [
-  {
-    id: "25561504",
-    brand: "Globus",
-    productType: "Self Design Bodycon Dress For Women",
-    sizesAvailable: ["L"],
-    price: {
-      discountedPrice: 574,
-      originalPrice: 2299,
-      discountPercentage: "75% OFF",
-    },
-    imageLink:
-      "https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/25561504/2023/10/19/be9bfe40-b298-4e16-8988-c560b9bcedfc1697736273897GlobusBlackBodyconDress1.jpg",
-  },
-  {
-    id: "26005874",
-    brand: "Globus",
-    productType: "Cotton Fitted Crop Top",
-    sizesAvailable: ["L"],
-    price: {
-      discountedPrice: 337,
-      originalPrice: 1299,
-      discountPercentage: "74% OFF",
-    },
-    imageLink:
-      "https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/26005874/2023/11/23/5b9f4bf2-c585-4a6e-85ff-767b0577b0631700729134540GlobusPinkCottonCropTop1.jpg",
-  },
-  {
-    id: "17301320",
-    brand: "Globus",
-    productType: "Women T-shirt",
-    sizesAvailable: ["L"],
-    price: {
-      discountedPrice: 283,
-      originalPrice: 1049,
-      discountPercentage: "73% OFF",
-    },
-    imageLink:
-      "https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/17301320/2022/2/25/a8b7cd8f-92db-4ab8-b5bb-c308ec2a47331645807170337Tshirts1.jpg",
-  },
-  {
-    id: "26334394",
-    brand: "Globus",
-    productType: "Self Design Sheath Dress",
-    sizesAvailable: ["XL"],
-    price: {
-      discountedPrice: 620,
-      originalPrice: 2299,
-      discountPercentage: "73% OFF",
-    },
-    imageLink:
-      "https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/26334394/2023/12/8/5841741b-a063-4bf5-aa34-5765b5e3d3bc1702052079083GlobusTealHalterNeckCrepeBodyconDress1.jpg",
-  },
-  {
-    id: "16335274",
-    brand: "Globus",
-    productType: "Women T-shirt",
-    sizesAvailable: ["S"],
-    price: {
-      discountedPrice: 293,
-      originalPrice: 1049,
-      discountPercentage: "72% OFF",
-    },
-    imageLink:
-      "https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/16335274/2021/12/2/761a89a4-4478-4ae8-a978-f39f3b1927721638430135658GlobusWomenBlackPocketsT-shirt1.jpg",
-  },
-  {
-    id: "17168814",
-    brand: "Globus",
-    productType: "Women Mustard T-shirt",
-    sizesAvailable: ["M"],
-    price: {
-      discountedPrice: 314,
-      "original Price": 1049,
-      discountPercentage: "70% OFF",
-    },
-    imageLink:
-      "https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/17168814/2022/2/16/509a75d7-26db-4c2b-aa7b-4b75749e29ee1645000870760GlobusWomenMustardYellowT-shirt1.jpg",
-  },
-  {
-    id: "25561504",
-    brand: "Globus",
-    productType: "Self Design Bodycon Dress For Women",
-    sizesAvailable: ["L"],
-    price: {
-      discountedPrice: 574,
-      originalPrice: 2299,
-      discountPercentage: "75% OFF",
-    },
-    imageLink:
-      "https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/25561504/2023/10/19/be9bfe40-b298-4e16-8988-c560b9bcedfc1697736273897GlobusBlackBodyconDress1.jpg",
-  },
-  {
-    id: "26334394",
-    brand: "Globus",
-    productType: "Self Design Sheath Dress",
-    sizesAvailable: ["XL"],
-    price: {
-      discountedPrice: 620,
-      originalPrice: 2299,
-      discountPercentage: "73% OFF",
-    },
-    imageLink:
-      "https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/26334394/2023/12/8/5841741b-a063-4bf5-aa34-5765b5e3d3bc1702052079083GlobusTealHalterNeckCrepeBodyconDress1.jpg",
-  },
-];
-
 export const PRODUCT_DETAIL_CONSTANTS = {
   NAVIGATION: [
     "Home",
@@ -601,24 +494,24 @@ export const PRODUCT_DETAIL_CONSTANTS = {
   ],
   PRODUCT_RATING_PROGRESS_BAR_COLOR: [
     {
-      star: 5,
-      color: "#14958f",
-    },
-    {
-      star: 4,
-      color: "#14958f",
-    },
-    {
-      star: 3,
-      color: "#72bfbc",
+      star: 1,
+      color: "#f16565",
     },
     {
       star: 2,
       color: "#fcb301",
     },
     {
-      star: 1,
-      color: "#f16565",
+      star: 3,
+      color: "#72bfbc",
+    },
+    {
+      star: 4,
+      color: "#14958f",
+    },
+    {
+      star: 5,
+      color: "#14958f",
     },
   ],
   CUSTOMER_PRODUCT_REVIEW: [

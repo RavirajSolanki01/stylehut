@@ -24,3 +24,9 @@ export interface CategoryResponse {
   description: string;
   sub_categories: SubCategory[];
 }
+
+export interface ISearchOption {
+  id: number;
+  name: string;
+  group: string;
+}

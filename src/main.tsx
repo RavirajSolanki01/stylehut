@@ -14,7 +14,7 @@ import theme from "./utils/theme.ts";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <ToastContainer />
+      <ToastContainer position="top-center" />
       <CssBaseline />
       <Provider store={store}>
         <PersistGate persistor={persistor}>

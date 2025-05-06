@@ -6,10 +6,20 @@ import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { getProductList } from "../../services/productService";
 import { getWishlist, postWishlist } from "../../services/wishlistService";
 import { SkeletonProduct } from "../../components/ProductCard/SkeletonPorduct";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export const ProductList = () => {
   const navigate = useNavigate();
+  const { search } = useLocation();
+
+  const queryParams = new URLSearchParams(search);
+  const category = queryParams.get("category")?.split("requestid")[0];
+  const subcategory = queryParams.get("subcategory")?.split("requestid")[0];
+  const sub_category_type = queryParams
+    .get("sub_category_type")
+    ?.split("requestid")[0];
+
+
   const [sortBy, setSortBy] = useState("Recommended");
 
   const handleSortBy = (sortBy: string) => {
@@ -97,7 +107,7 @@ export const ProductList = () => {
   });
 
   const handleGotoProduct = (product_id: number) => {
-    navigate(`/product-detail?product_id=${product_id}`);
+    navigate(`/product-detail/${product_id}`);
   };
 
   const handleAddToWishlist = async (product_id: number) => {
@@ -133,7 +143,16 @@ export const ProductList = () => {
         sortBy: sortingBy || sorting,
         order: order || ordering,
         maxPrice: priceRange[1] < 10000 ? priceRange[1] : 100000,
+        category_id: Number(queryParams.get("category")?.split("requestid")[1]),
+        sub_category_id: Number(
+          queryParams.get("subcategory")?.split("requestid")[1]
+        ),
+        sub_category_type_id: Number(
+          queryParams.get("sub_category_type")?.split("requestid")[1]
+        ),
       });
+      console.log(response.data.data.items, "??>><<response.data.data.items");
+
       setProducts(response.data.data.items);
       setPagination({
         currentPage: response.data.data.meta.page,
@@ -158,22 +177,77 @@ export const ProductList = () => {
     return () => {
       clearTimeout(handler);
     };
-  }, [priceRange]);
+  }, [priceRange, category, subcategory, sub_category_type, wishlistIDs]);
   return (
     <React.Fragment>
       <div>
         <div className="px-[25px] py-[20px] ">
-          <div className="text-left leading-[30px]">
-            Home / Clothing / Men Tshirts
+          <div className="text-left leading-[30px] text-gray-400">
+            <Link
+              to="/home"
+              className={
+                subcategory || sub_category_type
+                  ? "text-gray-400"
+                  : "text-black font-semibold"
+              }
+            >
+              Home
+            </Link>
+            {category && (
+              <>
+                {" / "}
+                <Link
+                  to={`/product-list?category=${category}requestid${Number(
+                    queryParams.get("category")?.split("requestid")[1]
+                  )}`}
+                  className={
+                    subcategory || sub_category_type
+                      ? "text-gray-400 capitalize"
+                      : "text-black font-semibold capitalize"
+                  }
+                >
+                  {category?.toLowerCase()}
+                </Link>
+              </>
+            )}
+            {subcategory && (
+              <>
+                {" / "}
+                <Link
+                  to={`/product-list?category=${category}requestid${Number(
+                    queryParams.get("category")?.split("requestid")[1]
+                  )}&subcategory=${subcategory}requestid${
+                    queryParams.get("subcategory")?.split("requestid")[1]
+                  }`}
+                  className={
+                    sub_category_type
+                      ? "text-gray-400 capitalize"
+                      : "text-black font-semibold capitalize"
+                  }
+                >
+                  {subcategory?.toLowerCase()}
+                </Link>
+              </>
+            )}
+            {sub_category_type && (
+              <>
+                {" / "}
+                <span className="text-black font-semibold capitalize">
+                  {sub_category_type?.toLowerCase()}
+                </span>
+              </>
+            )}
           </div>
+
           <div className="text-left leading-[30px]">
-            Men Tshirts - 23000 items
+            {category} {sub_category_type}{" "}
+            <span className=" font-light">{productsList.length} items</span>
           </div>
         </div>
         <div className="px-[25px] py-[20px] flex w-full justify-between h-[40px] items-end ">
           <div>FILTERS</div>
           <div className="flex gap-[10px]">
-            <div className="flex gap-[10px]">
+            <div className=" flex gap-[10px]">
               <div className="relative group">
                 <button className="default bg-white flex items-center justify-between px-3 py-2 border border-gray-300 rounded hover:bg-[#f5f5f5]">
                   Bundles
@@ -227,7 +301,7 @@ export const ProductList = () => {
               </div>
             </div>
 
-            <div className="relative group">
+            <div className=" relative group">
               <button className="default bg-[#fff] flex items-center justify-between px-3 py-2 border border-gray-300 rounded hover:bg-[#f5f5f5]">
                 Size
                 <svg
@@ -256,6 +330,7 @@ export const ProductList = () => {
               </div>
             </div>
           </div>
+
           <div className="relative group">
             <div className="sortDiv cursor-pointer text-left p-[10px] w-[300px] border border-[#e9e9ed]">
               Sort by: {sortBy}
@@ -278,7 +353,7 @@ export const ProductList = () => {
         <div className="border-t border-[#e9e9ed] flex">
           <div className="w-[250px] border-r border-[#e9e9ed]">
             {/* Categories */}
-            <div className="border-b border-[#e9e9ed] pb-[20px]">
+            {/* <div className="border-b border-[#e9e9ed] pb-[20px]">
               <div className="text-left p-[20px] text-[14px] uppercase font-bold">
                 Categories
               </div>
@@ -310,7 +385,7 @@ export const ProductList = () => {
                   Lounge Tshirt
                 </label>
               </div>
-            </div>
+            </div> */}
             {/* Brands */}
             <div className="border-b border-[#e9e9ed] pb-[20px]">
               <div className="text-left p-[20px] text-[14px] uppercase font-bold">
@@ -449,9 +524,10 @@ export const ProductList = () => {
                         brand={product.brand.name}
                         name={product.name}
                         price={
-                          product.discount === null
-                            ? product.price
-                            : product.price - product.price / 10
+                          product?.discount === null
+                            ? product?.price
+                            : product?.price -
+                              (product?.price * product?.discount) / 100
                         }
                         originalPrice={product.price}
                         discount={product.discount || 0}

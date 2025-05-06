@@ -98,6 +98,12 @@ html,body,#root {
   .responsive-home-page {
     padding-top: 150px;
   }
+  .wishlist-items-container {
+    margin: 0px 35px;
+  }
+  .wishlist-items {
+    margin: 20px 40px;
+  }
 }
 
 @media (max-width: 800px) {
@@ -162,6 +168,12 @@ html,body,#root {
   .custom-box-shadow {
     margin: 20px;
     padding: 25px 10px 10px;
+  }
+  .wishlist-items-container {
+    margin: 0px 25px;
+  }
+  .wishlist-items {
+    margin: 20px 30px;
   }
 }
 

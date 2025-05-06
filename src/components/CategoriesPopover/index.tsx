@@ -23,6 +23,7 @@ export const CategoriesPopover: React.FC<CategoriesPopoverProps> = ({
   activePopoverIndex,
   handlePopoverClose,
   handlePopoverOpen,
+  handleNavigate
 }) => {
   const activeCategory = categories[activePopoverIndex];
   const color = menuItems[activePopoverIndex]?.color || "#ff3f6c";
@@ -87,6 +88,7 @@ export const CategoriesPopover: React.FC<CategoriesPopoverProps> = ({
                     <li
                       key={sub.id}
                       className="text-sm text-[#282C3F] font-[400] w-full my-[5px] cursor-pointer break-keep whitespace-normal hover:text-[#40414b] hover:font-[700] max-w-[170px]"
+                      onClick={()=>handleNavigate(`&subcategory=${encodeURIComponent(category.name)}requestid${category.id}&sub_category_type=${encodeURIComponent(sub.name)}requestid${sub.id}`)}
                     >
                       {sub.name}
                     </li>

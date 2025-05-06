@@ -1,6 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Logo } from "../../assets";
-import { Badge, InputAdornment, OutlinedInput, styled } from "@mui/material";
+import {
+  Autocomplete,
+  Badge,
+  InputAdornment,
+  TextField,
+  styled,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
@@ -16,7 +22,9 @@ import { CategoriesPopover } from "../CategoriesPopover";
 import { toast } from "react-toastify";
 import { setLoading } from "../../store/slice/loading.slice";
 import { getCategories } from "../../services/categoriesService";
-import { CategoryResponse } from "../../utils/types";
+import { CategoryResponse, ISearchOption } from "../../utils/types";
+import useDebounce from "../../hooks";
+import { getheaderSearch } from "../../services/headerSearch";
 
 export const Header: React.FC = () => {
   const { auth } = useSelector((state: RootState) => ({
@@ -29,10 +37,20 @@ export const Header: React.FC = () => {
   const buttonRef = useRef<HTMLDivElement | null>(null);
   const headerItemRefs = useRef<(HTMLLIElement | null)[]>([]);
 
-  const [activePopoverIndex, setActivePopoverIndex] = useState<number | null>(null);
-  const [hoveredProfile, setHoveredProfile] = useState<HTMLElement | null>(null);
-  const [menuItems, setMenuItems] = useState<{ label: string; color: string }[]>([]);
+  const [activePopoverIndex, setActivePopoverIndex] = useState<number | null>(
+    null
+  );
+  const [hoveredProfile, setHoveredProfile] = useState<HTMLElement | null>(
+    null
+  );
+  const [menuItems, setMenuItems] = useState<
+    { label: string; color: string, id:number }[]
+  >([]);
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [labelValue, setLabelValue] = useState("");
+  const [options, setOptions] = useState<ISearchOption[]>([]);
+  const debouncedSearchTerm = useDebounce(inputValue, 500);
 
   const isUserLoggedIn = useMemo(() => !!auth?.token?.length, [auth.token]);
 
@@ -48,11 +66,55 @@ export const Header: React.FC = () => {
   const open = Boolean(hoveredProfile);
   const id = open ? "profile-popover" : undefined;
 
-  const handleNavigate = (path: string) => navigate(path);
+  const handleNavigate = (path: string) => {
+    if (labelValue?.length) {
+      navigate(`/product-list?category=${labelValue + path}`);
+    }
+  };
 
-  const handleCategoryClick = (index: number) => {
+  const handleCategoryClick = (index: number, label?: string) => {
+    
+    setLabelValue(label as string);
     setActivePopoverIndex((prevIndex) => (prevIndex !== index ? null : index));
     setActivePopoverIndex(index);
+  };
+  useEffect(() => {
+    dispatch(setLoading(true));
+    if (debouncedSearchTerm)
+      getheaderSearch(inputValue)
+        .then((res) => {
+          const { success } = res.data;
+          if (success) {
+            const { brands, subCategoriesType } = res.data.data;
+
+            const groupedOptions: ISearchOption[] = [
+              ...brands.map((item: ISearchOption) => ({
+                ...item,
+                group: "Brands",
+              })),
+              ...subCategoriesType.map((item: any) => ({
+                ...item,
+                name: `${item.name} for ${item.category.name}`,
+                group: "SubCategories",
+              })),
+            ];
+
+            setOptions(groupedOptions);
+          }
+        })
+        .catch((err) => {
+          setMenuItems(headerMenuItems);
+          const errorMessage =
+            err?.response?.data?.message ||
+            err?.response?.data ||
+            "Something went wrong.";
+          toast.error(`Fetch categories data Failed: ${errorMessage}`);
+        })
+        .finally(() => dispatch(setLoading(false)));
+  }, [debouncedSearchTerm]);
+
+  const handleOptionClick = () => {
+    navigate("/product-list");
   };
 
   useEffect(() => {
@@ -61,18 +123,29 @@ export const Header: React.FC = () => {
       .then((res) => {
         const categoryData = res?.data?.data?.categories;
         if (categoryData) {
-          const sorted = categoryData.sort((a: { id: number; }, b: { id: number; }) => a.id - b.id);
-          setMenuItems(sorted.map((cat: { name: string | number; }) => ({ label: cat.name, color: colorMap[cat.name] })));
+          const sorted = categoryData.sort(
+            (a: { id: number }, b: { id: number }) => a.id - b.id
+          );
+          setMenuItems(
+            sorted.map((cat: { name: string | number, id:number }) => ({
+              label: cat.name,
+              color: colorMap[cat.name],
+              id: cat.id
+            }))
+          );
           setCategories(sorted);
         }
       })
       .catch((err) => {
-        setMenuItems(headerMenuItems)
-        const errorMessage = err?.response?.data?.message || err?.response?.data || "Something went wrong.";
+        setMenuItems(headerMenuItems);
+        const errorMessage =
+          err?.response?.data?.message ||
+          err?.response?.data ||
+          "Something went wrong.";
         toast.error(`Fetch categories data Failed: ${errorMessage}`);
       })
       .finally(() => dispatch(setLoading(false)));
-  }, []);
+  }, [debouncedSearchTerm]);
 
   return (
     <div className="fixed w-full top-0 z-50 bg-white flex justify-between gap-x-5 shadow-md px-[30px] mx-auto responsive-header">
@@ -93,15 +166,20 @@ export const Header: React.FC = () => {
             {menuItems.map((item, index) => (
               <li
                 key={index}
-                ref={(el) => { headerItemRefs.current[index] = el }}
+                ref={(el) => {
+                  headerItemRefs.current[index] = el;
+                }}
                 className="flex h-full pb-[18px] pt-[10px] max-h-[60px] items-center relative min-w-[55px] w-full justify-center"
                 style={{
                   zIndex: 1000,
-                  borderBottom: activePopoverIndex === index ? `4px solid ${item.color}` : "",
+                  borderBottom:
+                    activePopoverIndex === index
+                      ? `4px solid ${item.color}`
+                      : "",
                 }}
-                onMouseEnter={() => handleCategoryClick(index)}
-                onMouseLeave={() => handleCategoryClick(index)}
-                onClick={() => handleCategoryClick(index)}
+                onMouseEnter={() => handleCategoryClick(index, `${item.label+'requestid'+ item.id}`)}
+                onMouseLeave={() => handleCategoryClick(index, `${item.label+'requestid'+ item.id}`)}
+                onClick={() => handleCategoryClick(index, `${item.label+'requestid'+ item.id}`)}
               >
                 <div>{item.label}</div>
               </li>
@@ -114,7 +192,9 @@ export const Header: React.FC = () => {
               key={activePopoverIndex}
               handleNavigate={handleNavigate}
               handlePopoverClose={() => setActivePopoverIndex(null)}
-              handlePopoverOpen={() => setActivePopoverIndex(activePopoverIndex)}
+              handlePopoverOpen={() =>
+                setActivePopoverIndex(activePopoverIndex)
+              }
               hoveredItem={headerItemRefs.current[activePopoverIndex]}
               open={Boolean(headerItemRefs.current[activePopoverIndex])}
               activePopoverIndex={activePopoverIndex}
@@ -126,16 +206,43 @@ export const Header: React.FC = () => {
       </div>
 
       <div className="w-full flex items-center py-[10px] justify-end gap-x-[50px] headerItem">
-        <CustomInput
-          placeholder="Search for products, brands and more"
-          className="search-input"
-          startAdornment={
-            <InputAdornment position="start">
-              <SearchIcon style={{ color: "#696e79", marginRight: "20px" }} />
-            </InputAdornment>
+        <Autocomplete
+          freeSolo
+          open
+          options={options}
+          groupBy={(option) => option.group}
+          getOptionLabel={(option) =>
+            typeof option === "string" ? option : option.name
           }
+          onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
+          onChange={handleOptionClick}
+          style={{ width: "100%" }}
+          renderGroup={(params) => (
+            <li key={params.key}>
+              <GroupHeader className="ul-test">{params.group}</GroupHeader>
+              <GroupItems>{params.children}</GroupItems>
+            </li>
+          )}
+          renderOption={(props, option) => (
+            <li {...props} key={option.id}>
+              {option.name}
+            </li>
+          )}
+          renderInput={(params) => (
+            <CustomTextField
+              {...params}
+              placeholder="Search for products, brands and more"
+              InputProps={{
+                ...params.InputProps,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon className="search-icon" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
         />
-
         <div className="flex items-center gap-x-[30px]">
           <div
             className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#ff3f6c]"
@@ -192,13 +299,17 @@ export const Header: React.FC = () => {
   );
 };
 
-
-const CustomInput = styled(OutlinedInput)({
+const CustomTextField = styled(TextField)({
   maxWidth: 600,
   width: "100%",
   height: 40,
   backgroundColor: "#f5f5f6",
   borderRadius: 4,
+  "& .MuiOutlinedInput-root": {
+    height: 40,
+    paddingRight: 0,
+    paddingLeft: 14,
+  },
   "& .MuiOutlinedInput-notchedOutline": {
     border: "none",
   },
@@ -210,10 +321,28 @@ const CustomInput = styled(OutlinedInput)({
   },
   "@media (max-width: 1450px)": {
     maxWidth: "420px",
-    width: "100%",
   },
   "@media (max-width: 1350px)": {
     maxWidth: "420px",
-    width: "100%",
   },
+  "& .search-icon": {
+    color: "#696e79",
+    marginRight: 20,
+  },
+});
+
+const GroupHeader = styled("div")({
+  position: "sticky",
+  top: 0,
+  padding: "6px 10px",
+  color: "#000",
+  backgroundColor: "#f5f5f6",
+  fontWeight: 700,
+  borderBottom: `1px solid #f5f5f6`,
+});
+
+const GroupItems = styled("ul")({
+  padding: 0,
+  margin: 0,
+  listStyle: "none",
 });

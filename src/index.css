@@ -76,3 +76,17 @@ button.default{
     background-color: #f9f9f9;
   } */
 }
+
+.Toastify__toast {
+  color: #e2418197;
+  font-weight: 500;
+  border-left: 3px solid #e2418197;
+}
+
+.Toastify__close-button {
+  color: #e2418197;
+}
+
+.Toastify__progress-bar {
+  background: #e2418197;
+}

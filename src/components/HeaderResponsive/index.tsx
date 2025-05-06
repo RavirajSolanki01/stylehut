@@ -88,7 +88,7 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
       >
         <div>
           {menuItems.map((item, index) => (
-            <div>
+            <div key={`menu-item-${index}-${item.label}`}>
               <CustomAccordion
                 key={index}
                 expanded={hoveredIndex === index}
@@ -106,7 +106,7 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
                 <SmoothAccordionDetails onClick={(e) => e.stopPropagation()}>
                   {categories[hoveredIndex as number]?.sub_categories.map((i, index) => (
                     <CustomSubcategoriesAccordion
-                      key={index}
+                      key={`sub-${index}-${hoveredIndex}`}
                       expanded={hoveredItemIndex === index}
                       onClick={() =>
                         setHoveredItemIndex((prevIndex) =>
@@ -126,7 +126,7 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
                       <SmoothAccordionDetails className="h-full max-h-[250px] overflow-auto">
                         {i.sub_category_types.map((sub, subIndex) => (
                           <Typography
-                            key={subIndex}
+                            key={`${sub.name}-${subIndex}`}
                             className="text-sm text-[#282C3F] text-start py-[5px]"
                           >
                             {sub.name}

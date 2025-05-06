@@ -59,7 +59,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <div
-      className="max-w-[210px] mx-[10px] mb-[20px] w-auto hover:shadow-lg cursor-pointer group"
+      className="  relative max-w-[210px] mx-[10px] mb-[20px] w-auto hover:shadow-lg cursor-pointer group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -104,7 +104,33 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         </div>
       </div>
-      <div className="text-left text-[#535766] px-[10px] mb-[5px] group-hover:block hidden">
+      <div className="absolute top-1 right-1">
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // <-- This prevents the parent onClick
+            addToWishlist?.(); // <-- Call your wishlist function
+          }}
+          className={` cursor-pointer ${
+            isWishlisted ? " text-[#fff]" : ""
+          } default rounded-full text-[#535766] text-[12px] h-[30px] w-[30px] bg-white flex items-center justify-center gap-2 !border border-gray-300 hover:!border-black transition-colors py-1`}
+           
+        >
+          {isWishlisted ? (
+            <Favorite
+              fill="bg-[#ff3e6c]"
+              className="text-[#ff3e6c] "
+              style={{ fontSize: "1rem" }}
+            />
+          ) : (
+            <FavoriteBorder
+              className="text-[#535766] "
+              style={{ fontSize: "1rem" }}
+            />
+          )}
+          {/* Wishlist */}
+        </button>
+      </div>
+      {/* <div className="text-left text-[#535766] px-[10px] mb-[5px] group-hover:block hidden">
         <button
           onClick={(e) => {
             e.stopPropagation(); // <-- This prevents the parent onClick
@@ -129,12 +155,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           Wishlist
         </button>
         <span>Sizes: L</span>
-      </div>
+      </div> */}
 
-      <div className="text-left text-[16px] text-[700] px-[10px] mt-[12px] mb-[6px] group-hover:hidden">
+      <div className="text-left text-[16px] text-[700] px-[10px] mt-[12px] mb-[6px] ">
         {name}
       </div>
-      <div className="text-left text-[14px] text-[#535766] px-[10px] mb-[6px] group-hover:hidden">
+      <div className="text-left text-[14px] text-[#535766] px-[10px] mb-[6px] ">
         {brand}
       </div>
       <div className="text-left text-[14px] text-[#000] px-[10px]">
