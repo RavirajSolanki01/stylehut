@@ -214,7 +214,7 @@ export const Header: React.FC = () => {
           getOptionLabel={(option) =>
             typeof option === "string" ? option : option.name
           }
-          onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
+          onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
           onChange={handleOptionClick}
           style={{ width: "100%" }}
           renderGroup={(params) => (
