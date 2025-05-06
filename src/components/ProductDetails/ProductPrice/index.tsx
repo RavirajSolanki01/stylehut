@@ -50,7 +50,7 @@ const ProductPrice = ({
             className="flex items-center justify-between px-[8px] py-[2px] max-w-[150px] border-1 border-solid border-[#eaeaec] cursor-pointer hover:border-[#535766]"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[16px] font-[700]">{averageRating}</span>
+              <span className="text-[16px] font-[700]">{averageRating > 0 ? averageRating.toFixed(1) : 0}</span>
               <StarIcon
                 className={`border-r-2 border-[#eaeaec] scale-[0.7]`}
                 style={{ color: getRatingColor(averageRating) }}

@@ -29,6 +29,7 @@ import ProductDetailPage from "./pages/Product/index.tsx";
 import "./style.css";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/index.ts";
+import { Reviews } from "./pages/Reviews/index.tsx";
 
 function App() {
   const { users } = useSelector((state: RootState) => ({
@@ -106,6 +107,14 @@ function App() {
           }
         />
         <Route
+          path={PRIVATE_ROUTES.REVIEWS}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Reviews />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
           path={PRIVATE_ROUTES.PROFILE}
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
@@ -113,6 +122,7 @@ function App() {
             </ProtectedRoute>
           }
         >
+
           <Route path={PRIVATE_ROUTES.MYPROFILE} element={<ProfileDetails />} />
           <Route path={PRIVATE_ROUTES.OVERVIEW} element={<Overview />} />
           <Route path={PRIVATE_ROUTES.ORDERS} element={<Orders />} />
