@@ -22,7 +22,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (!isAuthenticated) {
     return null;
   }
-
+  
   return (
     <>
       <Header />

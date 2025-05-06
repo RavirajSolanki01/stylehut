@@ -13,3 +13,5 @@ export const GET_ADDRESS_API_ENDPOINT = "/api/address";
 export const UPDATE_ADDRESS_API_ENDPOINT = "/api/address";
 export const DELETE_ADDRESS_API_ENDPOINT = "/api/address";
 export const GET_ADDRESS_BY_ID_API_ENDPOINT = "/api/address";
+
+export const POST_CART_API_ENDPOINT = "/api/cart";
