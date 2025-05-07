@@ -43,7 +43,7 @@ const ProductRating = ({
         <div className="flex justify-center flex-col">
           <div className="min-w-[80px] flex gap-[10px]">
             <span className="font-[400] text-[48px] text-[#282c3f]">
-              {averageRating}
+              {averageRating > 0 ? averageRating.toFixed(1) : 0}
             </span>
             <StarIcon className="text-[#14958f] h-[24px] w-[24px]" />
           </div>

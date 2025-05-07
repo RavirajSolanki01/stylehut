@@ -5,17 +5,8 @@ import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
 import { DeliveryIcon } from "../../../assets";
 import { getRatingColor } from "../../../utils/reusable-functions";
-import { Favorite } from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setLoading } from "../../../store/slice/loading.slice";
-import {
-  getCartProducts,
-  postCartProduct,
-} from "../../../services/productCartService";
-import { toast } from "react-toastify";
-import { useState } from "react";
-import { CartResponse } from "../../../utils/types";
+import { ArrowRightAltSharp, Favorite } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const ProductPrice = ({
   productName,
@@ -26,7 +17,9 @@ const ProductPrice = ({
   totalRatings,
   productRatingClick,
   addToWishlist,
+  addToCart,
   isWishlisted = false,
+  isAddedToCart,
 }: {
   productName: string;
   brandName: string;
@@ -36,39 +29,11 @@ const ProductPrice = ({
   totalRatings: number;
   productRatingClick?: () => void;
   addToWishlist?: () => void;
+  addToCart?: () => void;
   isWishlisted?: boolean;
+  isAddedToCart?: boolean;
 }) => {
-  const { id } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate()
-  const [buttonText, setButtonText] = useState<string>("ADD TO BAG");
-
-  const addToBeg = () => {
-    dispatch(setLoading(true));
-    postCartProduct({ product_id: Number(id), quantity: 1 })
-      .then((res) => {
-        if(res.status === 200){
-          setButtonText("GO TO BEG")
-        }
-      })
-      .catch((err) => {
-        const errorMessage =
-          err?.response?.data?.message ||
-          err?.response?.data ||
-          "Something went wrong.";
-        toast.error(`Add to cart Failed: ${errorMessage}`);
-      })
-      .finally(() => dispatch(setLoading(false)));
-  };
-
-  const handleAddToCart = () => {
-    if(buttonText === "GO TO BEG"){
-      navigate("/cart")
-    }else{
-      addToBeg();
-    }
-  };
-
   return (
     <div className="flex items-center flex-col items-start">
       {/* product info */}
@@ -85,7 +50,7 @@ const ProductPrice = ({
             className="flex items-center justify-between px-[8px] py-[2px] max-w-[150px] border-1 border-solid border-[#eaeaec] cursor-pointer hover:border-[#535766]"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[16px] font-[700]">{averageRating}</span>
+              <span className="text-[16px] font-[700]">{averageRating > 0 ? averageRating.toFixed(1) : 0}</span>
               <StarIcon
                 className={`border-r-2 border-[#eaeaec] scale-[0.7]`}
                 style={{ color: getRatingColor(averageRating) }}
@@ -165,19 +130,30 @@ const ProductPrice = ({
       {/* product size */}
 
       {/* add bag and wishlist button */}
-      <div className="flex flex-wrap gap-[10px] h-[54px] w-full mb-[23px]">
-        <button
-          onClick={() => handleAddToCart()}
-          className="cursor-pointer bg-[#ff3f6c] max-w-[313px] w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#ff527b] hover:border-transparent"
-        >
-          <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
-          <span>{buttonText}</span>
-        </button>
+      <div className="flex gap-[10px] h-[54px] w-full mb-[23px]  flex-wrap sm:flex-nowrap ">
+        {isAddedToCart ? (
+          <button
+            onClick={()=>navigate("/cart")}
+            className="cursor-pointer bg-[#ff3f6c]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#ff527b] hover:border-transparent h-10"
+          >
+            <span>GO TO BAG</span>
+            <ArrowRightAltSharp className="!w-[20px] !h-[20px]" />
+          </button>
+        ) : (
+          <button
+            onClick={addToCart}
+            className="cursor-pointer bg-[#ff3f6c]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#ff527b] hover:border-transparent h-10"
+          >
+            <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
+            <span>ADD TO BAG</span>
+          </button>
+        )}
+
         <button
           onClick={addToWishlist}
-          className={` ${
+          className={`h-10  ${
             isWishlisted ? "!bg-[#535766] text-[#fff]" : ""
-          } cursor-pointer border border-[#d4d5d9] text-[#282c3f] bg-[#fff] font-bold text-[14px]  rounded-[4px] flex items-center justify-center gap-[6px] hover:border-[#535766] w-full max-w-[207px]`}
+          } cursor-pointer border border-[#d4d5d9] text-[#282c3f] bg-[#fff] font-bold text-[14px]  rounded-[4px] flex items-center justify-center gap-[6px] hover:border-[#535766] w-full`}
         >
           {isWishlisted ? (
             <Favorite

@@ -7,6 +7,9 @@ import { getProductList } from "../../services/productService";
 import { getWishlist, postWishlist } from "../../services/wishlistService";
 import { SkeletonProduct } from "../../components/ProductCard/SkeletonPorduct";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getBrandList } from "../../services/brandService";
+import EmptyCart from "./empty.svg";
 
 export const ProductList = () => {
   const navigate = useNavigate();
@@ -18,7 +21,6 @@ export const ProductList = () => {
   const sub_category_type = queryParams
     .get("sub_category_type")
     ?.split("requestid")[0];
-
 
   const [sortBy, setSortBy] = useState("Recommended");
 
@@ -96,6 +98,8 @@ export const ProductList = () => {
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [productsList, setProducts] = useState([]);
   const [wishlistIDs, setWishlistIDs] = useState<number[]>([]);
+  const [brandList, setBrandList] = useState<{name: string, id:number}[]>([]);
+  const [selectedBrand, setSelectedBrand] = useState<number>(0);
   const [{ ordering, sorting }, setOrderBy] = useState({
     sorting: "create_at",
     ordering: "desc",
@@ -114,11 +118,16 @@ export const ProductList = () => {
     try {
       const wishlistResponse = await postWishlist({ product_id });
 
-      if (wishlistResponse?.data?.success) {
+      if (wishlistResponse?.data?.message.startsWith("Add")) {
         setWishlistIDs((prevIDs) => [...prevIDs, product_id]);
+      } else {
+        setWishlistIDs((prevIDs) => prevIDs.filter(item=> item  != product_id));
       }
+      toast.success(wishlistResponse?.data?.message)
     } catch (error) {
+      toast.error("Please login to add product to wishlist");
       console.error("Failed to add to wishlist", error);
+      navigate("/login");
     }
   };
   const fetchWishlist = async () => {
@@ -150,6 +159,7 @@ export const ProductList = () => {
         sub_category_type_id: Number(
           queryParams.get("sub_category_type")?.split("requestid")[1]
         ),
+        brand_id: selectedBrand
       });
       console.log(response.data.data.items, "??>><<response.data.data.items");
 
@@ -165,8 +175,14 @@ export const ProductList = () => {
     }
   };
 
+  const fetchBrandList = async () => {
+    const response = await getBrandList();
+    setBrandList(response.data.data.items.map((item: {name: string, id:number}) => ({name: item.name, id: item.id}))); 
+  };
+
   useEffect(() => {
     fetchWishlist();
+    fetchBrandList();
   }, []);
 
   useEffect(() => {
@@ -177,7 +193,7 @@ export const ProductList = () => {
     return () => {
       clearTimeout(handler);
     };
-  }, [priceRange, category, subcategory, sub_category_type, wishlistIDs]);
+  }, [priceRange, category, subcategory, sub_category_type, selectedBrand]);
   return (
     <React.Fragment>
       <div>
@@ -248,7 +264,7 @@ export const ProductList = () => {
           <div>FILTERS</div>
           <div className="flex gap-[10px]">
             <div className=" flex gap-[10px]">
-              <div className="relative group">
+              <div className="relative group hidden">
                 <button className="default bg-white flex items-center justify-between px-3 py-2 border border-gray-300 rounded hover:bg-[#f5f5f5]">
                   Bundles
                   <svg
@@ -273,7 +289,7 @@ export const ProductList = () => {
                 </div>
               </div>
 
-              <div className="relative group">
+              <div className="relative group hidden">
                 <button className="default bg-[#fff] flex items-center justify-between px-3 py-2 border border-gray-300 rounded hover:bg-[#f5f5f5]">
                   <div className="flex items-center gap-2">
                     Country of Origin
@@ -301,7 +317,7 @@ export const ProductList = () => {
               </div>
             </div>
 
-            <div className=" relative group">
+            <div className=" relative group hidden">
               <button className="default bg-[#fff] flex items-center justify-between px-3 py-2 border border-gray-300 rounded hover:bg-[#f5f5f5]">
                 Size
                 <svg
@@ -391,34 +407,33 @@ export const ProductList = () => {
               <div className="text-left p-[20px] text-[14px] uppercase font-bold">
                 Brands
               </div>
-              <div className="text-left px-[20px] text-[14px] flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="brand-1-checkbox"
-                  name="brand-1"
-                  className="h-[18px] w-[18px] rounded-[3px] border-2 border-[#ff3f6c] text-[#ff3f6c] cursor-pointer accent-[#ff3f6c] appearance-none bg-[#fff] checked:text-[#fff] checked:bg-[#ff3f6c]"
-                />
-                <label
-                  htmlFor="brand-1-checkbox"
-                  className="ml-[10px] text-[14px] text-[#282c3f]  cursor-pointer hover:text-[#ff3f6c] font-[400]"
+              
+              {brandList.map((brand) => (
+                <div key={brand.id} className="text-left px-[20px] text-[14px] flex items-center gap-2 mt-[5px]">
+                  <input
+                    type="radio"
+                    id={`brand-${brand.id}-radio`}
+                    name="brand-selection"
+                    checked={selectedBrand === brand.id}
+                    onChange={() => setSelectedBrand(brand.id)}
+                    className="h-[18px] w-[18px] rounded-[3px] border-2 border-[#ff3f6c] text-[#ff3f6c] cursor-pointer accent-[#ff3f6c] appearance-none bg-[#fff] checked:text-[#fff] checked:bg-[#ff3f6c]"
+                  />
+                  <label
+                    htmlFor={`brand-${brand.id}-radio`}
+                    className="ml-[10px] text-[14px] text-[#282c3f] cursor-pointer hover:text-[#ff3f6c] font-[400]"
+                  >
+                    {brand.name}
+                  </label>
+                </div>
+              ))}
+              {selectedBrand !== 0 && (
+                <div 
+                  className="text-left px-[20px] text-[14px] mt-[5px] cursor-pointer text-[#ff3f6c] hover:underline"
+                  onClick={() => setSelectedBrand(0)}
                 >
-                  Brand 1
-                </label>
-              </div>
-              <div className="text-left px-[20px] text-[14px] flex items-center gap-2 mt-[5px]">
-                <input
-                  type="checkbox"
-                  id="brand-2-checkbox"
-                  name="brand-2"
-                  className="h-[18px] w-[18px] rounded-[3px] border-2 border-[#ff3f6c] text-[#ff3f6c] cursor-pointer accent-[#ff3f6c] appearance-none bg-[#fff] checked:text-[#fff] checked:bg-[#ff3f6c]"
-                />
-                <label
-                  htmlFor="brand-2-checkbox"
-                  className="ml-[10px] text-[14px] text-[#282c3f]  cursor-pointer hover:text-[#ff3f6c] font-[400]"
-                >
-                  Brand 2
-                </label>
-              </div>
+                  Clear
+                </div>
+              )}
             </div>
 
             {/* Price Range */}
@@ -539,9 +554,15 @@ export const ProductList = () => {
                   )
                 )
               ) : (
-                <p className="w-full text-center my-8 text-gray-500 text-lg font-semibold">
-                  🙁 Sorry, no products match your search.
-                </p>
+                <div className="w-full flex flex-col items-center justify-center my-12">
+                  <img src={EmptyCart} alt="empty-cart" className="w-44 h-44 mb-6" />
+                  <p className="text-gray-500 text-lg font-semibold mb-2">
+                    No Products Found
+                  </p>
+                  <p className="text-gray-400 text-sm">
+                    We couldn't find any products matching your search criteria.
+                  </p>
+                </div>
               )}
             </div>
 

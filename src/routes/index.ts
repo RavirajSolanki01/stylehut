@@ -4,6 +4,7 @@ export const PUBLIC_ROUTES = {
   LOGIN: "/login",
   VERIFY_OTP: "/verify-otp",
   PRODUCT_DETAIL: "product-detail/:id",
+  // PRODUCT_LIST: "/product-list",
 };
 
 export const PRIVATE_ROUTES = {
@@ -26,4 +27,5 @@ export const PRIVATE_ROUTES = {
   PRODUCT_LIST: "/product-list",
   WISHLIST: "/wishlist",
   CART: "/cart",
+  REVIEWS: "/reviews",
 };

@@ -29,6 +29,7 @@ export interface ISearchOption {
   id: number;
   name: string;
   group: string;
+  path: string;
 }
 
 // User Addresses-------------------------------------------------------------------------------------------------------------->

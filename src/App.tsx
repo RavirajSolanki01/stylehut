@@ -30,6 +30,7 @@ import "./style.css";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/index.ts";
 import { ProductCart } from "./pages/Cart/index.tsx";
+import { Reviews } from "./pages/Reviews/index.tsx";
 
 function App() {
   const { users } = useSelector((state: RootState) => ({
@@ -85,7 +86,7 @@ function App() {
         <Route
           path={PRIVATE_ROUTES.PRODUCT_LIST}
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <ProtectedRoute isAuthenticated={true}>
               <ProductList />
             </ProtectedRoute>
           }
@@ -93,7 +94,7 @@ function App() {
         <Route
           path={PUBLIC_ROUTES.PRODUCT_DETAIL}
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <ProtectedRoute isAuthenticated={true}>
               <ProductDetailPage />
             </ProtectedRoute>
           }
@@ -115,6 +116,14 @@ function App() {
           }
         />
         <Route
+          path={PRIVATE_ROUTES.REVIEWS}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Reviews />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
           path={PRIVATE_ROUTES.PROFILE}
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
@@ -122,6 +131,7 @@ function App() {
             </ProtectedRoute>
           }
         >
+
           <Route path={PRIVATE_ROUTES.MYPROFILE} element={<ProfileDetails />} />
           <Route path={PRIVATE_ROUTES.OVERVIEW} element={<Overview />} />
           <Route path={PRIVATE_ROUTES.ORDERS} element={<Orders />} />
