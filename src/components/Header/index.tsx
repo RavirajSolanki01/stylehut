@@ -85,7 +85,7 @@ export const Header: React.FC = () => {
         .then((res) => {
           const { success } = res.data;
           if (success) {
-            const { brands, subCategoriesType } = res.data.data;
+            const { brands, subCategoriesType } = res.data.data;            
 
             const groupedOptions: ISearchOption[] = [
               ...brands.map((item: ISearchOption) => ({
@@ -96,6 +96,7 @@ export const Header: React.FC = () => {
                 ...item,
                 name: `${item.name} for ${item.category.name}`,
                 group: "SubCategories",
+                path: `/product-list?category=${item.category.name}requestid${item.category.id}&subcategory=${item.sub_category.name}requestid${item.sub_category.id}&sub_category_type=${item.name}requestid${item.id}`
               })),
             ];
 
@@ -113,9 +114,6 @@ export const Header: React.FC = () => {
         .finally(() => dispatch(setLoading(false)));
   }, [debouncedSearchTerm]);
 
-  const handleOptionClick = () => {
-    navigate("/product-list");
-  };
 
   useEffect(() => {
     dispatch(setLoading(true));
@@ -155,7 +153,7 @@ export const Header: React.FC = () => {
 
       <div className="w-full flex items-center py-[10px] headerItem">
         <img
-          onClick={() => handleNavigate("/home")}
+          onClick={() => navigate("/home")}
           src={Logo}
           alt="myntra_logo"
           className="max-h-[60px] max-w-[60px] h-full w-full cursor-pointer"
@@ -215,16 +213,20 @@ export const Header: React.FC = () => {
             typeof option === "string" ? option : option.name
           }
           onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
-          onChange={handleOptionClick}
-          style={{ width: "100%" }}
+          onChange={(_, option) => {
+            if (option && typeof option !== 'string') {
+              navigate(option.path);
+            }
+          }}
+          style={{ width: "100%" }}          
           renderGroup={(params) => (
             <li key={params.key}>
-              <GroupHeader className="ul-test">{params.group}</GroupHeader>
+              <GroupHeader className="ul-test">{params.group && "All others"}</GroupHeader>
               <GroupItems>{params.children}</GroupItems>
             </li>
           )}
           renderOption={(props, option) => (
-            <li {...props} key={option.id}>
+            <li {...props} key={option.id} className="cursor-pointer font-light my-1 pl-2 hover:text-[#ff3f6c]">
               {option.name}
             </li>
           )}
@@ -276,7 +278,7 @@ export const Header: React.FC = () => {
 
           <div
             className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#ff3f6c]"
-            onClick={() => handleNavigate("/wishlist")}
+            onClick={() => navigate("/wishlist")}
           >
             <FavoriteBorderOutlinedIcon />
             <p className="text-[11px] my-[0px] font-[700]">Wishlist</p>
