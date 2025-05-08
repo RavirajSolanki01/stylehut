@@ -88,6 +88,8 @@ export interface CartItems {
   updated_at: string;
   is_deleted: boolean;
   product: Product;
+  isAvailable: boolean;
+  isSelected: boolean;
 }
 
 export interface Product {

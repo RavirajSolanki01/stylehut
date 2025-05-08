@@ -7,7 +7,7 @@ export const PublicRoute = ({ children }: { children: React.ReactNode }) => {
 
   return isAuthenticated ? <Navigate to="/home" replace /> : <>
   <Header/>
-  <div className="header-less-content">{children}</div>
+  <div>{children}</div>
 
   </>;
 };

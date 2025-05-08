@@ -68,7 +68,7 @@ export const Overview: React.FC = () => {
               <p className="text-[15px] font-[600] text-[050505] m-[0px] py-[5px]">
                 {section.title}
               </p>
-              <p className="text-[12px] text-[#b7b7b7] font-[400] m-[0px] py-[5px]">
+              <p className="text-xs text-[#b7b7b7] font-[400] m-[0px] py-[5px]">
                 {section.subtitle}
               </p>
             </div>
@@ -116,7 +116,7 @@ export const Overview: React.FC = () => {
                     <p className="text-[15px] font-[600] text-[050505] m-[0px]">
                       {section.title}
                     </p>
-                    <p className="text-[12px] text-[#b7b7b7] font-[400] m-[0px]">
+                    <p className="text-xs text-[#b7b7b7] font-[400] m-[0px]">
                       {section.subtitle}
                     </p>
                   </div>
@@ -144,7 +144,7 @@ export const Overview: React.FC = () => {
                     <p className="text-[15px] font-[600] text-[050505] m-[0px]">
                       {section.title}
                     </p>
-                    <p className="text-[12px] text-[#b7b7b7] font-[400] m-[0px]">
+                    <p className="text-xs text-[#b7b7b7] font-[400] m-[0px]">
                       {section.subtitle}
                     </p>
                   </div>
@@ -172,7 +172,7 @@ export const Overview: React.FC = () => {
                     <p className="text-[15px] font-[600] text-[050505] m-[0px]">
                       {section.title}
                     </p>
-                    <p className="text-[12px] text-[#b7b7b7] font-[400] m-[0px]">
+                    <p className="text-xs text-[#b7b7b7] font-[400] m-[0px]">
                       {section.subtitle}
                     </p>
                   </div>

@@ -86,18 +86,18 @@ export const LoginPage: React.FC = () => {
                 <FormHelperText error>{errors.email.message}</FormHelperText>
               )}
 
-              <p className="py-[10px] text-start text-[12px] text-[#424553]">
+              <p className="py-[10px] text-start text-xs text-[#424553]">
                 By continuing, I agree to the{" "}
                 <a
                   href="/termsofuse"
-                  className="text-[#fb527b] font-[700] text-[12px] hover:text-[#fb527b] cursor-pointer"
+                  className="text-[#fb527b] font-[700] text-xs hover:text-[#fb527b] cursor-pointer"
                 >
                   Terms of Use
                 </a>{" "}
                 &{" "}
                 <a
                   href="/privacypolicy"
-                  className="text-[#fb527b] font-[700] text-[12px] hover:text-[#fb527b] cursor-pointer"
+                  className="text-[#fb527b] font-[700] text-xs hover:text-[#fb527b] cursor-pointer"
                 >
                   Privacy Policy
                 </a>
@@ -115,9 +115,9 @@ export const LoginPage: React.FC = () => {
               </button>
             </form>
 
-            <p className="py-[15px] text-start text-[12px] text-[#424553]">
+            <p className="py-[15px] text-start text-xs text-[#424553]">
               Have trouble logging in?{" "}
-              <span className="text-[#fb527b] font-[700] text-[12px] cursor-pointer">
+              <span className="text-[#fb527b] font-[700] text-xs cursor-pointer">
                 Get help
               </span>
             </p>

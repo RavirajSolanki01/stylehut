@@ -37,6 +37,10 @@ body,
   margin-top: 20px;
 }
 
+.responsive-cart-page {
+  padding-top: 40px;
+}
+
 .overview-responsive-container,
 .add-address-button {
   display: none;
@@ -86,6 +90,9 @@ body,
   .search-input {
     display: none !important;
   }
+  .responsive-cart-page {
+    padding-top: 10px;
+  }
 }
 
 @media (max-width: 1025px) {
@@ -114,6 +121,10 @@ body,
   }
   .wishlist-items {
     margin: 20px 40px;
+  }
+  .responsive-cart-page {
+    padding: 0px 40px;
+    flex-direction: column;
   }
 }
 
@@ -204,6 +215,10 @@ body,
   .add-address-new-button {
     display: none;
   }
+  .responsive-cart-page {
+    padding: 50px 40px;
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 650px) {
@@ -261,6 +276,10 @@ body,
   }
   .pincode-container {
     gap: 0;
+  }
+  .responsive-cart-page {
+    padding: 80px 40px;
+    flex-direction: column;
   }
 }
 

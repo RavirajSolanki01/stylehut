@@ -65,7 +65,7 @@ export const LoggedInUserProfileMenu: React.FC<LoggedInProfileMenuProps> = ({
         <p className="text-[#282c3f] font-[700] mt-[10px] mb-[5px]">
           Hello Makwana
         </p>
-        <p className="text text-[#696b79] text-[12px] my-[0px] font-normal">
+        <p className="text text-[#696b79] text-xs my-[0px] font-normal">
           {users.email}
         </p>
         <hr className="my-4 border-t-[1px] border-[#d2d2d2] mb-[10px]" />

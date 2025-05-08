@@ -29,12 +29,12 @@ export const DeleteAccount: React.FC = () => {
               You'll lose your order history, saved details, Myntra Credit,
               MynCash, SuperCoins and all other coupons and benefits.
             </li>
-            <p className="text-start text-[12px]">
+            <p className="text-start text-xs">
               Any account related benefits will be forfeited once the account is
               deleted and will no longer be available to you. You cannot recover
               the same. However, you can always create a new account. By
               deleting your account, you acknowledge you have read our {""}
-              <span className="text-[#ff3f6c] text-[12px] cursor-pointer">
+              <span className="text-[#ff3f6c] text-xs cursor-pointer">
                 Privacy Policy.
               </span>
             </p>
@@ -42,7 +42,7 @@ export const DeleteAccount: React.FC = () => {
               Any pending orders, exchanges, returns or refunds will no longer
               be accessible via your account.
             </li>
-            <p className="flex justify-start text-start text-[12px]">
+            <p className="flex justify-start text-start text-xs">
               Myntra will try to complete the open transactions in the next 30
               days on a best effort basis. However, we cannot ensure tracking &
               traceability of transactions once the account is deleted.

@@ -25,6 +25,7 @@ import { getCategories } from "../../services/categoriesService";
 import { CategoryResponse, ISearchOption } from "../../utils/types";
 import useDebounce from "../../hooks";
 import { getheaderSearch } from "../../services/headerSearch";
+import { removeAuthToken } from "../../store/slice/auth.slice";
 
 export const Header: React.FC = () => {
   const { auth } = useSelector((state: RootState) => ({
@@ -141,6 +142,9 @@ export const Header: React.FC = () => {
           err?.response?.data ||
           "Something went wrong.";
         toast.error(`Fetch categories data Failed: ${errorMessage}`);
+        if(err?.response?.data?.message === "Unauthorized: Invalid or expired token"){
+          dispatch(removeAuthToken())
+        }
       })
       .finally(() => dispatch(setLoading(false)));
   }, [debouncedSearchTerm]);
