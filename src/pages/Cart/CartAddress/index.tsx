@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
 import {
-  Checkbox,
   CheckboxProps,
   Chip,
   CircularProgress,
   Dialog,
-  Divider,
   FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  styled,
-  TextField,
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import * as Yup from "yup";
-import { pink } from "@mui/material/colors";
 import { AddressCardProps, FormAddressData } from "../../../utils/types";
 import {
   deleteAddress,
@@ -31,8 +22,16 @@ import { setLoading } from "../../../store/slice/loading.slice";
 import { toast } from "react-toastify";
 import { JSX } from "react/jsx-runtime";
 import { RootState } from "../../../store";
+import {
+  CustomCheckbox,
+  CustomFormControlLabel,
+  CustomInput,
+  CustomRadioButton,
+  CustomRadioGroup,
+  schema,
+} from "../../../components/UserProfile/Addresses";
 
-export const Addresses: React.FC = () => {
+export const CartAddresses = () => {
   const [defaultIndex, setDefaultIndex] = useState<number>(0);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -236,12 +235,6 @@ export const Addresses: React.FC = () => {
       },
     });
 
-  const handleMarkAsDefault = (id: number) => {
-    setSelectedIndex(id);
-    const updated = { ...addresses[id], is_default: true };
-    handleUpdateAddress(updated);
-  };
-
   useEffect(() => {
     fetchAddresses();
   }, []);
@@ -249,24 +242,24 @@ export const Addresses: React.FC = () => {
   return (
     <div className="py-2 pr-3 max-w-[810px] w-full responsive-address-page">
       <div className="flex justify-between items-center">
-        <p className="text-[16px] font-bold">Saved Addresses</p>
+        <p className="text-[16px] font-bold">Select Delivery Address</p>
         <button
           onClick={() => handleClickOpen(undefined)}
-          className="cursor-pointer bg-transparent border border-[#d2d2d2] text-[#ff3f6c] text-center 
+          className="cursor-pointer bg-transparent border border-[#282c3f] text-[#282c3f] text-center 
               max-w-[215px] w-full py-[10px] my-[8px] text-[14px] font-[700] rounded-[5px] uppercase 
              hover:font-[700] transition-colors duration-300
-              hover:border-[#ff3f6c]  focus:outline-none add-address-new-button"
+              hover:border-[#282c3f]  focus:outline-none add-address-new-button"
         >
-          <AddIcon className="mr-1" /> Add New Address
+          Add New Address
         </button>
         <button
           onClick={() => handleClickOpen(undefined)}
-          className="cursor-pointer bg-transparent border border-[#d2d2d2] text-[#ff3f6c] text-center 
+          className="cursor-pointer bg-transparent border border-[#d2d2d2] text-[#282c3f] text-center 
               max-w-[215px] w-full py-[10px] my-[8px] text-[14px] font-[700] rounded-[5px] uppercase 
              hover:font-[700] transition-colors duration-300
-              hover:border-[#ff3f6c]  focus:outline-none add-address-button"
+              hover:border-[#282c3f]  focus:outline-none add-address-button"
         >
-          <AddIcon className="mr-1" /> Add
+          Add
         </button>
       </div>
 
@@ -302,10 +295,17 @@ export const Addresses: React.FC = () => {
                   onEdit={() => handleClickOpen(addr.id)}
                   handleDeleteClick={handleDeleteClick}
                   selectedIndex={selectedIndex}
-                  onMakeDefault={() => handleMarkAsDefault(addr.id as number)}
+                  onMakeDefault={() => {}}
                 />
               );
             })}
+          </div>
+
+          <div
+            onClick={() => handleClickOpen(undefined)}
+            className="rounded shadow-sm mb-4 transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] cursor-pointer text-[#ff3f6c] p-4 border border-dashed border-[#282c3f60]"
+          >
+            <AddIcon className="mr-1" /> Add New Address
           </div>
         </div>
       ) : (
@@ -657,56 +657,57 @@ const AddressCard: React.FC<AddressCardProps> = ({
       className="rounded shadow-sm mb-4 transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] cursor-pointer"
     >
       <div className="flex justify-between items-start p-4">
-        <div>
-          <p className="font-semibold text-[#696b79] mb-2">{full_name}</p>
-          <p className="text-sm text-[#696b79] font-normal">
-            {addressLine}, {address_line2}
-          </p>
-          <p className="text-sm text-[#696b79] font-normal">
-            {city} - {postal_code}
-          </p>
-          <p className="text-sm text-[#696b79] font-normal">{state}</p>
-          {phone && (
-            <p className="text-sm text-[#696b79] font-normal mt-2">
-              <span className="text-[#696b79]">Mobile:</span> {phone}
+        <div className="flex items-start">
+          <CustomRadioButton checked={isSelected} />
+          <div>
+            <p className="font-semibold text-[#696b79] mb-2">
+              <span>{full_name}</span> &nbsp;
+              <Chip
+                label={address_type}
+                size="small"
+                sx={{
+                  border: "1px solid #03a685",
+                  backgroundColor: "transparent",
+                  fontWeight: 500,
+                  height: "20px",
+                  color: "#03a685",
+                }}
+              />
             </p>
-          )}
-          {!isDefault && isSelected && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onMakeDefault();
-              }}
-              className="mt-2 text-[#ff3f6c] text-sm font-semibold focus:outline-none cursor-pointer"
-            >
-              Make This Default
-            </button>
-          )}
+            <p className="text-sm text-[#696b79] font-normal">
+              {addressLine}, {address_line2}
+            </p>
+            <p className="text-sm text-[#696b79] font-normal">
+              {city} - {postal_code}
+            </p>
+            <p className="text-sm text-[#696b79] font-normal">{state}</p>
+            {phone && (
+              <p className="text-sm text-[#696b79] font-normal mt-2">
+                <span className="text-[#696b79]">Mobile:</span> {phone}
+              </p>
+            )}
+            {isSelected && (
+              <p className="text-sm text-[#696b79] font-normal mt-2">
+                <span className="text-[#696b79]">
+                  • Pay on Delivery not available
+                </span>
+              </p>
+            )}
+          </div>
         </div>
-        <Chip
-          label={address_type}
-          size="small"
-          sx={{
-            backgroundColor: "#f5f5f5",
-            fontWeight: 500,
-            color: "#696b79",
-          }}
-        />
       </div>
       {isSelected && (
         <>
-          <Divider className="my-4 w-full" />
-          <div className="flex items-center text-sm font-semibold p-2">
+          <div className="flex items-center text-sm font-semibold p-2 w-1/3 justify-around">
             <button
               onClick={onEdit}
-              className="flex-1 text-[#ff3f6c] p-1 focus:outline-none"
+              className="cursor-pointer rounded-[5px] border border-[#282c3f] text-[#282c3f] p-2 w-2/5 focus:outline-none"
             >
               EDIT
             </button>
-            <div className="border-l border-gray-300 h-5 mx-2" />
             <button
               onClick={() => handleDeleteClick(id as number)}
-              className="flex-1 text-[#ff3f6c] p-1 focus:outline-none"
+              className="cursor-pointer rounded-[5px] border border-[#282c3f] text-[#282c3f] p-2 w-2/5 focus:outline-none"
             >
               REMOVE
             </button>
@@ -716,113 +717,3 @@ const AddressCard: React.FC<AddressCardProps> = ({
     </div>
   );
 };
-
-export const schema = Yup.object().shape({
-  full_name: Yup.string()
-    .required("Name is required.")
-    .matches(/^[A-Za-z\s]+$/, "Name should only contain letters and spaces.")
-    .min(3, "Name must be at least 3 characters."),
-
-  phone: Yup.string()
-    .required("Mobile number is required.")
-    .matches(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number."),
-
-  address_line1: Yup.string().required("Address is required."),
-
-  city: Yup.string()
-    .required("City or District is required.")
-    .matches(/^[A-Za-z\s]+$/, "Only letters and spaces are allowed."),
-
-  postal_code: Yup.string()
-    .required("Pincode is required")
-    .matches(/^\d{6}$/, "Pincode must be exactly 6 digits")
-    .test(
-      "is-valid-pincode",
-      "Invalid pincode, please enter a valid one",
-      async function (value) {
-        if (!value || value.length !== 6) return false;
-        try {
-          const response = await fetch(
-            `https://api.postalpincode.in/pincode/${value}`
-          );
-          const data = await response.json();
-          const postOffice = data[0]?.PostOffice?.[0];
-          return !!postOffice;
-        } catch (e) {
-          return false;
-        }
-      }
-    ),
-
-  state: Yup.string()
-    .required("State is required.")
-    .matches(/^[A-Za-z\s]+$/, "Only letters and spaces are allowed."),
-
-  address_line2: Yup.string()
-    .required("Town is required.")
-    .matches(/^[A-Za-z\s]+$/, "Only letters and spaces are allowed."),
-
-  address_type: Yup.string().required("Please select the type of address."),
-  is_open_saturday: Yup.boolean().default(false),
-  is_open_sunday: Yup.boolean().default(false),
-  is_default: Yup.boolean().default(false),
-});
-
-export const CustomInput = styled(TextField)({
-  width: "100%",
-  height: "40px",
-  borderRadius: 4,
-  marginBottom: "35px",
-  "& .Mui-error": {
-    margin: 0,
-  },
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderRadius: "0px",
-  },
-  "& .MuiOutlinedInput-input": {
-    height: "15px",
-  },
-  "&:hover .MuiOutlinedInput-notchedOutline": {
-    borderRadius: "0px",
-    border: "1px solid #ff3f6c",
-  },
-  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    borderRadius: "0px",
-    border: "1px solid #ff3f6c",
-  },
-  "& .MuiOutlinedInput-root": {
-    borderRadius: 0,
-    "&:hover fieldset": {
-      border: "1px solid #ff3f6c",
-    },
-    "&.Mui-focused fieldset": {
-      border: "1px solid #ff3f6c",
-    },
-  },
-});
-
-export const CustomRadioButton = styled(Radio)({
-  "&.Mui-checked": {
-    color: pink[600],
-  },
-});
-
-export const CustomRadioGroup = styled(RadioGroup)({
-  "@media (max-width: 350px)": {
-    display: "flex",
-    flexDirection: "column",
-    gap: 0,
-  },
-});
-
-export const CustomFormControlLabel = styled(FormControlLabel)({
-  color: "#535766",
-  fontWeight: "normal",
-});
-
-export const CustomCheckbox = styled(Checkbox)({
-  color: "gray",
-  "&.Mui-checked": {
-    color: pink[600],
-  },
-});
