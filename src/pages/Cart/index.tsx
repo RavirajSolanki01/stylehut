@@ -32,7 +32,6 @@ export const ProductCart: React.FC = () => {
   const handleStepClick = (index: number) => {
     if (index <= maxAllowedStep) {
       setActiveStep(index);
-      //   navigate(`/cart/${steps[index].toLowerCase()}`);
     }
   };
 
@@ -126,6 +125,7 @@ const PriceSummary: React.FC<Props> = ({ setMaxAllowedStep }) => {
   const handlePlaceOrder = () => {
     if (selectedItems.length > 0) {
       setMaxAllowedStep(2);
+      setCartItems([]);
     }
   };
   return (
@@ -168,20 +168,6 @@ const PriceSummary: React.FC<Props> = ({ setMaxAllowedStep }) => {
 
 const CartItemsList: React.FC<Props> = ({ setMaxAllowedStep }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
-  const handleSelectItem = (id: number) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, isSelected: !item.isSelected } : item
-      )
-    );
-  };
-
-  const handleQtyChange = (id: number, newQty: number) => {
-    setCartItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, qty: newQty } : item))
-    );
-  };
 
   const selectedItems = cartItems.filter(
     (item) => item.isSelected && item.isAvailable
