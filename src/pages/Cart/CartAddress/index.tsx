@@ -632,8 +632,6 @@ const CustomCheckboxComponent = (
 
 const AddressCard: React.FC<AddressCardProps> = ({
   address,
-  isDefault,
-  onMakeDefault,
   isSelected,
   onClick,
   onEdit,
