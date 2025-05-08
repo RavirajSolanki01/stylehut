@@ -26,5 +26,6 @@ export const PRIVATE_ROUTES = {
   // PRODUCT_LIST: "/product-list/:category/:subcategory/:sub_category_type",
   PRODUCT_LIST: "/product-list",
   WISHLIST: "/wishlist",
+  CART: "/cart",
   REVIEWS: "/reviews",
 };

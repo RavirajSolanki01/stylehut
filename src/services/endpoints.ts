@@ -16,3 +16,6 @@ export const GET_ADDRESS_BY_ID_API_ENDPOINT = "/api/address";
 export const REVIEWS_ENDPOINT = "/api/rating";
 export const POST_CART_API_ENDPOINT = "/api/cart";
 export const GET_BRAND_LIST_API_ENDPOINT = "/api/brand";
+export const GET_CART_PRODUCTS_API_ENDPOINT = "api/cart/user";
+export const DELETE_FROM_CART_API_ENDPOINT = "/api/cart";
+

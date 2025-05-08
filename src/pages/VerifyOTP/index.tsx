@@ -154,7 +154,7 @@ export const VerifyOtpPage: React.FC = () => {
             <CustomTypography className="text-start pt-[20px] font-bold font-assistant text-lg">
               Verify with OTP
             </CustomTypography>
-            <p className="text-[#787878] text-justify text-[12px] pb-[20px]">
+            <p className="text-[#787878] text-justify text-xs pb-[20px]">
               Sent to {users.email}
             </p>
 
@@ -178,21 +178,21 @@ export const VerifyOtpPage: React.FC = () => {
               {!isResendDisabled ? (
                 <p
                   onClick={handleResendOtp}
-                  className="text-[#fb527b] text-justify font-[700] text-[12px] hover:text-[#fb527b] cursor-pointer uppercase"
+                  className="text-[#fb527b] text-justify font-[700] text-xs hover:text-[#fb527b] cursor-pointer uppercase"
                 >
                   Resend OTP
                 </p>
               ) : (
                 <p
-                  className={`text-[#787878] text-justify font-[500] text-[12px] cursor-pointer opacity-70`}
+                  className={`text-[#787878] text-justify font-[500] text-xs cursor-pointer opacity-70`}
                   onClick={!isResendDisabled ? handleResendOtp : undefined}
                 >
                   {`Resend OTP in 00:${timer.toString().padStart(2, "0")}`}
                 </p>
               )}
-              <p className="py-[5px] text-start text-[12px] text-[#424553] font-normal">
+              <p className="py-[5px] text-start text-xs text-[#424553] font-normal">
                 Having trouble logging in? {""}
-                <span className="text-[#fb527b] text-justify font-[700] text-[12px] hover:text-[#fb527b] cursor-pointer">
+                <span className="text-[#fb527b] text-justify font-[700] text-xs hover:text-[#fb527b] cursor-pointer">
                   Get Help
                 </span>
               </p>

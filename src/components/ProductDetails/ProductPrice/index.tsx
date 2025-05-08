@@ -187,7 +187,7 @@ const ProductPrice = ({
             name="pincode"
           />
           <button
-            type="submit"
+            // type="submit"
             className="text-sm font-medium text-[#ff3f6c] bg-transparent px-4 py-2 hover:bg-transparent hover:border-transparent"
           >
             Check

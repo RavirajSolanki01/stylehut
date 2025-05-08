@@ -29,6 +29,7 @@ import ProductDetailPage from "./pages/Product/index.tsx";
 import "./style.css";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/index.ts";
+import { ProductCart } from "./pages/Cart/index.tsx";
 import { Reviews } from "./pages/Reviews/index.tsx";
 
 function App() {
@@ -103,6 +104,14 @@ function App() {
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
               <Wishlist />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={PRIVATE_ROUTES.CART}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} path="cart">
+              <ProductCart />
             </ProtectedRoute>
           }
         />

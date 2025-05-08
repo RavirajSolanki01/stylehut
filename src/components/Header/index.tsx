@@ -25,6 +25,7 @@ import { getCategories } from "../../services/categoriesService";
 import { CategoryResponse, ISearchOption } from "../../utils/types";
 import useDebounce from "../../hooks";
 import { getheaderSearch } from "../../services/headerSearch";
+import { removeAuthToken } from "../../store/slice/auth.slice";
 
 export const Header: React.FC = () => {
   const { auth } = useSelector((state: RootState) => ({
@@ -141,6 +142,9 @@ export const Header: React.FC = () => {
           err?.response?.data ||
           "Something went wrong.";
         toast.error(`Fetch categories data Failed: ${errorMessage}`);
+        if(err?.response?.data?.message === "Unauthorized: Invalid or expired token"){
+          dispatch(removeAuthToken())
+        }
       })
       .finally(() => dispatch(setLoading(false)));
   }, [debouncedSearchTerm]);
@@ -284,7 +288,7 @@ export const Header: React.FC = () => {
             <p className="text-[11px] my-[0px] font-[700]">Wishlist</p>
           </div>
 
-          <div className="text-[#282c3f] cursor-pointer flex flex-col items-center h-full min-h-[60px] w-full min-w-[40px] justify-center">
+          <div onClick={() => navigate("/cart")} className="text-[#282c3f] cursor-pointer flex flex-col items-center h-full min-h-[60px] w-full min-w-[40px] justify-center border-b-4 border-b-transparent hover:border-b-[#ff3f6c]">
             <Badge
               badgeContent={5}
               color="error"

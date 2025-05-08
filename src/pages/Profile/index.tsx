@@ -18,7 +18,7 @@ export const Profile: React.FC = () => {
         <div className="pt-[25px] w-full max-w-[1050px] mx-auto responsive-profile-page mb-[40px]">
           <div className="flex flex-col items-start account-section">
             <p className="text text-[16px] font-[700] m-[0px]">Account</p>
-            <p className="text text-[12px] text-[#363d42] font-[400] m-[0px]">
+            <p className="text text-xs text-[#363d42] font-[400] m-[0px]">
               {users?.full_name}
             </p>
             <hr className="border-t-[1px] w-full border-[#d2d2d2] mt-[15px] mb-[0px]" />
@@ -39,7 +39,7 @@ export const Profile: React.FC = () => {
               </NavLink>
               <hr className="border-t-[1px] w-full border-[#d2d2d2] mt-[0px]" />
               <div className="flex flex-col justify-start">
-                <p className="text-start text-[12px] text-[#7e818c] font-[400] uppercase mb-[10px] mt-3">
+                <p className="text-start text-xs text-[#7e818c] font-[400] uppercase mb-[10px] mt-3">
                   Orders
                 </p>
                 <NavLink
@@ -58,7 +58,7 @@ export const Profile: React.FC = () => {
               <hr className="border-t-[1px] w-full border-[#d2d2d2] mt-[10px]" />
 
               <div className="flex flex-col justify-start">
-                <p className="text-start text-[#7e818c] text-[12px] font-[400] mb-[10px] mt-3 uppercase">
+                <p className="text-start text-[#7e818c] text-xs font-[400] mb-[10px] mt-3 uppercase">
                   Creadits
                 </p>
                 <NavLink
@@ -102,7 +102,7 @@ export const Profile: React.FC = () => {
               <hr className="border-t-[1px] w-full border-[#d2d2d2] mt-[10px]" />
 
               <div className="flex flex-col justify-start">
-                <p className="text-start text-[12px] text-[#7e818c] mb-[10px] mt-3 font-[400] uppercase">
+                <p className="text-start text-xs text-[#7e818c] mb-[10px] mt-3 font-[400] uppercase">
                   Account
                 </p>
                 <NavLink
@@ -195,7 +195,7 @@ export const Profile: React.FC = () => {
               <hr className="border-t-[1px] w-full border-[#d2d2d2] mt-[10px]" />
 
               <div className="flex flex-col justify-start">
-                <p className="text-start text-[12px] mb-[10px] mt-3 text-[#7e818c] font-[400] uppercase">
+                <p className="text-start text-xs mb-[10px] mt-3 text-[#7e818c] font-[400] uppercase">
                   Legal
                 </p>
                 <NavLink

@@ -58,3 +58,98 @@ export interface AddressCardProps {
   onEdit: () => void;
   handleDeleteClick: (index: number) => void;
 }
+
+
+// ADD TO CART >>>>>>>------------------------------------------------------>>>>>>>>>>---------------------------------------------------------------->>>>>>>>>>>>>>
+
+export interface CartResponse {
+  user: User;
+  items: CartItems[];
+  total: number;
+  totalAmount: number;
+}
+
+export interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  mobile: string;
+}
+
+export interface CartItems {
+  id: number;
+  cart_id: number;
+  product_id: number;
+  quantity: number;
+  size: string | null;
+  color: string | null;
+  created_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+  product: Product;
+  isAvailable: boolean;
+  isSelected: boolean;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  description: string;
+  image: string[];
+  price: string;
+  discount: number;
+  quantity: number;
+  category_id: number;
+  sub_category_id: number;
+  sub_category_type_id: number;
+  brand_id: number;
+  create_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+  is_featured: boolean;
+  views_count: number;
+  category: Category;
+  sub_category: SubCategory;
+  sub_category_type: SubCategoryType;
+  brand: Brand;
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  description: string;
+  create_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+}
+
+export interface SubCategory {
+  id: number;
+  name: string;
+  description: string;
+  create_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+  category_id: number;
+}
+
+export interface SubCategoryType {
+  id: number;
+  name: string;
+  description: string;
+  category_id: number;
+  sub_category_id: number;
+  create_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+}
+
+export interface Brand {
+  id: number;
+  name: string;
+  description: string;
+  create_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+}
