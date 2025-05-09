@@ -12,6 +12,7 @@ interface ProductCardProps {
   additionalImages?: string[]; // Array of additional images for carousel
   addToWishlist?: () => void;
   isWishlisted: boolean;
+  totalReviews?: number;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -25,6 +26,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   additionalImages = [], // Default to empty array if not provided
   addToWishlist,
   isWishlisted = false,
+  totalReviews = 0,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -84,7 +86,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <span className="text-xs font-medium">{rating.toFixed(1)}</span>
           <Star className="text-[#72BFBC]" style={{ fontSize: "1rem" }} />
           <span className="text-xs font-medium">|</span>
-          <span className="text-xs font-medium">23</span>
+          <span className="text-xs font-medium">{totalReviews}</span>
         </div>
       </div>
 
