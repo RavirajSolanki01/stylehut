@@ -246,12 +246,12 @@ const CartItemsList: React.FC<Props> = ({
 
   const withLoading = async (callback: () => Promise<void>) => {
     try {
-      dispatch(setLoading(true));
+      dispatch(setLoading({ key: "cart", value: true }));
       await callback();
     } catch (error) {
       toast.error("Something went wrong!");
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setLoading({ key: "cart", value: false }));
     }
   };
 
@@ -273,11 +273,11 @@ const CartItemsList: React.FC<Props> = ({
   };
 
   const handleRemoveFromCart = async (productId: number) => {
+    setOpenConfirmDialog(false);
     await withLoading(async () => {
       const response = await removeFromCart(productId);
       if (response.status === 200) {
         toast.success("Item removed from Bag");
-        setOpenConfirmDialog(false);
         await refreshCart();
       }
     });
@@ -287,6 +287,7 @@ const CartItemsList: React.FC<Props> = ({
     if (!selectedProduct?.id) return;
 
     await withLoading(async () => {
+      setOpenConfirmDialog(false);
       const wishlistResponse = await postWishlist({
         product_id: Number(selectedProduct.id),
         isSoftAdd: true,
@@ -294,7 +295,6 @@ const CartItemsList: React.FC<Props> = ({
 
       const message = wishlistResponse.data.message;
       if (message.startsWith("Added")) {
-        setOpenConfirmDialog(false);
         await removeFromCart(Number(selectedItemId));
         await refreshCart();
         toast.success(message);

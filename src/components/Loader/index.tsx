@@ -4,7 +4,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { RootState } from "../../store";
 
 export const LoaderOverlay: React.FC = () => {
-  const isLoading = useSelector((state: RootState) => state.loading.isLoading);
+  const isLoading = useSelector((state: RootState) =>
+    ["cart", "profile", "address", "cart-address", "verify-otp", "get-profile"].some((key) => state.loading[key])
+  );
 
   if (!isLoading) return null;
 

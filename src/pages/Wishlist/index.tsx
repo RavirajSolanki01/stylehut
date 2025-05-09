@@ -127,7 +127,7 @@ export const Wishlist = () => {
   const [wishlist_page_data, setWishlist_page_data] = useState<any>([]);
 
   const handleRemoveFromWishlist = (product_id: number) => {
-    dispatch(setLoading(true));
+    dispatch(setLoading({ key: "remove-from-wishlist", value: true }));
     postWishlist({ product_id })
       .then((res) => {
         fetchWishlist();
@@ -140,11 +140,11 @@ export const Wishlist = () => {
           "Something went wrong.";
         toast.error(`Remove item from wishlist Failed: ${errorMessage}`);
       })
-      .finally(() => dispatch(setLoading(false)));
+      .finally(() => dispatch(setLoading({ key: "remove-from-wishlist", value: false })));
   };
 
   const fetchWishlist = () => {
-    dispatch(setLoading(true));
+    dispatch(setLoading({ key: "get-wishlist", value: true }));
     getWishlist({ page: 1, pageSize: 100 })
       .then((res) => {
         const wishlist_data = res?.data?.data?.items;
@@ -159,7 +159,7 @@ export const Wishlist = () => {
           "Something went wrong.";
         toast.error(`Fetch wishlist data Failed: ${errorMessage}`);
       })
-      .finally(() => dispatch(setLoading(false)));
+      .finally(() => dispatch(setLoading({ key: "get-wishlist", value: false })));
   };
 
   useEffect(() => {

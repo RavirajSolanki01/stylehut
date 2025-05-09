@@ -44,7 +44,7 @@ export const Addresses: React.FC = () => {
 
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
-  const isLoading = useSelector((state: RootState) => state.loading.isLoading);
+  const isLoading = useSelector((state: RootState) => state.loading["address"]);
 
   const {
     handleSubmit,
@@ -167,7 +167,7 @@ export const Addresses: React.FC = () => {
       openOnError?: boolean;
     }
   ) => {
-    dispatch(setLoading(true));
+    dispatch(setLoading({ key: "address", value: true }));
     try {
       const res = await apiFn();
       onSuccess?.(res);
@@ -175,7 +175,7 @@ export const Addresses: React.FC = () => {
       toast.error(`${errorPrefix}: ${getErrorMessage(err)}`);
       if (openOnError) setOpen(true);
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setLoading({ key: "address", value: false }));
     }
   };
 

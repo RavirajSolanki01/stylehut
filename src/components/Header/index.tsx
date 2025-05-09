@@ -81,7 +81,7 @@ export const Header: React.FC = () => {
     setActivePopoverIndex(index);
   };
   useEffect(() => {
-    dispatch(setLoading(true));
+    dispatch(setLoading({ key: "search", value: true }));
     if (debouncedSearchTerm)
       getheaderSearch(inputValue)
         .then((res) => {
@@ -113,14 +113,14 @@ export const Header: React.FC = () => {
             "Something went wrong.";
           toast.error(`Fetch categories data Failed: ${errorMessage}`);
         })
-        .finally(() => dispatch(setLoading(false)));
+        .finally(() => dispatch(setLoading({ key: "search", value: false })));
   }, [debouncedSearchTerm]);
 
   useEffect(() => {
     const hasFetched = sessionStorage.getItem("hasFetchedCategories");
 
     if (!hasFetched) {
-      dispatch(setLoading(true));
+      dispatch(setLoading({ key: "category", value: true }));
       getCategories()
         .then((res) => {
           const categoryData = res?.data?.data?.categories;
@@ -156,7 +156,7 @@ export const Header: React.FC = () => {
           }
         })
         .finally(() => {
-          dispatch(setLoading(false));
+          dispatch(setLoading({ key: "category", value: false }));
           sessionStorage.setItem("hasFetchedCategories", "true");
         });
     }

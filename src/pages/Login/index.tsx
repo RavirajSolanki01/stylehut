@@ -36,11 +36,11 @@ export const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const isLoading = useSelector((state: RootState) => state.loading.isLoading);
+  const isLoading = useSelector((state: RootState) => state.loading["login"]);
 
   const onSubmit = (data: FormData) => {
     dispatch(addLoggedInUser(data));
-    dispatch(setLoading(true));
+    dispatch(setLoading({ key: "login", value: true }));
     registerUser(data)
       .then((res) => {
         if (res.status === 200 && res.data.message === "OTP sent to email.") {
@@ -57,7 +57,7 @@ export const LoginPage: React.FC = () => {
         toast.error(`Login Failed: ${errorMessage}`);
       })
       .finally(() => {
-        dispatch(setLoading(false));
+        dispatch(setLoading({ key: "login", value: false }));
       });
   };
 

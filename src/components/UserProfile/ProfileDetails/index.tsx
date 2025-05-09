@@ -59,16 +59,15 @@ export const ProfileDetails: React.FC = () => {
       birth_date: data.birth_date,
       gender_id: data.gender_id,
     };
-    dispatch(setLoading(true));
+    dispatch(setLoading({ key: "profile", value: true }));
     updateUserProfile(updatedData)
       .then((res) => {
         if (
-          res.data.data &&
-          res.data.message === "Profile updated successfully"
+          res.data.data
         ) {
           const userData = res.data.data;
           reset(userData);
-          toast.success(res.data.message);
+          toast.success("Profile updated successfully");
         }
       })
       .catch((err) => {
@@ -81,12 +80,12 @@ export const ProfileDetails: React.FC = () => {
         toast.error(`Update user profile Failed: ${errorMessage}`);
       })
       .finally(() => {
-        dispatch(setLoading(false));
+        dispatch(setLoading({ key: "profile", value: false }));
       });
   };
 
   useEffect(() => {
-    dispatch(setLoading(true));
+    dispatch(setLoading({ key: "get-profile", value: true }));
     getUserProfile()
       .then((res) => {
         if (res) {
@@ -115,7 +114,7 @@ export const ProfileDetails: React.FC = () => {
         toast.error(`Fetch user profile data Failed: ${errorMessage}`);
       })
       .finally(() => {
-        dispatch(setLoading(false));
+        dispatch(setLoading({ key: "get-profile", value: false }));
       });
   }, [reset]);
 

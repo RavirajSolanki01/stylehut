@@ -166,7 +166,7 @@ export const CartAddresses = () => {
       openOnError?: boolean;
     }
   ) => {
-    dispatch(setLoading(true));
+    dispatch(setLoading({ key: "cart-address", value: true }));
     try {
       const res = await apiFn();
       onSuccess?.(res);
@@ -174,7 +174,7 @@ export const CartAddresses = () => {
       toast.error(`${errorPrefix}: ${getErrorMessage(err)}`);
       if (openOnError) setOpen(true);
     } finally {
-      dispatch(setLoading(false));
+      dispatch(setLoading({ key: "cart-address", value: false }));
     }
   };
 

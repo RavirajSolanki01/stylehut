@@ -9,6 +9,7 @@ import { registerUser, verifyOtp } from "../../services/userService";
 import { toast } from "react-toastify";
 import { addAuthToken } from "../../store/slice/auth.slice";
 import { useNavigate } from "react-router-dom";
+import { setLoading } from "../../store/slice/loading.slice";
 
 type FormData = {
   digit1: string;
@@ -77,6 +78,7 @@ export const VerifyOtpPage: React.FC = () => {
       email: users.email,
       otp: otp,
     };
+    dispatch(setLoading({ key: "verify-otp", value: true }));
     verifyOtp(payload)
       .then((res) => {
         if (res.data.message === "OTP verified successfully") {
@@ -92,7 +94,8 @@ export const VerifyOtpPage: React.FC = () => {
           "Something went wrong.";
 
         toast.error(`Verification Failed: ${errorMessage}`);
-      });
+      })
+      .finally(() => dispatch(setLoading({ key: "verify-otp", value: false })));
   };
 
   const handleChange = (value: string, index: number) => {
