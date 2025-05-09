@@ -26,10 +26,12 @@ import { CategoryResponse, ISearchOption } from "../../utils/types";
 import useDebounce from "../../hooks";
 import { getheaderSearch } from "../../services/headerSearch";
 import { removeAuthToken } from "../../store/slice/auth.slice";
+import { addCategories, addSubCategories } from "../../store/slice/categories.slice";
 
 export const Header: React.FC = () => {
-  const { auth } = useSelector((state: RootState) => ({
+  const { auth , categoryList} = useSelector((state: RootState) => ({
     auth: state.auth,
+    categoryList: state.categories
   }));
 
   const navigate = useNavigate();
@@ -45,9 +47,9 @@ export const Header: React.FC = () => {
     null
   );
   const [menuItems, setMenuItems] = useState<
-    { label: string; color: string, id:number }[]
-  >([]);
-  const [categories, setCategories] = useState<CategoryResponse[]>([]);
+    { label: string; color: string; id: number }[]
+  >(categoryList.categories);
+  const [categories, setCategories] = useState<CategoryResponse[]>(categoryList.subCategories as CategoryResponse[]);
   const [inputValue, setInputValue] = useState("");
   const [labelValue, setLabelValue] = useState("");
   const [options, setOptions] = useState<ISearchOption[]>([]);
@@ -74,7 +76,6 @@ export const Header: React.FC = () => {
   };
 
   const handleCategoryClick = (index: number, label?: string) => {
-    
     setLabelValue(label as string);
     setActivePopoverIndex((prevIndex) => (prevIndex !== index ? null : index));
     setActivePopoverIndex(index);
@@ -86,7 +87,7 @@ export const Header: React.FC = () => {
         .then((res) => {
           const { success } = res.data;
           if (success) {
-            const { brands, subCategoriesType } = res.data.data;            
+            const { brands, subCategoriesType } = res.data.data;
 
             const groupedOptions: ISearchOption[] = [
               ...brands.map((item: ISearchOption) => ({
@@ -97,7 +98,7 @@ export const Header: React.FC = () => {
                 ...item,
                 name: `${item.name} for ${item.category.name}`,
                 group: "SubCategories",
-                path: `/product-list?category=${item.category.name}requestid${item.category.id}&subcategory=${item.sub_category.name}requestid${item.sub_category.id}&sub_category_type=${item.name}requestid${item.id}`
+                path: `/product-list?category=${item.category.name}requestid${item.category.id}&subcategory=${item.sub_category.name}requestid${item.sub_category.id}&sub_category_type=${item.name}requestid${item.id}`,
               })),
             ];
 
@@ -115,39 +116,51 @@ export const Header: React.FC = () => {
         .finally(() => dispatch(setLoading(false)));
   }, [debouncedSearchTerm]);
 
-
   useEffect(() => {
-    dispatch(setLoading(true));
-    getCategories()
-      .then((res) => {
-        const categoryData = res?.data?.data?.categories;
-        if (categoryData) {
-          const sorted = categoryData.sort(
-            (a: { id: number }, b: { id: number }) => a.id - b.id
-          );
-          setMenuItems(
-            sorted.map((cat: { name: string | number, id:number }) => ({
-              label: cat.name,
-              color: colorMap[cat.name],
-              id: cat.id
-            }))
-          );
-          setCategories(sorted);
-        }
-      })
-      .catch((err) => {
-        setMenuItems(headerMenuItems);
-        const errorMessage =
-          err?.response?.data?.message ||
-          err?.response?.data ||
-          "Something went wrong.";
-        toast.error(`Fetch categories data Failed: ${errorMessage}`);
-        if(err?.response?.data?.message === "Unauthorized: Invalid or expired token"){
-          dispatch(removeAuthToken())
-        }
-      })
-      .finally(() => dispatch(setLoading(false)));
-  }, [debouncedSearchTerm]);
+    const hasFetched = sessionStorage.getItem("hasFetchedCategories");
+
+    if (!hasFetched) {
+      dispatch(setLoading(true));
+      getCategories()
+        .then((res) => {
+          const categoryData = res?.data?.data?.categories;
+          if (categoryData) {
+            const sorted = categoryData.sort(
+              (a: { id: number }, b: { id: number }) => a.id - b.id
+            );
+            const sortedMenuItems = sorted.map(
+              (cat: { name: string | number; id: number }) => ({
+                label: cat.name,
+                color: colorMap[cat.name],
+                id: cat.id,
+              })
+            );
+            setMenuItems(sortedMenuItems);
+            setCategories(sorted);
+            dispatch(addCategories(sortedMenuItems));
+            dispatch(addSubCategories(sorted));
+          }
+        })
+        .catch((err) => {
+          setMenuItems(headerMenuItems);
+          const errorMessage =
+            err?.response?.data?.message ||
+            err?.response?.data ||
+            "Something went wrong.";
+          toast.error(`Fetch categories data Failed: ${errorMessage}`);
+          if (
+            err?.response?.data?.message ===
+            "Unauthorized: Invalid or expired token"
+          ) {
+            dispatch(removeAuthToken());
+          }
+        })
+        .finally(() => {
+          dispatch(setLoading(false));
+          sessionStorage.setItem("hasFetchedCategories", "true");
+        });
+    }
+  }, []);
 
   return (
     <div className="fixed w-full top-0 z-50 bg-white flex justify-between gap-x-5 shadow-md px-[30px] mx-auto responsive-header">
