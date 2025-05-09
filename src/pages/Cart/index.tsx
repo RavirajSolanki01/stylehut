@@ -14,6 +14,7 @@ import { LoaderOverlay } from "../../components/Loader";
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { CartAddresses } from "./CartAddress";
+import { SizeModal } from "./Dialogs/SizeModal";
 
 type Props = {
   setMaxAllowedStep: (step: number) => void;
@@ -222,10 +223,14 @@ const CartItemsList: React.FC<Props> = ({
   setCartItems,
 }) => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+  const [openSizeDialog, setOpenSizeDialog] = useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = useState<number>(0);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleOpenSizeDialog = () => setOpenSizeDialog(true)
+  const handleCloseSizeDialog = () => setOpenSizeDialog(false)
 
   const handleSelectItem = (id: number) => {
     setCartItems((prev) =>
@@ -284,6 +289,7 @@ const CartItemsList: React.FC<Props> = ({
     await withLoading(async () => {
       const wishlistResponse = await postWishlist({
         product_id: Number(selectedProduct.id),
+        isSoftAdd: true,
       });
 
       const message = wishlistResponse.data.message;
@@ -408,7 +414,7 @@ const CartItemsList: React.FC<Props> = ({
                     {item.product.description}
                   </p>
                   <div className="flex items-center my-4 justify-center sm:justify-start">
-                    <div className="max-w-[70px] w-full bg-[#f5f5f6] px-2 py-1 flex items-center justify-between text-xs sm:text-sm cursor-pointer">
+                    <div onClick={handleOpenSizeDialog} className="max-w-[70px] w-full bg-[#f5f5f6] px-2 py-1 flex items-center justify-between text-xs sm:text-sm cursor-pointer">
                       <span>Size: S</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -595,6 +601,8 @@ const CartItemsList: React.FC<Props> = ({
           </div>
         </div>
       </Dialog>
+
+      <SizeModal handleCloseSizeDialog={handleCloseSizeDialog} openSizeDialog={openSizeDialog} />
     </div>
   );
 };

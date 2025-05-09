@@ -33,7 +33,7 @@ import {
   Home,
   SizeInclusive,
   Sunglasses,
-  HeadPhones
+  HeadPhones,
 } from "../assets";
 
 export const colorMap: Record<string, string> = {
@@ -140,13 +140,13 @@ export const ShopByCategoryData = [
 ];
 
 export const headerMenuItems = [
-  { id: 0,label: "Men", color: "#ff3f6c" },
-  { id: 0,label: "Women", color: "#fb56c1" },
-  { id: 0,label: "Kids", color: "#f26a10" },
-  { id: 0,label: "Home", color: "#f2c210" },
-  { id: 0,label: "Beauty", color: "#0db7af" },
-  { id: 0,label: "Genz", color: "#ff3f6c" },
-  { id: 0,label: "Studio", color: "#f26a10" },
+  { id: 0, label: "Men", color: "#ff3f6c" },
+  { id: 0, label: "Women", color: "#fb56c1" },
+  { id: 0, label: "Kids", color: "#f26a10" },
+  { id: 0, label: "Home", color: "#f2c210" },
+  { id: 0, label: "Beauty", color: "#0db7af" },
+  { id: 0, label: "Genz", color: "#ff3f6c" },
+  { id: 0, label: "Studio", color: "#f26a10" },
 ];
 
 export const ProfileMenuItems = [
@@ -724,6 +724,33 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       discount: 40,
       price: "₹1,499",
       imgUrl: SimilarProduct2,
+    },
+  ],
+  SIZE: [
+    {
+      id: 1,
+      size: "S",
+      quantity: 2,
+    },
+    {
+      id: 2,
+      size: "M",
+      quantity: 0,
+    },
+    {
+      id: 3,
+      size: "L",
+      quantity: 5,
+    },
+    {
+      id: 4,
+      size: "XL",
+      quantity: 3,
+    },
+    {
+      id: 5,
+      size: "XXL",
+      quantity: 9,
     },
   ],
 };
