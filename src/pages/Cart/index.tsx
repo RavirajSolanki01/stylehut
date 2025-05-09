@@ -15,6 +15,7 @@ import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { CartAddresses } from "./CartAddress";
 import { SizeModal } from "./Dialogs/SizeModal";
+import { QuantityModal } from "./Dialogs/QuantityModal";
 
 type Props = {
   setMaxAllowedStep: (step: number) => void;
@@ -224,13 +225,25 @@ const CartItemsList: React.FC<Props> = ({
 }) => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
   const [openSizeDialog, setOpenSizeDialog] = useState<boolean>(false);
+  const [openQuantityDialog, setOpenQuantityDialog] = useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = useState<number>(0);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedQuantity, setSelectedQuantity] = useState<number | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleOpenSizeDialog = () => setOpenSizeDialog(true)
-  const handleCloseSizeDialog = () => setOpenSizeDialog(false)
+  const handleOpenSizeDialog = (product: Product) => {
+    setOpenSizeDialog(true);
+    setSelectedProduct(product);
+  };
+  const handleCloseSizeDialog = () => setOpenSizeDialog(false);
+
+  const handleOpenQuantityDialog = (product: Product) => {
+    setOpenQuantityDialog(true);
+    setSelectedProduct(product);
+  };
+  const handleCloseQuantityDialog = () => setOpenQuantityDialog(false);
 
   const handleSelectItem = (id: number) => {
     setCartItems((prev) =>
@@ -414,8 +427,11 @@ const CartItemsList: React.FC<Props> = ({
                     {item.product.description}
                   </p>
                   <div className="flex items-center my-4 justify-center sm:justify-start">
-                    <div onClick={handleOpenSizeDialog} className="max-w-[70px] w-full bg-[#f5f5f6] px-2 py-1 flex items-center justify-between text-xs sm:text-sm cursor-pointer">
-                      <span>Size: S</span>
+                    <div
+                      onClick={() => handleOpenSizeDialog(item.product)}
+                      className="max-w-[70px] w-full bg-[#f5f5f6] px-2 py-1 flex items-center justify-between text-xs sm:text-sm cursor-pointer"
+                    >
+                      <span>Size: {selectedSize || "S"}</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 10 6"
@@ -425,7 +441,10 @@ const CartItemsList: React.FC<Props> = ({
                         <path d="M0 0L5 6L10 0H0Z" />
                       </svg>
                     </div>
-                    <div className="max-w-[70px] w-full text-xs sm:text-sm bg-[#f5f5f6] px-2 py-1 mx-2 flex items-center justify-between cursor-pointer">
+                    <div
+                      onClick={() => handleOpenQuantityDialog(item.product)}
+                      className="max-w-[70px] w-full text-xs sm:text-sm bg-[#f5f5f6] px-2 py-1 mx-2 flex items-center justify-between cursor-pointer"
+                    >
                       <span>Qty: {item.quantity}</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -451,7 +470,7 @@ const CartItemsList: React.FC<Props> = ({
                       ₹{Number(item.product.price).toFixed(0)}
                     </span>
 
-                    <span className="font-normal text-[#ff905a]text-xs sm:text-sm ">
+                    <span className="font-normal text-[#ff905a] text-xs sm:text-sm ">
                       ({item.product.discount}%)
                     </span>
                   </div>
@@ -602,7 +621,19 @@ const CartItemsList: React.FC<Props> = ({
         </div>
       </Dialog>
 
-      <SizeModal handleCloseSizeDialog={handleCloseSizeDialog} openSizeDialog={openSizeDialog} />
+      <SizeModal
+        handleCloseSizeDialog={handleCloseSizeDialog}
+        openSizeDialog={openSizeDialog}
+        selectedProduct={selectedProduct as Product}
+        selectedSize={selectedSize}
+        setSelectedSize={setSelectedSize}
+      />
+      <QuantityModal
+        handleCloseQuantityDialog={handleCloseQuantityDialog}
+        openQuantityDialog={openQuantityDialog}
+        selectedQuantity={selectedQuantity as number}
+        setSelectedQuantity={setSelectedQuantity}
+      />
     </div>
   );
 };

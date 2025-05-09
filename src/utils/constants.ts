@@ -753,6 +753,48 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       quantity: 9,
     },
   ],
+  QUANTITY: [
+    {
+      id: 1,
+      quantity: 1,
+    },
+    {
+      id: 2,
+      quantity: 2,
+    },
+    {
+      id: 3,
+      quantity: 3,
+    },
+    {
+      id: 4,
+      quantity: 4,
+    },
+    {
+      id: 5,
+      quantity: 5,
+    },
+    {
+      id: 6,
+      quantity: 6,
+    },
+    {
+      id: 7,
+      quantity: 7,
+    },
+    {
+      id: 8,
+      quantity: 8,
+    },
+    {
+      id: 9,
+      quantity: 9,
+    },
+    {
+      id: 10,
+      quantity: 10,
+    },
+  ],
 };
 export const sortByOptions = [
   "Recommended",
