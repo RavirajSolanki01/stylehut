@@ -407,7 +407,7 @@ export const ProductList = () => {
               <div className="text-left p-[20px] text-[14px] uppercase font-bold">
                 Brands
               </div>
-              
+
               {brandList.map((brand) => (
                 <div key={brand.id} className="text-left px-[20px] text-[14px] flex items-center gap-2 mt-[5px]">
                   <input
@@ -427,7 +427,7 @@ export const ProductList = () => {
                 </div>
               ))}
               {selectedBrand !== 0 && (
-                <div 
+                <div
                   className="text-left px-[20px] text-[14px] mt-[5px] cursor-pointer text-[#ff3f6c] hover:underline"
                   onClick={() => setSelectedBrand(0)}
                 >
@@ -525,6 +525,7 @@ export const ProductList = () => {
                     name: string;
                     discount: number;
                     price: number;
+                    ratingStats: { totalRatings: number; averageRating: number };
                   }) => (
                     <div
                       key={product.id}
@@ -546,7 +547,8 @@ export const ProductList = () => {
                         }
                         originalPrice={product.price}
                         discount={product.discount || 0}
-                        // rating={product}
+                        totalReviews={product.ratingStats.totalRatings}
+                        rating={product.ratingStats.averageRating}
                         additionalImages={product.image}
                         addToWishlist={() => handleAddToWishlist(product.id)}
                       />
@@ -555,7 +557,11 @@ export const ProductList = () => {
                 )
               ) : (
                 <div className="w-full flex flex-col items-center justify-center my-12">
-                  <img src={EmptyCart} alt="empty-cart" className="w-44 h-44 mb-6" />
+                  <img
+                    src={EmptyCart}
+                    alt="empty-cart"
+                    className="w-44 h-44 mb-6"
+                  />
                   <p className="text-gray-500 text-lg font-semibold mb-2">
                     No Products Found
                   </p>
