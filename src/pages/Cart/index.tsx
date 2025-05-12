@@ -5,7 +5,7 @@ import { Checkbox, Dialog, IconButton, styled } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import { getCartProducts, removeFromCart } from "../../services/cartService";
-import { CartItems, Product } from "../../utils/types";
+import { CartItems, FormAddressData, Product } from "../../utils/types";
 import { toast } from "react-toastify";
 import { postWishlist } from "../../services/wishlistService";
 import { useDispatch } from "react-redux";
@@ -16,6 +16,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { CartAddresses } from "./CartAddress";
 import { SizeModal } from "./Dialogs/SizeModal";
 import { QuantityModal } from "./Dialogs/QuantityModal";
+import { ApplyCouponModal } from "./Dialogs/ApplyCouponModal";
 
 type Props = {
   setMaxAllowedStep: (step: number) => void;
@@ -123,14 +124,27 @@ const PriceSummary: React.FC<Props> = ({
   setActiveStep,
   cartItems,
 }) => {
+  const [openCouponDialog, setOpenCouponDialog] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    maxSavings: number;
+    minPurchase: number;
+  } | null>(null);
+
+  const handleCloseCouponDialog = () => setOpenCouponDialog(false);
+  const handleOpenCouponDialog = () => setOpenCouponDialog(true);
+
+  const handleApplyCoupon = (coupon: typeof appliedCoupon) => {
+    setAppliedCoupon(coupon);
+    handleCloseCouponDialog();
+  };
+
   const selectedItems = cartItems?.filter(
     (item) => item.isSelected && item.isAvailable
   );
 
   const totalMRP = selectedItems
-    ?.reduce((acc, item) => {
-      return acc + Number(item.product.price) * item.quantity;
-    }, 0)
+    ?.reduce((acc, item) => acc + Number(item.product.price) * item.quantity, 0)
     .toFixed(0);
 
   const totalDiscount = selectedItems
@@ -141,10 +155,20 @@ const PriceSummary: React.FC<Props> = ({
     }, 0)
     .toFixed(0);
 
+  const couponDiscount =
+    appliedCoupon && Number(totalMRP) >= appliedCoupon.minPurchase
+      ? Math.min(appliedCoupon.maxSavings, Number(totalMRP) * 0.15)
+      : 0;
+
   const totalAmount =
     selectedItems && selectedItems.length > 0
-      ? (Number(totalMRP) - Number(totalDiscount) + 20).toFixed(0)
-      : 0;
+      ? (
+          Number(totalMRP) -
+          Number(totalDiscount) -
+          Number(couponDiscount) +
+          20
+        ).toFixed(0)
+      : "0";
 
   const handlePlaceOrder = () => {
     if (selectedItems && selectedItems.length > 0) {
@@ -152,6 +176,7 @@ const PriceSummary: React.FC<Props> = ({
       setActiveStep(1);
     }
   };
+
   return (
     <div className="w-full lg:w-[30%] md:w-[100%] py-5 sm:py-0">
       <p className="text-[#535766] font-bold text-xs sm:text-sm uppercase mb-2">
@@ -165,15 +190,18 @@ const PriceSummary: React.FC<Props> = ({
           </p>
         </div>
         <button
+          onClick={handleOpenCouponDialog}
           className="cursor-pointer bg-transparent border border-[#ff3f6c] text-[#ff3f6c] text-center 
-              px-[10px] max-w-[80px] w-full py-[5px] text-xs sm:text-sm font-[700] uppercase 
-             hover:font-[700] transition-colors duration-300
-              hover:border-[#ff3f6c] hover:bg-[#ffeaef] focus:outline-none"
+            px-[10px] max-w-[80px] w-full py-[5px] text-xs sm:text-sm font-[700] uppercase 
+            hover:font-[700] transition-colors duration-300
+            hover:border-[#ff3f6c] hover:bg-[#ffeaef] focus:outline-none"
         >
           Apply
         </button>
       </div>
+
       <hr className="my-4 text-[#eaeaec]" />
+
       <div>
         <p className="font-bold mb-2 text-[#535766] text-xs sm:text-sm">
           PRICE DETAILS ({selectedItems?.length} Item)
@@ -188,8 +216,8 @@ const PriceSummary: React.FC<Props> = ({
             </div>
             <div className="text-xs sm:text-sm flex justify-between font-normal my-1 text-[#282c3f]">
               <span>Coupon Discount</span>{" "}
-              <span className="text-[#ff3f6c] cursor-pointer">
-                Apply Coupon
+              <span className="text-[#ff3f6c]">
+                -₹{couponDiscount ? couponDiscount.toFixed(0) : 0}
               </span>
             </div>
             <div className="text-xs sm:text-sm flex justify-between font-normal my-1 text-[#282c3f]">
@@ -213,6 +241,12 @@ const PriceSummary: React.FC<Props> = ({
           PLACE ORDER
         </button>
       </div>
+
+      <ApplyCouponModal
+        handleCloseCouponDialog={handleCloseCouponDialog}
+        openCouponDialog={openCouponDialog}
+        onApplyCoupon={handleApplyCoupon}
+      />
     </div>
   );
 };
@@ -230,6 +264,9 @@ const CartItemsList: React.FC<Props> = ({
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedQuantity, setSelectedQuantity] = useState<number | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>("");
+  const [defaultAddress, setDefaultAddress] = useState<FormAddressData | null>(
+    null
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -277,6 +314,7 @@ const CartItemsList: React.FC<Props> = ({
       isAvailable: item.product?.quantity > 0,
     }));
 
+    setDefaultAddress(response.data.data.defaultAddress);
     setCartItems(items);
   };
 
@@ -335,12 +373,12 @@ const CartItemsList: React.FC<Props> = ({
             <p className="text-[#282c3f] text-xs font-normal">
               Deliver to :{" "}
               <span className="text-[#282c3f] font-bold">
-                Neha Makwana, 382245
+                {defaultAddress?.full_name}, {defaultAddress?.postal_code}
               </span>
             </p>
             <p className="text-[#282c3f] text-xs font-normal">
-              {" "}
-              Alnoor park society, Aniyali road, Ranpur , Ahmedabad
+              {defaultAddress?.address_line1}, {defaultAddress?.address_line2},{" "}
+              {defaultAddress?.city} , {defaultAddress?.state}
             </p>
           </div>
           <button
