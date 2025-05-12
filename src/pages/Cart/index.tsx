@@ -17,11 +17,13 @@ import { CartAddresses } from "./CartAddress";
 import { SizeModal } from "./Dialogs/SizeModal";
 import { QuantityModal } from "./Dialogs/QuantityModal";
 import { ApplyCouponModal } from "./Dialogs/ApplyCouponModal";
+import PaymentScreen from "./PaymentScreen";
 
 type Props = {
-  setMaxAllowedStep: (step: number) => void;
-  setActiveStep: (step: number) => void;
+  setMaxAllowedStep: () => void;
+  setActiveStep: () => void;
   cartItems: CartItems[];
+  activeStep: number;
   setCartItems: React.Dispatch<React.SetStateAction<CartItems[]>>;
 };
 
@@ -31,6 +33,14 @@ export const ProductCart: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItems[]>([]);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [maxAllowedStep, setMaxAllowedStep] = useState<number>(0);
+
+  const handleIncreaseSetMaxAllowedStep = () => {
+    setMaxAllowedStep((prev) => prev + 1);
+  };
+
+  const handleIncreaseSetActiveStep = () => {
+    setActiveStep((prev) => prev + 1);
+  };
 
   const handleStepClick = (index: number) => {
     if (index <= maxAllowedStep) {
@@ -95,9 +105,10 @@ export const ProductCart: React.FC = () => {
         {activeStep === 0 ? (
           <CartItemsList
             cartItems={cartItems}
+            activeStep={activeStep}
             setCartItems={setCartItems}
-            setMaxAllowedStep={setMaxAllowedStep}
-            setActiveStep={setActiveStep}
+            setMaxAllowedStep={handleIncreaseSetMaxAllowedStep}
+            setActiveStep={handleIncreaseSetActiveStep}
           />
         ) : activeStep === 1 ? (
           <div className="flex flex-col md:flex-row gap-6">
@@ -105,14 +116,26 @@ export const ProductCart: React.FC = () => {
               <CartAddresses />
             </div>
             <PriceSummary
-              setActiveStep={setActiveStep}
-              setMaxAllowedStep={setMaxAllowedStep}
+              activeStep={activeStep}
+              setActiveStep={handleIncreaseSetActiveStep}
+              setMaxAllowedStep={handleIncreaseSetMaxAllowedStep}
               setCartItems={setCartItems}
               cartItems={cartItems}
             />
           </div>
         ) : (
-          <div>Payment</div>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="w-full md:w-[70%]">
+              <PaymentScreen />
+            </div>
+            <PriceSummary
+              activeStep={activeStep}
+              setActiveStep={handleIncreaseSetActiveStep}
+              setMaxAllowedStep={handleIncreaseSetMaxAllowedStep}
+              setCartItems={setCartItems}
+              cartItems={cartItems}
+            />
+          </div>
         )}
       </div>
     </>
@@ -123,6 +146,7 @@ const PriceSummary: React.FC<Props> = ({
   setMaxAllowedStep,
   setActiveStep,
   cartItems,
+  activeStep,
 }) => {
   const [openCouponDialog, setOpenCouponDialog] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState<{
@@ -172,8 +196,8 @@ const PriceSummary: React.FC<Props> = ({
 
   const handlePlaceOrder = () => {
     if (selectedItems && selectedItems.length > 0) {
-      setMaxAllowedStep(1);
-      setActiveStep(1);
+      setMaxAllowedStep();
+      setActiveStep();
     }
   };
 
@@ -233,13 +257,15 @@ const PriceSummary: React.FC<Props> = ({
         <div className="font-bold flex text-xs sm:text-sm justify-between my-1 text-[#3e4152]">
           <span>Total Amount</span> <span>₹{totalAmount}</span>
         </div>
-        <button
-          className="w-full mt-4 cursor-pointer bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]"
-          disabled={selectedItems?.length === 0}
-          onClick={handlePlaceOrder}
-        >
-          PLACE ORDER
-        </button>
+        {activeStep < 2 && (
+          <button
+            className="w-full mt-4 cursor-pointer bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]"
+            disabled={selectedItems?.length === 0}
+            onClick={handlePlaceOrder}
+          >
+            PLACE ORDER
+          </button>
+        )}
       </div>
 
       <ApplyCouponModal
@@ -256,6 +282,7 @@ const CartItemsList: React.FC<Props> = ({
   setMaxAllowedStep,
   setActiveStep,
   setCartItems,
+  activeStep,
 }) => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
   const [openSizeDialog, setOpenSizeDialog] = useState<boolean>(false);
@@ -598,6 +625,7 @@ const CartItemsList: React.FC<Props> = ({
         setMaxAllowedStep={setMaxAllowedStep}
         setCartItems={setCartItems}
         cartItems={cartItems}
+        activeStep={activeStep}
       />
 
       <Dialog
