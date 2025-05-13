@@ -81,7 +81,7 @@ export const Header: React.FC = () => {
     setActivePopoverIndex(index);
   };
   useEffect(() => {
-    dispatch(setLoading({ key: "search", value: true }));
+    // dispatch(setLoading({ key: "search", value: true }));
     if (debouncedSearchTerm)
       getheaderSearch(inputValue)
         .then((res) => {

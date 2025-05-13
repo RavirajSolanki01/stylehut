@@ -18,7 +18,9 @@ const authSlice = createSlice({
       state.token = action.payload.token;
     },
     removeAuthToken: (state) => {
-      localStorage.removeItem("authToken")
+      localStorage.removeItem("authToken");
+      sessionStorage.removeItem("hasFetchedCategories");
+
       state.token = "";
     },
   },

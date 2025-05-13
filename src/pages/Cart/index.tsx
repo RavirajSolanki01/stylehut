@@ -4,11 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { Checkbox, Dialog, IconButton, styled } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
-import { getCartProducts, removeFromCart } from "../../services/cartService";
-import { CartItems, FormAddressData, Product } from "../../utils/types";
+import {
+  getCartProducts,
+  moveAllFromCartToWishlist,
+  removeAllFromCart,
+  removeFromCart,
+} from "../../services/cartService";
+import { CartItems, Coupon, FormAddressData, Product } from "../../utils/types";
 import { toast } from "react-toastify";
 import { postWishlist } from "../../services/wishlistService";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../store/slice/loading.slice";
 import { LoaderOverlay } from "../../components/Loader";
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
@@ -19,6 +24,8 @@ import { QuantityModal } from "./Dialogs/QuantityModal";
 import { ApplyCouponModal } from "./Dialogs/ApplyCouponModal";
 import { ChangeAddressModal } from "./Dialogs/ChangeAddressModal";
 import PaymentScreen from "./PaymentScreen";
+import { addAppliedCoupon } from "../../store/slice/cart.slice";
+import { RootState } from "../../store";
 
 type Props = {
   setMaxAllowedStep: React.Dispatch<React.SetStateAction<number>>;
@@ -141,18 +148,23 @@ const PriceSummary: React.FC<Props> = ({
   cartItems,
   activeStep,
 }) => {
+  const { selectedCoupon } = useSelector((state: RootState) => ({
+    selectedCoupon: state.cart.coupon,
+  }));
   const [openCouponDialog, setOpenCouponDialog] = useState(false);
-  const [appliedCoupon, setAppliedCoupon] = useState<{
-    code: string;
-    maxSavings: number;
-    minPurchase: number;
-  } | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(
+    selectedCoupon
+  );
+  const dispatch = useDispatch();
 
   const handleCloseCouponDialog = () => setOpenCouponDialog(false);
-  const handleOpenCouponDialog = () => setOpenCouponDialog(true);
+  const handleOpenCouponDialog = () => {
+    setOpenCouponDialog(true);
+  };
 
   const handleApplyCoupon = (coupon: typeof appliedCoupon) => {
     setAppliedCoupon(coupon);
+    dispatch(addAppliedCoupon(coupon));
     handleCloseCouponDialog();
   };
 
@@ -173,8 +185,11 @@ const PriceSummary: React.FC<Props> = ({
     .toFixed(0);
 
   const couponDiscount =
-    appliedCoupon && Number(totalMRP) >= appliedCoupon.minPurchase
-      ? Math.min(appliedCoupon.maxSavings, Number(totalMRP) * 0.15)
+    appliedCoupon && Number(totalMRP) >= Number(appliedCoupon.min_order_amount)
+      ? Math.min(
+          Number(appliedCoupon.max_savings_amount),
+          Number(totalMRP) * 0.15
+        )
       : 0;
 
   const totalAmount =
@@ -277,6 +292,7 @@ const PriceSummary: React.FC<Props> = ({
         handleCloseCouponDialog={handleCloseCouponDialog}
         openCouponDialog={openCouponDialog}
         onApplyCoupon={handleApplyCoupon}
+        totalAmount={Number(totalAmount)}
       />
     </div>
   );
@@ -318,25 +334,37 @@ const CartItemsList: React.FC<Props> = ({
   const handleCloseQuantityDialog = () => setOpenQuantityDialog(false);
 
   const handleSelectItem = (id: number) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
+    setCartItems((prev) => {
+      const updatedCartItems = prev.map((item) =>
         item.id === id ? { ...item, isSelected: !item.isSelected } : item
-      )
-    );
+      );
+      return updatedCartItems;
+    });
+  };
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+
+    setCartItems((prev) => {
+      const updatedCartItems = prev.map((item) =>
+        item.isAvailable ? { ...item, isSelected: isChecked } : item
+      );
+      return updatedCartItems;
+    });
   };
 
   const selectedItems = cartItems.filter(
     (item) => item.isSelected && item.isAvailable
   );
 
-  const withLoading = async (callback: () => Promise<void>) => {
+  const withLoading = async (key: string, callback: () => Promise<void>) => {
     try {
-      dispatch(setLoading({ key: "cart", value: true }));
+      dispatch(setLoading({ key, value: true }));
       await callback();
     } catch (error) {
       toast.error("Something went wrong!");
     } finally {
-      dispatch(setLoading({ key: "cart", value: false }));
+      dispatch(setLoading({ key, value: false }));
     }
   };
 
@@ -360,7 +388,7 @@ const CartItemsList: React.FC<Props> = ({
 
   const handleRemoveFromCart = async (productId: number) => {
     setOpenConfirmDialog(false);
-    await withLoading(async () => {
+    await withLoading("remove-from-cart", async () => {
       const response = await removeFromCart(productId);
       if (response.status === 200) {
         toast.success("Item removed from Bag");
@@ -369,10 +397,32 @@ const CartItemsList: React.FC<Props> = ({
     });
   };
 
+  const handleRemoveAllSelectedItems = async () => {
+    await withLoading("remove-all-from-cart", async () => {
+      const productIds = selectedItems.flatMap((item) => item.product_id);
+      const response = await removeAllFromCart(productIds);
+      if (response.status === 200) {
+        toast.success("All selected items removed from Bag");
+        await refreshCart();
+      }
+    });
+  };
+
+  const handleMoveAllSelectedItemsToWishlist = async () => {
+    await withLoading("remove-all-to-wishlist", async () => {
+      const productIds = selectedItems.flatMap((item) => item.product_id);
+      const response = await moveAllFromCartToWishlist(productIds);
+      if (response.status === 200) {
+        toast.success("All selected items moved to wishlist");
+        await refreshCart();
+      }
+    });
+  };
+
   const handleAddToWishlist = async () => {
     if (!selectedProduct?.id) return;
 
-    await withLoading(async () => {
+    await withLoading("add-to-wishlist", async () => {
       setOpenConfirmDialog(false);
       const wishlistResponse = await postWishlist({
         product_id: Number(selectedProduct.id),
@@ -391,7 +441,7 @@ const CartItemsList: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    withLoading(refreshCart);
+    withLoading("refresh-cart", refreshCart);
   }, []);
 
   const handleDeleteClick = (product: Product, itemId: number) => {
@@ -441,24 +491,24 @@ const CartItemsList: React.FC<Props> = ({
                 selectedItems.length ===
                 cartItems.filter((i) => i.isAvailable).length
               }
-              onChange={(e) =>
-                setCartItems((prev) =>
-                  prev.map((item) =>
-                    item.isAvailable
-                      ? { ...item, isSelected: e.target.checked }
-                      : item
-                  )
-                )
-              }
+              onChange={handleSelectAll}
             />
             {selectedItems.length}/{cartItems.length} Items Selected
           </div>
           <div className="flex w-full max-w-[310px] ml-3 sm:ml-0 items-center text-xs sm:text-sm font-semibold py-0 sm:py-2">
-            <button className=" max-w-[60px] sm:max-w-[100px] w-full font-bold text-[#535766] p-1 text-xs sm:text-sm focus:outline-none normal-case sm:uppercase">
-              Remove
+            <button
+              disabled={selectedItems.length <= 0}
+              onClick={() => handleRemoveAllSelectedItems()}
+              className="cursor-pointer max-w-[60px] sm:max-w-[100px] w-full font-bold text-[#535766] p-1 text-xs sm:text-sm focus:outline-none normal-case sm:uppercase disabled:text-gray-300 disabled:cursor-not-allowed"
+            >
+              Remove All
             </button>
             <div className="border-l border-gray-300 h-5 mx-2" />
-            <button className="max-w-[160px] sm:max-w-[200px] text-justify sm:text-center w-full font-bold text-[#535766] p-1 text-xs sm:text-sm focus:outline-none normal-case sm:uppercase">
+            <button
+              disabled={selectedItems.length <= 0}
+              onClick={() => handleMoveAllSelectedItemsToWishlist()}
+              className="cursor-pointer max-w-[160px] sm:max-w-[200px] text-justify sm:text-center w-full font-bold text-[#535766] p-1 text-xs sm:text-sm focus:outline-none normal-case sm:uppercase disabled:text-gray-300 disabled:cursor-not-allowed"
+            >
               Move to wishlist
             </button>
           </div>
