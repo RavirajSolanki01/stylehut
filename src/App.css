@@ -313,3 +313,48 @@ body,
     margin-bottom: 10px;
   }
 }
+
+
+
+/* ------- */
+
+.custom_data h1 {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+}
+ .custom_data h2 {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+}
+ .custom_data h3 {
+  font-size: 1.25rem !important;
+  font-weight: 500 !important;
+}
+ .custom_data h4 {
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+}
+ .custom_data h5 {
+  font-size: 0.875rem !important;
+  font-weight: 300 !important;
+}
+ .custom_data h6 {
+  font-size: 0.75rem !important;
+  font-weight: 200 !important;
+}
+ .custom_data ul {
+  list-style-type: disc !important;
+  margin-left: 1.5rem !important;
+}
+
+ .custom_data ul li {
+  margin-bottom: 0.5rem !important;
+}
+ .custom_data ol {
+  list-style-type: decimal !important;
+  margin-left: 1.5rem !important;
+}
+
+ .custom_data ol li {
+  margin-bottom: 0.5rem !important;
+}
