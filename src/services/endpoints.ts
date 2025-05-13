@@ -18,4 +18,5 @@ export const POST_CART_API_ENDPOINT = "/api/cart";
 export const GET_BRAND_LIST_API_ENDPOINT = "/api/brand";
 export const GET_CART_PRODUCTS_API_ENDPOINT = "api/cart/user";
 export const DELETE_FROM_CART_API_ENDPOINT = "/api/cart";
-
+export const GET_TERMS_API_ENDPOINT = "/api/terms";
+export const GET_PRIVACY_POLICY_API_ENDPOINT = "/api/policy";
