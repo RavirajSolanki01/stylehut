@@ -18,7 +18,7 @@ export const PRIVATE_ROUTES = {
   SAVEDCARDS: "saved-cards",
   SAVEDUPIS: "saved-upi",
   SAVEDWALLETS: "saved-wallets",
-  ADDRESSES: "adderesses",
+  ADDRESSES: "Addresses",
   INSIDER: "insider",
   DELETEACCOUNT: "delete-account",
   TERMSOFUSE: "terms",

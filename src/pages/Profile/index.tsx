@@ -155,7 +155,7 @@ export const Profile: React.FC = () => {
                   Saved Wallets/BNPL
                 </NavLink>
                 <NavLink
-                  to="adderesses"
+                  to="Addresses"
                   className={({ isActive }) =>
                     `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                       isActive
@@ -164,7 +164,7 @@ export const Profile: React.FC = () => {
                     }`
                   }
                 >
-                  Adderesses
+                  Addresses
                 </NavLink>
                 <NavLink
                   to="insider"

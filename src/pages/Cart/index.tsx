@@ -17,6 +17,7 @@ import { CartAddresses } from "./CartAddress";
 import { SizeModal } from "./Dialogs/SizeModal";
 import { QuantityModal } from "./Dialogs/QuantityModal";
 import { ApplyCouponModal } from "./Dialogs/ApplyCouponModal";
+import { ChangeAddressModal } from "./Dialogs/ChangeAddressModal";
 
 type Props = {
   setMaxAllowedStep: (step: number) => void;
@@ -177,6 +178,13 @@ const PriceSummary: React.FC<Props> = ({
     }
   };
 
+  useEffect(() => {
+   if (selectedItems.length <= 0) {
+      setMaxAllowedStep(0);
+      setActiveStep(0);
+    }
+  },[selectedItems])
+
   return (
     <div className="w-full lg:w-[30%] md:w-[100%] py-5 sm:py-0">
       <p className="text-[#535766] font-bold text-xs sm:text-sm uppercase mb-2">
@@ -267,6 +275,7 @@ const CartItemsList: React.FC<Props> = ({
   const [defaultAddress, setDefaultAddress] = useState<FormAddressData | null>(
     null
   );
+  const [openAddressDialog, setOpenAddressDialog] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -275,6 +284,8 @@ const CartItemsList: React.FC<Props> = ({
     setSelectedProduct(product);
   };
   const handleCloseSizeDialog = () => setOpenSizeDialog(false);
+  const handleCloseChangeAddressDialog = () => setOpenAddressDialog(false);
+  const handleOpenChangeAddressDialog = () => setOpenAddressDialog(true);
 
   const handleOpenQuantityDialog = (product: Product) => {
     setOpenQuantityDialog(true);
@@ -368,28 +379,31 @@ const CartItemsList: React.FC<Props> = ({
   return (
     <div className="flex flex-col lg:flex-row gap-2">
       <div className="w-full lg:w-[70%] md:w-[100%]">
-        <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#fff6f4] border border-[#eaeaec] rounded-md">
-          <div>
-            <p className="text-[#282c3f] text-xs font-normal">
-              Deliver to :{" "}
-              <span className="text-[#282c3f] font-bold">
-                {defaultAddress?.full_name}, {defaultAddress?.postal_code}
-              </span>
-            </p>
-            <p className="text-[#282c3f] text-xs font-normal">
-              {defaultAddress?.address_line1}, {defaultAddress?.address_line2},{" "}
-              {defaultAddress?.city} , {defaultAddress?.state}
-            </p>
-          </div>
-          <button
-            className="cursor-pointer bg-transparent border border-[#ff3f6c] text-[#ff3f6c] text-center 
+        {defaultAddress !== null && (
+          <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#fff6f4] border border-[#eaeaec] rounded-md">
+            <div>
+              <p className="text-[#282c3f] text-xs font-normal">
+                Deliver to :{" "}
+                <span className="text-[#282c3f] font-bold">
+                  {defaultAddress?.full_name}, {defaultAddress?.postal_code}
+                </span>
+              </p>
+              <p className="text-[#282c3f] text-xs font-normal">
+                {defaultAddress?.address_line1}, {defaultAddress?.address_line2}
+                , {defaultAddress?.city} , {defaultAddress?.state}
+              </p>
+            </div>
+            <button
+              onClick={handleOpenChangeAddressDialog}
+              className="cursor-pointer bg-transparent border border-[#ff3f6c] text-[#ff3f6c] text-center 
               px-[10px] w-full sm:max-w-[160px] py-[7px] my-2 sm:my-[15px] text-xs sm:text-md font-[700] rounded-md capitalize 
              hover:font-[700] transition-colors duration-300
               hover:border-[#ff3f6c]  focus:outline-none sm:uppercase"
-          >
-            Change address
-          </button>
-        </div>
+            >
+              Change address
+            </button>
+          </div>
+        )}
         <div className="flex flex-col md:flex-row justify-between sm:items-center my-2 sm:my-3">
           <div className="py-1 ml-2 font-semibold text-gray-800 text-xs sm:text-sm normal-case sm:uppercase">
             <Checkbox
@@ -421,12 +435,15 @@ const CartItemsList: React.FC<Props> = ({
             </button>
             <div className="border-l border-gray-300 h-5 mx-2" />
             <button className="max-w-[160px] sm:max-w-[200px] text-justify sm:text-center w-full font-bold text-[#535766] p-1 text-xs sm:text-sm focus:outline-none normal-case sm:uppercase">
-              Move to whishlist
+              Move to wishlist
             </button>
           </div>
         </div>
         {cartItems.map((item) => (
-          <div className="border border-[#eaeaec] rounded-md p-4 mb-2">
+          <div
+            key={item.id}
+            className="border border-[#eaeaec] rounded-md p-4 mb-2"
+          >
             <div className="relative">
               <button
                 className="absolute right-1 text-gray-500 hover:text-black cursor-pointer hover:bg-[#f5f5f5] p-2 rounded-[50%]"
@@ -653,7 +670,7 @@ const CartItemsList: React.FC<Props> = ({
               onClick={() => handleAddToWishlist()}
               className="flex-1 text-xs uppercase text-[#ff3f6c] p-1 focus:outline-none cursor-pointer"
             >
-              Move to whishlist
+              Move to wishlist
             </button>
           </div>
         </div>
@@ -671,6 +688,12 @@ const CartItemsList: React.FC<Props> = ({
         openQuantityDialog={openQuantityDialog}
         selectedQuantity={selectedQuantity as number}
         setSelectedQuantity={setSelectedQuantity}
+      />
+
+      <ChangeAddressModal
+        handleCloseAddressDialog={handleCloseChangeAddressDialog}
+        openAddressDialog={openAddressDialog}
+        refreshCart={refreshCart}
       />
     </div>
   );

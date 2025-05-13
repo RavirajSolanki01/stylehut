@@ -194,7 +194,7 @@ export const accountSections = [
   {
     icon: Addersses,
     title: "Addresses",
-    path: "adderesses",
+    path: "Addresses",
     subtitle: "Save addresses for a hassle-free checkout",
   },
   {
@@ -299,7 +299,7 @@ export const PaymentSections = [
   {
     icon: Addersses,
     title: "Addresses",
-    path: "adderesses",
+    path: "Addresses",
     subtitle: "Save addresses for a hassle-free checkout",
   },
   {
