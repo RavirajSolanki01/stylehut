@@ -189,17 +189,22 @@ const PriceSummary: React.FC<Props> = ({
 
   const handlePlaceOrder = () => {
     if (selectedItems && selectedItems.length > 0) {
-      setMaxAllowedStep(1);
-      setActiveStep(1);
+      if (activeStep === 1) {
+        setActiveStep(2);
+        setMaxAllowedStep(2);
+      } else {
+        setMaxAllowedStep(1);
+        setActiveStep(1);
+      }
     }
   };
 
   useEffect(() => {
-   if (selectedItems.length <= 0) {
+    if (selectedItems.length <= 0) {
       setMaxAllowedStep(0);
       setActiveStep(0);
     }
-  },[selectedItems])
+  }, [selectedItems]);
 
   return (
     <div className="w-full lg:w-[30%] md:w-[100%] py-5 sm:py-0">
