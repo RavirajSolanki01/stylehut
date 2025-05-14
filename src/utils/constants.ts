@@ -35,6 +35,14 @@ import {
   Sunglasses,
   HeadPhones,
 } from "../assets";
+import StarIcon from "../assets/Cart/SVGs/StarIcon";
+import CardIcon from "../assets/Cart/SVGs/CardIcon";
+import PayLaterIcon from "../assets/Cart/SVGs/PayLaterIcon";
+import WalletIcon from "../assets/Cart/SVGs/WalletIcon";
+import EMIIcon from "../assets/Cart/SVGs/EMIIcon";
+import NetBankingIcon from "../assets/Cart/SVGs/NetBankingIcon";
+import UPIIcon from "../assets/Cart/SVGs/UPIIcon";
+import CODIcon from "../assets/Cart/SVGs/CODIcon";
 
 export const colorMap: Record<string, string> = {
   Beauty: "#0db7af",
@@ -552,26 +560,26 @@ export const PRODUCT_DETAIL_CONSTANTS = {
     {
       id: 1,
       title: "10% Discount on HDFC Bank Credit & Debit Cards EMI",
-      minSpend: "₹3500",
-      maxDiscount: "₹1000",
+      minSpend: "3500",
+      maxDiscount: "1000",
     },
     {
       id: 2,
       title: "10% Discount on IDFC FIRST SWYP Credit Card",
-      minSpend: "₹850",
-      maxDiscount: "₹350",
+      minSpend: "850",
+      maxDiscount: "350",
     },
     {
       id: 3,
       title: "10% Discount on HSBC Credit Cards",
-      minSpend: "₹5000",
-      maxDiscount: "₹1500",
+      minSpend: "5000",
+      maxDiscount: "1500",
     },
     {
       id: 4,
       title: "7.5% Discount on Myntra Kotak Credit Card",
       minSpend: null,
-      maxDiscount: "₹750",
+      maxDiscount: "750",
     },
   ],
   PRODUCT_SPECIFICATION: [
@@ -642,7 +650,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "Nike",
       title: "Men's Running Shoes",
       discount: 20,
-      price: "₹3,199",
+      price: "3,199",
       imgUrl: SimilarProduct1,
     },
     {
@@ -650,7 +658,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "Adidas",
       title: "Ultraboost Sports Sneakers",
       discount: 25,
-      price: "₹5,499",
+      price: "5,499",
       imgUrl: SimilarProduct2,
     },
     {
@@ -658,7 +666,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "Puma",
       title: "Casual Sneakers for Men",
       discount: 30,
-      price: "₹2,799",
+      price: "2,799",
       imgUrl: SimilarProduct3,
     },
     {
@@ -666,7 +674,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "Reebok",
       title: "Training Shoes",
       discount: 15,
-      price: "₹3,899",
+      price: "3,899",
       imgUrl: SimilarProduct1,
     },
     {
@@ -674,7 +682,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "ASICS",
       title: "Gel-Contend 7 Running Shoes",
       discount: 18,
-      price: "₹4,299",
+      price: "4,299",
       imgUrl: SimilarProduct2,
     },
     {
@@ -682,7 +690,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "New Balance",
       title: "Fresh Foam Sneakers",
       discount: 22,
-      price: "₹4,799",
+      price: "4,799",
       imgUrl: SimilarProduct3,
     },
     {
@@ -690,7 +698,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "Skechers",
       title: "GOwalk Arch Fit Shoes",
       discount: 27,
-      price: "₹3,499",
+      price: "3,499",
       imgUrl: SimilarProduct1,
     },
     {
@@ -698,7 +706,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "Woodland",
       title: "Leather Outdoor Shoes",
       discount: 10,
-      price: "₹4,999",
+      price: "4,999",
       imgUrl: SimilarProduct2,
     },
     {
@@ -706,7 +714,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "Campus",
       title: "Running Shoes with Air Capsule",
       discount: 35,
-      price: "₹2,099",
+      price: "2,099",
       imgUrl: SimilarProduct3,
     },
     {
@@ -714,7 +722,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "Bata",
       title: "Power Walking Shoes",
       discount: 12,
-      price: "₹1,899",
+      price: "1,899",
       imgUrl: SimilarProduct1,
     },
     {
@@ -722,7 +730,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
       brandName: "Sparx",
       title: "Slip-On Sneakers",
       discount: 40,
-      price: "₹1,499",
+      price: "1,499",
       imgUrl: SimilarProduct2,
     },
   ],
@@ -806,6 +814,32 @@ export const sortByOptions = [
   "Customer rating",
 ];
 
+export const paymentMethods = [
+  { icon: StarIcon, label: "Recommended" },
+  { icon: CODIcon, label: "Cash On Delivery" },
+  {
+    icon: UPIIcon,
+    label: "UPI (Pay via any App)",
+  },
+  {
+    icon: CardIcon,
+    label: "Credit/Debit Card",
+    secondary: "10 Offers",
+  },
+  { icon: PayLaterIcon, label: "Pay Later" },
+  {
+    icon: WalletIcon,
+    label: "Wallets",
+    secondary: "1 Offer",
+  },
+  { icon: EMIIcon, label: "EMI" },
+  {
+    icon: NetBankingIcon,
+    label: "Net Banking",
+    secondary: "1 Offer",
+  },
+];
+
 export const offers_list = [
   "10% Instant Discount on Canara Bank Credit Cards on a min spend of ₹3,500. TCA",
   "10% Instant Discount on DBS Bank Credit Cards & Credit Card EMI on a min spend of ₹3,000. TCA",
@@ -824,4 +858,278 @@ export const offers_list = [
   "Get Upto ₹500 cashback On Mobikwik Wallet transaction on a min spend of ₹1,500.TCA",
   "Get up to ₹250 Cashback on Mobikwik UPI on a min spend of ₹999. TCA",
   "Flat ₹100 Assured Cashback on first ever transaction using Mobikwik UPI on a min spend of ₹500. TCA",
+];
+
+export const emi_bank_details = [
+  {
+    label: "DBS Bank Credit Card EMI",
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "HDFC Credit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/hdfc2.png",
+    minimum_order_value: "3000",
+  },
+  {
+    label: "HDFC Debit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/hdfc2.png",
+    minimum_order_value: "5000",
+  },
+  {
+    label: "Axis Credit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/axis.webp",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "Kotak Credit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/kotak.png",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "IDFC First Bank Credit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/idfc.webp",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "Bank of Baroda Credit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/bob.webp",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "ICICI Credit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/icici.png",
+    minimum_order_value: "1500",
+  },
+  {
+    label: "ICICI Debit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/icici.png",
+    minimum_order_value: "5000",
+  },
+  {
+    label: "SBI Credit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/sbi.png",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "RBL Bank Credit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/rblbank.webp",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "Canara Bank Credit Card EMI",
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "AU Small Finance Bank Credit Card EMI",
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "Standard Chartered Credit Card EMI",
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/standardchartered.webp",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "HSBC Bank Credit Card EMI",
+    image: "https://constant.myntassets.com/checkout/assets/img/hsbc.webp",
+    minimum_order_value: "2500",
+  },
+  {
+    label: "Home Credit Ujjwal EMI Card",
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/homecreditlogo.webp",
+    minimum_order_value: "1000",
+  },
+];
+
+export const highlighted_net_banking_options = [
+  {
+    image: "https://constant.myntassets.com/checkout/assets/img/axis.webp",
+    name: "Axis Bank",
+    is_facing_issue: false,
+  },
+  {
+    image: "https://constant.myntassets.com/checkout/assets/img/hdfc2.png",
+    name: "HDFC Bank",
+    is_facing_issue: false,
+  },
+  {
+    image: "https://constant.myntassets.com/checkout/assets/img/icici.png",
+    name: "ICICI Bank",
+    is_facing_issue: false,
+  },
+  {
+    image: "https://constant.myntassets.com/checkout/assets/img/kotak.png",
+    name: "Kotak",
+    is_facing_issue: false,
+  },
+  {
+    image: "https://constant.myntassets.com/checkout/assets/img/sbi.png",
+    name: "SBI",
+    is_facing_issue: true,
+  },
+];
+
+export const all_banks_list_for_net_banking = [
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Airtel payments bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Bank of Baroda Corporate",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Bank of Baroda Retail Accounts",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Bank of India",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Bank of Maharashtra",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Canara Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Catholic Syrian Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Central Bank of India",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "City Union Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "DCB BANK Personal",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Deutsche Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Dhanlaxmi Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Federal Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "IDBI Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "IDFC FIRST Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Indian Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Indian Overseas Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "IndusInd Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "ING Vysya Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Jammu and kashmir Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Karnataka Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Karur Vysya - Corporate Netbanking",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Karur Vysya Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Lakshmi Vilas Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Oriental Bank of Commerce",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "PayU Money",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Punjab and Sind Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Punjab National Bank [Corporate]",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Punjab National Bank [Retail]",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Ratnakar Bank",
+  },
+  {
+    image:
+      "https://constant.myntassets.com/checkout/assets/img/default-bank.svg",
+    name: "Saraswat Bank",
+  },
 ];
