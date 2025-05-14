@@ -22,6 +22,11 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CircleIcon from "@mui/icons-material/Circle";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
+import { getDateRange } from "../../../utils/reusable-functions";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import { IFilterOption } from "../../../utils/types";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import { getUserOrderList } from "../../../services/userOrderService";
 
 const orderReviews = [
   {
@@ -94,6 +99,17 @@ const timeOption = [
 export const Orders = () => {
   const [value, setValue] = useState<number | null>(0);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [filterOption, setFilterOption] = useState<IFilterOption>({
+    startDate: "",
+    endDate: "",
+    status: "",
+  });
+  const [{ currentPage, totalPages }, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 0,
+  });
+
   const handleFilterClick = () => {
     setIsFilterOpen(true);
   };
@@ -101,6 +117,62 @@ export const Orders = () => {
   const handleFilterClose = () => {
     setIsFilterOpen(false);
   };
+
+  const handleTimeFilterChange = (selectedTime: string) => {
+    const { startDate, endDate } = getDateRange(selectedTime);
+
+    setFilterOption((prevState: IFilterOption) => ({
+      ...prevState,
+      startDate: startDate ? startDate.toLocaleString() : "",
+      endDate: endDate ? endDate.toLocaleString() : "",
+    }));
+  };
+
+  const handleStatusFilterChange = (selectedStatus: string) => {
+    setFilterOption((prevState: IFilterOption) => ({
+      ...prevState,
+      status: selectedStatus,
+    }));
+  };
+  const handlePageChange = (page: number) => {
+    setPagination((pageItems) => ({
+      ...pageItems,
+      currentPage: page,
+    }));
+  };
+
+  const fetchProducts = async (
+    pageNo?: number,
+    order?: string,
+    sortingBy?: string
+  ) => {
+    setIsLoading(true);
+    try {
+      const response = await getUserOrderList({
+        page: currentPage,
+        pageSize: 10,
+        sortBy: "created_at",
+        status: filterOption.status,
+        order: "desc",
+        payment_status: "",
+        startDate: filterOption.startDate,
+        endDate: filterOption.endDate,
+        search: "",
+      });
+
+      setProducts(response.data.data.items);
+      setPagination({
+        currentPage: response.data.data.meta.page,
+        totalPages: response.data.data.meta.totalPages,
+      });
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  console.log("filter=>", filterOption, currentPage);
 
   return (
     <div className="p-4 w-full">
@@ -192,6 +264,55 @@ export const Orders = () => {
           );
         })}
       </div>
+      {orderReviews.length !== 0 && (
+        <div className="flex justify-center items-center gap-2 mt-8">
+          <button
+            className={`default px-4 py-2 rounded-md font-bold flex justify-center items-center
+      ${
+        currentPage === 1
+          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+          : "bg-white text-[#282c3f] hover:bg-gray-100"
+      }
+    `}
+            onClick={() => handlePageChange(1)}
+            disabled={currentPage === 1}
+          >
+            <KeyboardDoubleArrowLeftIcon /> Page 1
+          </button>
+
+          <button
+            className={`default px-4 py-2 rounded-md font-bold flex justify-center items-center
+      ${
+        currentPage === 1
+          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+          : "bg-white text-[#282c3f] hover:bg-gray-100"
+      }
+    `}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft /> Previous
+          </button>
+
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            className={`default px-4 py-2 rounded-md font-bold flex justify-center items-center
+      ${
+        currentPage === totalPages
+          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+          : "bg-white text-[#282c3f] hover:bg-gray-100"
+      }
+    `}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next <ChevronRight />
+          </button>
+        </div>
+      )}
       {orderReviews.length === 0 && (
         <div className="flex justify-center flex-col items-center h-[100%]">
           <img src={ErrorV2Icon} className="mb-[20px]" />
@@ -248,6 +369,7 @@ export const Orders = () => {
                 <StyledFormControlLabel
                   value={option.value}
                   control={<StyledRadio />}
+                  onChange={() => handleStatusFilterChange(option.label)}
                   label={option.label}
                   slotProps={{
                     typography: {
@@ -277,6 +399,7 @@ export const Orders = () => {
                   value={option.value}
                   control={<StyledRadio />}
                   label={option.label}
+                  onChange={() => handleTimeFilterChange(option.label)}
                   slotProps={{
                     typography: {
                       className:

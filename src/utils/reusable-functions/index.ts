@@ -24,3 +24,32 @@ export const withLoading = async (
     dispatch(setLoading({ key, value: false }));
   }
 };
+
+export const getDateRange = (option: string) => {
+  const endDate = new Date();
+  let startDate;
+
+  switch (option) {
+    case "Last 30 days":
+      startDate = new Date();
+      startDate.setDate(endDate.getDate() - 30);
+      break;
+
+    case "Last 6 Months":
+      startDate = new Date();
+      startDate.setMonth(endDate.getMonth() - 6);
+      break;
+
+    case "Last Year":
+      startDate = new Date();
+      startDate.setFullYear(endDate.getFullYear() - 1);
+      break;
+
+    case "Anytime":
+    default:
+      startDate = null;
+      break;
+  }
+
+  return { startDate, endDate: option === "Anytime" ? "" : endDate };
+};

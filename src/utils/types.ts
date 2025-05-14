@@ -165,3 +165,10 @@ export interface Brand {
   updated_at: string;
   is_deleted: boolean;
 }
+
+// -----------------------userOrder-------------------------------
+export interface IFilterOption {
+  startDate: string;
+  endDate: string;
+  status: string;
+}

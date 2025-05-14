@@ -24,3 +24,5 @@ export const GET_COUPONS_API_ENDPOINT = "api/coupon/offer";
 
 export const GET_TERMS_API_ENDPOINT = "/api/terms";
 export const GET_PRIVACY_POLICY_API_ENDPOINT = "/api/policy";
+
+export const GET_USER_ORDER_LIST_API_ENDPOINT = "/api/orders?";
