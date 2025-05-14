@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Logo } from "../../assets";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@mui/material";
-import { pink } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   getCartProducts,
@@ -274,11 +273,10 @@ const PriceSummary: React.FC<Props> = ({
         </div>
         <button
           onClick={handleOpenCouponDialog}
-          disabled={selectedItems.length <= 0}
-          className="cursor-pointer bg-transparent border border-[#ff3f6c] text-[#ff3f6c] text-center 
+          className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
             px-[10px] max-w-[80px] w-full py-[5px] text-xs sm:text-sm font-[700] uppercase 
-            hover:font-[700] transition-colors duration-300 disabled:cursor-not-allowed
-            hover:border-[#ff3f6c] hover:bg-[#ffeaef] focus:outline-none disabled:border-[#fccdd7] disabled:text-[#ffb8c7]"
+            hover:font-[700] transition-colors duration-300
+            hover:border-[#3880FF] hover:bg-[#eaebff] focus:outline-none"
         >
           Apply
         </button>
@@ -300,7 +298,7 @@ const PriceSummary: React.FC<Props> = ({
             </div>
             <div className="text-xs sm:text-sm flex justify-between font-normal my-1 text-[#282c3f]">
               <span>Coupon Discount</span>{" "}
-              <span className="text-[#ff3f6c]">
+              <span className="text-[#3880FF]">
                 -₹{couponDiscount ? couponDiscount.toFixed(0) : 0}
               </span>
             </div>
@@ -319,7 +317,7 @@ const PriceSummary: React.FC<Props> = ({
         </div>
         {activeStep < 2 && (
           <button
-            className="w-full mt-4 cursor-pointer bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]"
+            className="w-full mt-4 cursor-pointer bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#3880FF9b]"
             disabled={selectedItems?.length === 0}
             onClick={handlePlaceOrder}
           >
@@ -479,7 +477,7 @@ const CartItemsList: React.FC<Props> = ({
     <div className="flex flex-col lg:flex-row gap-2">
       <div className="w-full lg:w-[70%] md:w-[100%]">
         {defaultAddress !== null && (
-          <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#fff6f4] border border-[#eaeaec] rounded-md">
+          <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#8bc7ff46] border border-[#eaeaec] rounded-md">
             <div>
               <p className="text-[#282c3f] text-xs font-normal">
                 Deliver to :{" "}
@@ -494,10 +492,10 @@ const CartItemsList: React.FC<Props> = ({
             </div>
             <button
               onClick={handleOpenChangeAddressDialog}
-              className="cursor-pointer bg-transparent border border-[#ff3f6c] text-[#ff3f6c] text-center 
+              className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
               px-[10px] w-full sm:max-w-[160px] py-[7px] my-2 sm:my-[15px] text-xs sm:text-md font-[700] rounded-md capitalize 
              hover:font-[700] transition-colors duration-300
-              hover:border-[#ff3f6c]  focus:outline-none sm:uppercase"
+              hover:border-[#3880FF]  focus:outline-none sm:uppercase"
             >
               Change address
             </button>
@@ -507,9 +505,9 @@ const CartItemsList: React.FC<Props> = ({
           <div className="py-1 ml-2 font-semibold text-gray-800 text-xs sm:text-sm normal-case sm:uppercase">
             <Checkbox
               sx={{
-                color: pink[500],
+                color: "#3880FF",
                 "&.Mui-checked": {
-                  color: pink[500],
+                  color: "#3880FF",
                 },
               }}
               checked={
@@ -545,6 +543,7 @@ const CartItemsList: React.FC<Props> = ({
           >
             <div className="relative">
               <button
+                title="remove"
                 className="absolute right-1 text-gray-500 hover:text-black cursor-pointer hover:bg-[#f5f5f5] p-2 rounded-[50%]"
                 onClick={() => handleDeleteClick(item.product, item.id)}
               >
@@ -566,10 +565,10 @@ const CartItemsList: React.FC<Props> = ({
                       onChange={() => handleSelectItem(item.id)}
                       className="mr-4"
                       sx={{
-                        color: pink[500],
+                        color: "#3880FF",
                         backdropFilter: "#fff",
                         "&.Mui-checked": {
-                          color: pink[500],
+                          color: "#3880FF",
                         },
                       }}
                     />

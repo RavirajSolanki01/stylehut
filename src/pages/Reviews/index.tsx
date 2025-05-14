@@ -153,15 +153,15 @@ export const Reviews = () => {
             emptyIcon={<StarIcon fontSize="large" />}
             sx={{
               '& .MuiRating-iconFilled': {
-                color: '#ff3f6c',
+                color: '#3880FF',
               },
               '& .MuiRating-iconHover': {
-                color: '#ff3f6c',
+                color: '#3880FF',
               },
             }}
           />
           {rating && (
-            <Typography className="text-[16px] font-[500] text-[#ff3f6c]">
+            <Typography className="text-[16px] font-[500] text-[#3880FF]">
               {getRatingMessage(rating)}
             </Typography>
           )}
@@ -193,10 +193,10 @@ export const Reviews = () => {
           sx={{
             '& .MuiOutlinedInput-root': {
               '&:hover fieldset': {
-                borderColor: '#ff3f6c',
+                borderColor: '#3880FF',
               },
               '&.Mui-focused fieldset': {
-                borderColor: '#ff3f6c',
+                borderColor: '#3880FF',
               },
             },
             '& .MuiFormHelperText-root': {
@@ -216,10 +216,10 @@ export const Reviews = () => {
           variant="outlined"
           startIcon={<CloudUploadIcon />}
           sx={{
-            borderColor: '#ff3f6c',
-            color: '#ff3f6c',
+            borderColor: '#3880FF',
+            color: '#3880FF',
             '&:hover': {
-              borderColor: '#ff3f6c',
+              borderColor: '#3880FF',
               backgroundColor: 'rgba(255, 63, 108, 0.04)',
             },
           }}
@@ -246,7 +246,7 @@ export const Reviews = () => {
                     },
                   }}
                 >
-                  <DeleteIcon sx={{ color: '#ff3f6c', fontSize: '1.2rem' }} />
+                  <DeleteIcon sx={{ color: '#3880FF', fontSize: '1.2rem' }} />
                 </IconButton>
               </div>
             ))}
@@ -261,13 +261,13 @@ export const Reviews = () => {
         disabled={isSubmitting}
         onClick={handleSubmit}
         sx={{
-          backgroundColor: '#ff3f6c',
+          backgroundColor: '#3880FF',
           '&:hover': {
-            backgroundColor: '#ff3f6c',
+            backgroundColor: '#3880FF',
             opacity: 0.9,
           },
           '&.Mui-disabled': {
-            backgroundColor: '#ff3f6c',
+            backgroundColor: '#3880FF',
             opacity: 0.5,
           },
         }}

@@ -67,7 +67,7 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
             <MenuIcon
               fontSize="medium"
               onClick={toggleSidebar}
-              className="text-[#ff2f5f] cursor-pointer"
+              className="text-primary cursor-pointer"
             />
           </div>
         </div>
@@ -75,10 +75,10 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
           <img
             src={Logo}
             onClick={() => navigate("/home")}
-            alt="myntra_logo"
+            alt="logo"
             className="max-h-[30px] max-w-[30px] h-full w-full cursor-pointer"
           />
-          <p className="text-[#ff3f6c] text-[20px]">Myntra</p>
+          <p className="text-primary text-[20px]">Stylehut</p>
         </div>
       </div>
 
@@ -118,10 +118,10 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
                     >
                       <AccordionSummary
                         expandIcon={
-                          <ExpandMoreIcon className="text-[#ff2f5f] cursor-pointer"/>
+                          <ExpandMoreIcon className="text-primary cursor-pointer"/>
                         }
                       >
-                        <Typography  className="text-[#ff3f6c]" component="span">
+                        <Typography  className="text-primary" component="span">
                           {i.name}
                         </Typography>
                       </AccordionSummary>
@@ -140,7 +140,7 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
                 </SmoothAccordionDetails>
               </CustomAccordion>
               {index === menuItems.length - 2 && (
-                <div className="border-t border-[#ff3f6c]"></div>
+                <div className="border-t border-[#3880FF]"></div>
               )}
             </div>}
             </div>
@@ -148,14 +148,14 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
         </div>
         <div>
           <div className="flex flex-col justify-between w-full items-center mb-[100px]">
-            <div onClick={() => navigate("/profile/overview")} className="flex pl-[25px] border-b py-[12px] border-[#ff3f6c] w-full text-[#282c3f] cursor-pointer items-center">
+            <div onClick={() => navigate("/profile/overview")} className="flex pl-[25px] border-b py-[12px] border-[#3880FF] w-full text-[#282c3f] cursor-pointer items-center">
               <PersonOutlineIcon />
               <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
                 Profile
               </p>
             </div>
             {isUserLoggedIn && (
-              <div className="flex pl-[25px] border-b border-[#ff3f6c] py-[12px] w-full text-[#282c3f] cursor-pointer items-center">
+              <div className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center">
                 <PowerSettingsNewOutlinedIcon />
                 <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
                   Logout
@@ -188,10 +188,10 @@ const CustomSubcategoriesAccordion = styled(Accordion)(() => ({
     margin: "0px",
   },
   "&.Mui-expanded": {
-    borderColor: "#ff3f6c",
+    borderColor: "#3880FF",
   },
   "&.Mui-focused": {
-    borderColor: "#ff3f6c",
+    borderColor: "#3880FF",
   },
   "&:before": {
     display: "none",
@@ -218,20 +218,20 @@ const CustomSubcategoriesAccordion = styled(Accordion)(() => ({
 }));
 
 const CustomAccordion = styled(Accordion)(() => ({
-  borderTop: "1px solid #ff3f6c",
+  borderTop: "1px solid #3880FF",
   boxShadow: "none",
   minHeight: "50px",
   margin: "0px",
   borderTopLeftRadius: "0px !important",
   borderTopRightRadius: "0px !important",
   "&.Mui-expanded": {
-    borderColor: "#ff3f6c",
+    borderColor: "#3880FF",
   },
   "& .MuiAccordionSummary-content": {
     margin: "0px",
   },
   "&.Mui-focused": {
-    borderColor: "#ff3f6c",
+    borderColor: "#3880FF",
   },
   "&:before": {
     display: "none",
@@ -274,7 +274,7 @@ const CustomBox = styled(
   scrollbarWidth: "thin",
   display: "flex",
   flexDirection: "column",
-  scrollbarColor: '#ff3f6c #f1f1f1',
+  scrollbarColor: '#3880FF #f1f1f1',
   transition: "all 0.3s ease",
   "&.closed": {
     transform: "translateX(-100%)",

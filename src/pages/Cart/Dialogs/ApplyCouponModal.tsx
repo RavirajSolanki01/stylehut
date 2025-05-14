@@ -116,7 +116,7 @@ export const ApplyCouponModal: React.FC<ApplyCouponModalProps> = ({
           />
           <button
             type="submit"
-            className="text-sm text-[#ff3f6c] px-4 py-2 font-semibold cursor-pointer"
+            className="text-sm text-[#3880FF] px-4 py-2 font-semibold cursor-pointer"
           >
             Check
           </button>
@@ -144,10 +144,10 @@ export const ApplyCouponModal: React.FC<ApplyCouponModalProps> = ({
                 }}
                 className="cursor-pointer"
                 disabled={isExpired}
-                style={{ accentColor: "#ff3f6c" }}
+                style={{ accentColor: "#3880FF" }}
               />
               <div>
-                <div className="text-[#ff3f6c] border border-dashed px-2 py-1 text-xs font-semibold inline-block mb-1">
+                <div className="text-[#3880FF] border border-dashed px-2 py-1 text-xs font-semibold inline-block mb-1">
                   {coupon.code}
                 </div>
                 <p className="text-sm font-medium text-black">
@@ -179,7 +179,8 @@ export const ApplyCouponModal: React.FC<ApplyCouponModalProps> = ({
           </div>
         </div>
         <button
-          className="bg-[#ff3f6c] text-white px-6 py-2 font-semibold disabled:opacity-50 max-w-[360px] w-full cursor-pointer"
+          className="bg-[#3880FF] text-white px-6 py-2 font-semibold disabled:opacity-50 max-w-[360px] w-full cursor-pointer"
+          disabled={!selectedCode}
           onClick={() => onApplyCoupon(selectedCoupon ?? null)}
         >
           APPLY

@@ -308,10 +308,10 @@ export const ChangeAddressModal: React.FC<ChangeAddressModalProps> = ({
           <p>Saved Address</p>
           <button
             onClick={() => handleClickOpen()}
-            className="cursor-pointer bg-transparent text-[#ff3f6c] text-center 
+            className="cursor-pointer bg-transparent text-[#3880FF] text-center 
               max-w-[185px] w-full text-xs font-[700] rounded-[5px] uppercase 
              hover:font-[700] transition-colors duration-300
-              hover:border-[#ff3f6c]  focus:outline-none"
+              hover:border-[#3880FF]  focus:outline-none"
           >
             <AddIcon className="mr-1" fontSize="small" /> Add New Address
           </button>
@@ -362,7 +362,7 @@ export const ChangeAddressModal: React.FC<ChangeAddressModalProps> = ({
           <div className="mt-4 flex justify-center bg-white">
             <button
               onClick={() => handleClickOpen()}
-              className="max-w-[240px] w-full border text-[#ff3f6c] font-semibold py-2 sm:max-w-[400px] text-sm hover:bg-[#fff0f4] my-4"
+              className="max-w-[240px] w-full border text-[#3880FF] font-semibold py-2 sm:max-w-[400px] text-sm hover:bg-[#fff0f4] my-4"
             >
               ADD NEW ADDRESS
             </button>
@@ -413,7 +413,7 @@ const AddressCard: React.FC<AddressCardProps> = ({
           name="selectedAddress"
           checked={isSelected}
           onChange={() => handleSelect(Number(address.id))}
-          className="mt-1 accent-[#ff3f6c]"
+          className="mt-1 accent-[#3880FF]"
         />
 
         <div className="flex-1">
@@ -446,7 +446,7 @@ const AddressCard: React.FC<AddressCardProps> = ({
                       handleDeliverHere(Number(address.id));
                     }}
                     disabled={isSelected && address.is_default}
-                    className="bg-[#ff3f6c] disabled:bg-[#ffa9bd] disabled:cursor-not-allowed text-white py-2 px-3 focus:outline-none font-semibold text-xs rounded-sm flex items-center justify-center gap-2"
+                    className="bg-[#3880FF] disabled:bg-[#3881ff9b] disabled:cursor-not-allowed text-white py-2 px-3 focus:outline-none font-semibold text-xs rounded-sm flex items-center justify-center gap-2"
                   >
                     <LocalShippingOutlinedIcon
                       fontSize="small"
@@ -482,7 +482,7 @@ const AddressCard: React.FC<AddressCardProps> = ({
                   }}
                   className="cursor-pointer"
                 >
-                  <DeleteIcon sx={{ color: "#ff3f6c", fontSize: "1.5rem" }} />
+                  <DeleteIcon sx={{ color: "#3880FF", fontSize: "1.5rem" }} />
                 </IconButton>
               </Tooltip>
             </div>

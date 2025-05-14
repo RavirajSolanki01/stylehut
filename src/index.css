@@ -17,6 +17,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --primary-color: #3880ff;
 }
 
 /* a {
@@ -77,28 +78,36 @@ button.default{
   } */
 }
 
+.text-primary {
+  /* color: var(--primary-color); */
+  @apply text-[#3880FF];
+}
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
 .Toastify__toast {
-  color: #ff3f6c;
+  color: var(--primary-color);
   font-weight: 500;
-  border-left: 3px solid #ff3f6c;
+  border-left: 3px solid var(--primary-color);
 }
 
 .Toastify__close-button {
-  color: #ff3f6c;
+  color: var(--primary-color);
 }
 
 .Toastify__progress-bar {
-  background: #ff3f6c;
+  background: var(--primary-color);
 }
 
 .Toastify__toast--success .Toastify__toast-icon svg {
-  fill: #ff3f6c;
+  fill: var(--primary-color);
 }
 
 .Toastify__toast--error .Toastify__toast-icon svg {
-  fill: #ff3f6c;
+  fill: var(--primary-color);
 }
 
 .Toastify__toast--info .Toastify__toast-icon svg {
-  fill: #ff3f6c;
+  fill: var(--primary-color);
 }

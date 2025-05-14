@@ -104,7 +104,7 @@ const CustomerReview = ({
       {reviewArr?.length > 1 && !showAll && (
         <button
           onClick={() => setShowAll(true)}
-          className="cursor-pointer my-[15px] button-none text-[#ff3f6c] text-[14px]/normal font-[700] hover:border-[transparent] p-[0px] bg-[#fff]"
+          className="cursor-pointer my-[15px] button-none text-[#3880FF] text-[14px]/normal font-[700] hover:border-[transparent] p-[0px] bg-[#fff]"
         >
           View all {reviewArr.length} Reviews
         </button>
@@ -116,7 +116,7 @@ const CustomerReview = ({
       </p>
       <p className="text-[#282c3f] font-[400] text-[16px]">
         Seller:{" "}
-        <span className="text-[#ff3f6c] font-[700] cursor-pointer">
+        <span className="text-[#3880FF] font-[700] cursor-pointer">
           RetailNet
         </span>
       </p>

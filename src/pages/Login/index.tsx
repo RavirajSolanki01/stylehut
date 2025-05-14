@@ -90,14 +90,14 @@ export const LoginPage: React.FC = () => {
                 By continuing, I agree to the{" "}
                 <a
                   href="/termsofuse"
-                  className="text-[#fb527b] font-[700] text-xs hover:text-[#fb527b] cursor-pointer"
+                  className="text-[#3880FF] font-[700] text-xs hover:text-[#3880FF] cursor-pointer"
                 >
                   Terms of Use
                 </a>{" "}
                 &{" "}
                 <a
                   href="/privacypolicy"
-                  className="text-[#fb527b] font-[700] text-xs hover:text-[#fb527b] cursor-pointer"
+                  className="text-[#3880FF] font-[700] text-xs hover:text-[#3880FF] cursor-pointer"
                 >
                   Privacy Policy
                 </a>
@@ -105,7 +105,7 @@ export const LoginPage: React.FC = () => {
 
               <button
                 type="submit"
-                className="cursor-pointer bg-[#ff3f6c] text-center px-[12px] w-[345px] py-[12px] text-[#fff] text-[14px] font-[700] rounded-none uppercase continue-login-button"
+                className="cursor-pointer bg-[#3880FF] text-center px-[12px] w-[345px] py-[12px] text-[#fff] text-[14px] font-[700] rounded-none uppercase continue-login-button"
               >
                 {isLoading ? (
                   <CircularProgress size={20} style={{ color: "#fff" }} />
@@ -117,7 +117,7 @@ export const LoginPage: React.FC = () => {
 
             <p className="py-[15px] text-start text-xs text-[#424553]">
               Have trouble logging in?{" "}
-              <span className="text-[#fb527b] font-[700] text-xs cursor-pointer">
+              <span className="text-[#3880FF] font-[700] text-xs cursor-pointer">
                 Get help
               </span>
             </p>

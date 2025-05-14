@@ -96,7 +96,7 @@ const PaymentScreen = () => {
               </Typography>
             ))}
             <Box
-              className="mt-1 text-sm text-[#ff3f6c] font-medium flex items-center gap-1 cursor-pointer"
+              className="mt-1 text-sm text-[#3880FF] font-medium flex items-center gap-1 cursor-pointer"
               onClick={() => setShowMore(!showMore)}
             >
               {showMore ? (
@@ -126,7 +126,7 @@ const PaymentScreen = () => {
                     border: "1px solid #eaeaec",
                     borderLeft:
                       selectedPaymentMethod === method.label
-                        ? "4px solid #ff3f6c"
+                        ? "4px solid #3880FF"
                         : "1px solid #eaeaec",
                     backgroundColor:
                       selectedPaymentMethod === method.label
@@ -152,7 +152,7 @@ const PaymentScreen = () => {
                           fontSize: "14px !important",
                           color:
                             selectedPaymentMethod === method.label
-                              ? "#ff3f6c"
+                              ? "#3880FF"
                               : "#424553",
                         }}
                       >
@@ -188,7 +188,7 @@ const PaymentScreen = () => {
             </Box>
           </Box>
 
-          <div className="flex align-center justify-between rounded shadow-sm mb-4 transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] cursor-pointer text-[#ff3f6c] p-4 border border-gray-200">
+          <div className="flex align-center justify-between rounded shadow-sm mb-4 transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] cursor-pointer text-[#3880FF] p-4 border border-gray-200">
             <span className="text-[#424553] flex align-center">
               <GiftCardIcon /> &nbsp; Have A Gift Card ?
             </span>
@@ -255,10 +255,10 @@ const PaymentScreen = () => {
               }
               sx={{
                 textTransform: "none",
-                backgroundColor: "#ff3f6c",
+                backgroundColor: "#3880FF",
                 color: "#fff",
                 "&:hover": {
-                  backgroundColor: "#bbb",
+                  backgroundColor: "#3880FF",
                 },
                 "&.Mui-disabled": {
                   backgroundColor: "#d3d3d3",

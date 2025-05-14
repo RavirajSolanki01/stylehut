@@ -343,7 +343,7 @@ const FilterButton = styled(Button)({
 
 const StyledRating = styled(Rating)({
   "& .MuiRating-iconFilled": {
-    color: "#ff3f6c",
+    color: "#3880FF",
   },
 });
 
@@ -375,7 +375,7 @@ const StyledFormControlLabel = styled(FormControlLabel)({
 
 const StyledRadio = styled(Radio)({
   "&.Mui-checked": {
-    color: "#ff3f6c",
+    color: "#3880FF",
   },
 });
 
@@ -397,12 +397,12 @@ const ClearFilterButton = styled(Button)({
 });
 
 const ApplyFilterButton = styled(Button)({
-  border: "1px solid #ff3f6c",
+  border: "1px solid #3880FF",
   padding: "1px 6px",
   height: 40,
   width: "100%",
   color: "#fff",
   fontSize: "14px",
   fontWeight: 700,
-  backgroundColor: "#ff3f6c",
+  backgroundColor: "#3880FF",
 });

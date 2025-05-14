@@ -249,19 +249,19 @@ export const Addresses: React.FC = () => {
         <p className="text-[16px] font-bold">Saved Addresses</p>
         <button
           onClick={() => handleClickOpen(undefined)}
-          className="cursor-pointer bg-transparent border border-[#d2d2d2] text-[#ff3f6c] text-center 
+          className="cursor-pointer bg-transparent border border-[#d2d2d2] text-[#3880FF] text-center 
               max-w-[215px] w-full py-[10px] my-[8px] text-[14px] font-[700] rounded-[5px] uppercase 
              hover:font-[700] transition-colors duration-300
-              hover:border-[#ff3f6c]  focus:outline-none add-address-new-button"
+              hover:border-[#3880FF]  focus:outline-none add-address-new-button"
         >
           <AddIcon className="mr-1" /> Add New Address
         </button>
         <button
           onClick={() => handleClickOpen(undefined)}
-          className="cursor-pointer bg-transparent border border-[#d2d2d2] text-[#ff3f6c] text-center 
+          className="cursor-pointer bg-transparent border border-[#d2d2d2] text-[#3880FF] text-center 
               max-w-[215px] w-full py-[10px] my-[8px] text-[14px] font-[700] rounded-[5px] uppercase 
              hover:font-[700] transition-colors duration-300
-              hover:border-[#ff3f6c]  focus:outline-none add-address-button"
+              hover:border-[#3880FF]  focus:outline-none add-address-button"
         >
           <AddIcon className="mr-1" /> Add
         </button>
@@ -384,7 +384,7 @@ const AddressCard: React.FC<AddressCardProps> = ({
                 e.stopPropagation();
                 onMakeDefault();
               }}
-              className="mt-2 text-[#ff3f6c] text-sm font-semibold focus:outline-none cursor-pointer"
+              className="mt-2 text-[#3880FF] text-sm font-semibold focus:outline-none cursor-pointer"
             >
               Make This Default
             </button>
@@ -406,14 +406,14 @@ const AddressCard: React.FC<AddressCardProps> = ({
           <div className="flex items-center text-sm font-semibold p-2">
             <button
               onClick={onEdit}
-              className="flex-1 text-[#ff3f6c] p-1 focus:outline-none"
+              className="flex-1 text-[#3880FF] p-1 focus:outline-none"
             >
               EDIT
             </button>
             <div className="border-l border-gray-300 h-5 mx-2" />
             <button
               onClick={() => handleDeleteClick(id as number)}
-              className="flex-1 text-[#ff3f6c] p-1 focus:outline-none"
+              className="flex-1 text-[#3880FF] p-1 focus:outline-none"
             >
               REMOVE
             </button>
@@ -491,19 +491,19 @@ export const CustomInput = styled(TextField)({
   },
   "&:hover .MuiOutlinedInput-notchedOutline": {
     borderRadius: "0px",
-    border: "1px solid #ff3f6c",
+    border: "1px solid #3880FF",
   },
   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
     borderRadius: "0px",
-    border: "1px solid #ff3f6c",
+    border: "1px solid #3880FF",
   },
   "& .MuiOutlinedInput-root": {
     borderRadius: 0,
     "&:hover fieldset": {
-      border: "1px solid #ff3f6c",
+      border: "1px solid #3880FF",
     },
     "&.Mui-focused fieldset": {
-      border: "1px solid #ff3f6c",
+      border: "1px solid #3880FF",
     },
   },
 });

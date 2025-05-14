@@ -200,12 +200,22 @@ export const AddressDialog: React.FC<AddressDialogProps> = ({
                       >
                         <CustomFormControlLabel
                           value="HOME"
-                          control={<CustomRadioButton />}
+                          control={<CustomRadioButton sx={{ 
+                            color: '#3880FF',
+                            '&.Mui-checked': {
+                              color: '#3880FF',
+                            },
+                          }} />}
                           label="Home"
                         />
                         <CustomFormControlLabel
                           value="OFFICE"
-                          control={<CustomRadioButton />}
+                          control={<CustomRadioButton sx={{ 
+                            color: '#3880FF',
+                            '&.Mui-checked': {
+                              color: '#3880FF',
+                            },
+                          }} />}
                           label="Office"
                         />
                       </CustomRadioGroup>
@@ -232,6 +242,12 @@ export const AddressDialog: React.FC<AddressDialogProps> = ({
                               }) => {
                                 onChange(e.target.checked);
                               }}
+                              sx={{ 
+                                color: '#3880FF',
+                                '&.Mui-checked': {
+                                  color: '#3880FF',
+                                },
+                              }}
                             />
                           }
                           label="Opens on Saturday"
@@ -251,6 +267,12 @@ export const AddressDialog: React.FC<AddressDialogProps> = ({
                                 target: { checked: boolean };
                               }) => {
                                 onChange(e.target.checked);
+                              }}
+                              sx={{ 
+                                color: '#3880FF',
+                                '&.Mui-checked': {
+                                  color: '#3880FF',
+                                },
                               }}
                             />
                           }
@@ -275,6 +297,12 @@ export const AddressDialog: React.FC<AddressDialogProps> = ({
                           onChange={(e: { target: { checked: boolean } }) => {
                             field.onChange(e.target.checked);
                           }}
+                          sx={{ 
+                            color: '#3880FF',
+                            '&.Mui-checked': {
+                              color: '#3880FF',
+                            },
+                          }}
                         />
                       }
                       label="Make this as my default address"
@@ -295,7 +323,7 @@ export const AddressDialog: React.FC<AddressDialogProps> = ({
                   <div className="border-l border-gray-300 h-5 mx-2" />
                   <button
                     type="submit"
-                    className="flex-1 uppercase text-[#ff3f6c] p-1 focus:outline-none cursor-pointer"
+                    className="flex-1 uppercase text-[#3880FF] p-1 focus:outline-none cursor-pointer"
                   >
                     {isLoading ? (
                       <CircularProgress size={20} style={{ color: "#fff" }} />
