@@ -114,7 +114,7 @@ const ProductCard = ({
           textAlign="center"
           fontWeight={700}
           fontSize={14}
-          color="#ff3e6c"
+          color="#3880FF"
         >
           MOVE TO BAG
         </Typography>

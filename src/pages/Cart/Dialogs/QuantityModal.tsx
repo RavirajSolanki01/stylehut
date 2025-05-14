@@ -52,10 +52,10 @@ export const QuantityModal: React.FC<QuantityModalProps> = ({
                         quantityInfo.quantity !== 0 &&
                         setSelectedQuantity(quantityInfo.quantity as number)
                       }
-                      className={`size-button-default ${isSelected ? "!border-[#ff3f6c]" : ""} ${
+                      className={`size-button-default ${isSelected ? "!border-[#3880FF]" : ""} ${
                         quantityInfo.quantity === 0
                           ? "size-button-disabled cursor-not-allowed"
-                          : "cursor-pointer hover:border-[#ff3f6c]"
+                          : "cursor-pointer hover:border-[#3880FF]"
                       }`}
                     >
                       {quantityInfo.quantity}
@@ -76,7 +76,7 @@ export const QuantityModal: React.FC<QuantityModalProps> = ({
             <button
               type="submit"
               onClick={handleCloseQuantityDialog}
-              className="cursor-pointer bg-[#ff3f6c] text-center px-[12px] w-full py-[12px] 
+              className="cursor-pointer bg-[#3880FF] text-center px-[12px] w-full py-[12px] 
             text-[#fff] text-[14px] font-[700] rounded-none uppercase
             focus:outline-none focus:border-none hover:outline-none hover:border-transparent delete-account-buttons"
             >
@@ -93,7 +93,7 @@ const StyledIconButton = styled(IconButton)({
   position: "absolute",
   right: 8,
   top: 8,
-  color: "#282c3f",
+  color: "#3880FF",
   "& .MuiSvgIcon-root": {
     fontSize: "20px",
   },

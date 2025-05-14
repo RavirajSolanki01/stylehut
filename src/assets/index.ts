@@ -1,4 +1,4 @@
-import Logo from "./LoginSignup/myntra_logo.png";
+import Logo from "./LoginSignup/logo.png";
 import Offers_Banner from "./LoginSignup/offer_img.png";
 import Verify_Otp from "./LoginSignup/verify_email.png";
 import Slide1 from "./Home/slide1.png";

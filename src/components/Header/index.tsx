@@ -177,7 +177,7 @@ export const Header: React.FC = () => {
         <img
           onClick={() => navigate("/home")}
           src={Logo}
-          alt="myntra_logo"
+          alt="logo"
           className="max-h-[60px] max-w-[60px] h-full w-full cursor-pointer"
         />
 
@@ -268,7 +268,7 @@ export const Header: React.FC = () => {
             <li
               {...props}
               key={option.id}
-              className="cursor-pointer font-light my-1 pl-2 hover:text-[#ff3f6c]"
+              className="cursor-pointer font-light my-1 pl-2 hover:text-[#3880FF]"
             >
               {option.name}
             </li>
@@ -290,8 +290,8 @@ export const Header: React.FC = () => {
         />
         <div className="flex items-center gap-x-[30px]">
           <div
-            className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#ff3f6c]"
-            style={{ borderBottom: open ? "4px solid #ff3f6c" : "" }}
+            className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#3880ff]"
+            style={{ borderBottom: open ? "4px solid #3880FF" : "" }}
             ref={buttonRef}
             onClick={handlePopoverOpen}
           >
@@ -320,7 +320,7 @@ export const Header: React.FC = () => {
           )}
 
           <div
-            className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#ff3f6c]"
+            className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#3880ff]"
             onClick={() => navigate("/wishlist")}
           >
             <FavoriteBorderOutlinedIcon />
@@ -329,11 +329,11 @@ export const Header: React.FC = () => {
 
           <div
             onClick={() => navigate("/cart")}
-            className="text-[#282c3f] cursor-pointer flex flex-col items-center h-full min-h-[60px] w-full min-w-[40px] justify-center border-b-4 border-b-transparent hover:border-b-[#ff3f6c]"
+            className="text-[#282c3f] cursor-pointer flex flex-col items-center h-full min-h-[60px] w-full min-w-[40px] justify-center border-b-4 border-b-transparent hover:border-b-[#3880ff]"
           >
             <Badge
               badgeContent={5}
-              color="error"
+              color="info"
               overlap="circular"
               anchorOrigin={{ vertical: "top", horizontal: "right" }}
             >

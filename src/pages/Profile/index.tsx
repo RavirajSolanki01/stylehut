@@ -29,7 +29,7 @@ export const Profile: React.FC = () => {
                   className={({ isActive }) =>
                     `text-start text-[14px] font-[400] cursor-pointer my-[25px] ${
                       isActive
-                        ? "text-[#ff3f6c] font-[700] hover:text-[#ff3f6c] focus:outline-none"
+                        ? "text-[#3880FF] font-[700] hover:text-[#3880FF] focus:outline-none"
                         : "text-[#363d42] hover:text-[#363d42] focus:outline-none"
                     }`
                   }
@@ -46,7 +46,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -65,7 +65,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -77,7 +77,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -89,7 +89,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -109,7 +109,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -121,7 +121,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -134,7 +134,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -146,7 +146,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -158,7 +158,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -170,7 +170,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -182,7 +182,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -202,7 +202,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }
@@ -214,7 +214,7 @@ export const Profile: React.FC = () => {
                     className={({ isActive }) =>
                       `text-start text-[14px] font-[400] cursor-pointer my-[5px] ${
                         isActive
-                          ? "text-[#ff3f6c] font-[700]"
+                          ? "text-[#3880FF] font-[700]"
                           : "text-[#363d42] hover:text-[#363d42]"
                       }`
                     }

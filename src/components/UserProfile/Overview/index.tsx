@@ -48,7 +48,7 @@ export const Overview: React.FC = () => {
             onClick={() => handleNavigate("my-profile")}
             className="max-h-[30px] h-full max-w-[110px] w-full items-center rounded-none 
             cursor-pointer border border-[#d2d2d2] text-[11px] font-[600] uppercase
-          hover:border-[#ff3f6c] focus:outline-none p-[0px] mt-[22px]"
+          hover:border-[#3880FF] focus:outline-none p-[0px] mt-[22px]"
           >
             Edit Profile
           </button>
@@ -77,7 +77,7 @@ export const Overview: React.FC = () => {
         <div className="flex items-center justify-start pb-[80px]">
           <button
             onClick={handleLogout}
-            className="cursor-pointer bg-[#ff3f6c] text-center px-[12px] w-full py-[12px] 
+            className="cursor-pointer bg-[#3880FF] text-center px-[12px] w-full py-[12px] 
         text-[#fff] text-[16px] font-[700] rounded-none focus:outline-none focus:border-none hover:outline-none hover:border-transparent uppercase logout-button"
           >
             Logout
@@ -197,7 +197,7 @@ export const Overview: React.FC = () => {
         <div className="flex justify-center pb-[20px]">
           <button
             onClick={handleLogout}
-            className="cursor-pointer bg-[#ff3f6c] max-w-[750px] mb-4 text-center px-[12px] w-full py-[12px] 
+            className="cursor-pointer bg-primary max-w-[750px] mb-4 text-center px-[12px] w-full py-[12px] 
         text-[#fff] text-[14px] font-[700] rounded focus:outline-none focus:border-none hover:outline-none hover:border-transparent logout-button uppercase"
           >
             Logout

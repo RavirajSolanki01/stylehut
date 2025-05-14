@@ -5,7 +5,7 @@
     display: inline-block;
     font-size: 13px;
     font-weight: 700;
-    color: #ff3f6c;
+    color: #3880FF;
     margin-top: 4px;
     cursor: pointer;
 }
@@ -47,7 +47,7 @@
 }
 
 .size-button-default:hover {
-    border: 1px solid #ff3f6c;
+    border: 1px solid #3880FF;
 }
 
 .size-button-disabled {

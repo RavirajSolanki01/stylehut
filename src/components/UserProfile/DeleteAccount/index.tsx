@@ -34,7 +34,7 @@ export const DeleteAccount: React.FC = () => {
               deleted and will no longer be available to you. You cannot recover
               the same. However, you can always create a new account. By
               deleting your account, you acknowledge you have read our {""}
-              <span className="text-[#ff3f6c] text-xs cursor-pointer">
+              <span className="text-[#3880FF] text-xs cursor-pointer">
                 Privacy Policy.
               </span>
             </p>
@@ -72,9 +72,9 @@ export const DeleteAccount: React.FC = () => {
                 checked={checked}
                 onChange={handleChange}
                 sx={{
-                  color: pink[800],
+                  color: "#3880FF",
                   "&.Mui-checked": {
-                    color: pink[600],
+                    color: "#3880FF",
                   },
                 }}
               />
@@ -85,16 +85,16 @@ export const DeleteAccount: React.FC = () => {
           <button
             type="submit"
             disabled={!checked}
-            className="cursor-pointer text-[#ff3f6c] border border-[#ff3f6c] text-center px-[12px] w-full max-w-[320px] py-[12px] 
+            className="cursor-pointer text-[#3880FF] border border-[#3880FF] text-center px-[12px] w-full max-w-[320px] py-[12px] 
             text-[14px] font-[700] rounded-none uppercase
-            disabled:text-[#ffa2b8] disabled:border-[#ffa2b8] disabled:cursor-not-allowed
-            focus:outline-none hover:outline-none hover:border-[#ff3f6c] delete-account-buttons"
+            disabled:text-[#3880FF] disabled:border-[#3880FF] disabled:cursor-not-allowed
+            focus:outline-none hover:outline-none hover:border-[#3880FF] delete-account-buttons"
           >
            Delete Anyway
           </button>
           <button
             type="submit"
-            className="cursor-pointer bg-[#ff3f6c] text-center px-[12px] w-full max-w-[320px] py-[12px] 
+            className="cursor-pointer bg-[#3880FF] text-center px-[12px] w-full max-w-[320px] py-[12px] 
             text-[#fff] text-[14px] font-[700] rounded-none uppercase
             focus:outline-none focus:border-none hover:outline-none hover:border-transparent delete-account-buttons"
           >

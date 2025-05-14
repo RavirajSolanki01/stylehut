@@ -91,7 +91,7 @@ export const SizeModal: React.FC<SizeModalProps> = ({
                       className={`${
                         sizeInfo.quantity === 0 ? "size-button-disabled" : ""
                       }  ${
-                        isSelected ? "!border-[#ff3f6c]" : ""
+                        isSelected ? "!border-[#3880FF]" : ""
                       } size-button-default`}
                     >
                       {sizeInfo.size}
@@ -118,7 +118,7 @@ export const SizeModal: React.FC<SizeModalProps> = ({
             <button
               type="submit"
               onClick={handleCloseSizeDialog}
-              className="cursor-pointer bg-[#ff3f6c] text-center px-[12px] w-full py-[12px] 
+              className="cursor-pointer bg-[#3880FF] text-center px-[12px] w-full py-[12px] 
             text-[#fff] text-[14px] font-[700] rounded-none uppercase
             focus:outline-none focus:border-none hover:outline-none hover:border-transparent delete-account-buttons"
             >

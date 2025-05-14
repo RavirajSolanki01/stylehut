@@ -26,7 +26,7 @@ export const CategoriesPopover: React.FC<CategoriesPopoverProps> = ({
   handleNavigate
 }) => {
   const activeCategory = categories[activePopoverIndex];
-  const color = menuItems[activePopoverIndex]?.color || "#ff3f6c";
+  const color = menuItems[activePopoverIndex]?.color || "#3880FF";
 
   return (
     <Popover
@@ -78,7 +78,7 @@ export const CategoriesPopover: React.FC<CategoriesPopoverProps> = ({
             {activeCategory?.sub_categories?.map((category) => (
               <div key={category.id} className="break-inside-avoid mb-4">
                 <h4
-                  className="text-sm font-semibold text-[#ff3f6c] mb-[5px] mt-[0px] text-left min-w-[100px]"
+                  className="text-sm font-semibold text-primary mb-[5px] mt-[0px] text-left min-w-[100px]"
                   style={{ color }}
                 >
                   {category.name}

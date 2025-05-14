@@ -230,7 +230,7 @@ export const ProfileDetails: React.FC = () => {
           />
           <button
             type="submit"
-            className="cursor-pointer bg-[#ff3f6c] text-center px-[12px] py-[12px] text-[#fff] text-[14px] font-[700] rounded-none uppercase continue-login-button"
+            className="cursor-pointer bg-primary text-center px-[12px] py-[12px] text-[#fff] text-[14px] font-[700] rounded-none uppercase continue-login-button"
           >
             Save Details
           </button>
@@ -295,7 +295,7 @@ const CustomToggleButton = styled(ToggleButton)({
   textTransform: "capitalize",
   border: "1px solid #d2d2d2",
   "&.Mui-selected": {
-    color: "#ff3f6c",
+    color: "#3880FF",
     fontWeight: "bold",
     backgroundColor: "transparent",
   },
@@ -320,19 +320,19 @@ const CustomInput = styled(TextField)({
   },
   "&:hover .MuiOutlinedInput-notchedOutline": {
     borderRadius: "0px",
-    border: "1px solid #ff3f6c",
+    border: "1px solid #3880FF",
   },
   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
     borderRadius: "0px",
-    border: "1px solid #ff3f6c",
+    border: "1px solid #3880FF",
   },
   "& .MuiOutlinedInput-root": {
     borderRadius: 0,
     "&:hover fieldset": {
-      border: "1px solid #ff3f6c",
+      border: "1px solid #3880FF",
     },
     "&.Mui-focused fieldset": {
-      border: "1px solid #ff3f6c",
+      border: "1px solid #3880FF",
     },
   },
 });
@@ -360,11 +360,11 @@ export const CustomSelect = styled(Select)({
   },
   "&:hover .MuiOutlinedInput-notchedOutline": {
     borderRadius: 0,
-    border: "1px solid #ff3f6c",
+    border: "1px solid #3880FF",
   },
   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
     borderRadius: 0,
-    border: "1px solid #ff3f6c",
+    border: "1px solid #3880FF",
   },
   "& .MuiSelect-placeholder": {
     color: "#999",
@@ -387,7 +387,7 @@ export const CheckIcon = () => (
       <path
         d="M16.7746405,8.22735801 C16.478929,7.91934842 16.0050049,7.92494859 15.716079,8.24015841 L10.3732719,14.0147382 C10.3368437,14.0543394 10.2772014,14.0547394 10.240416,14.0155382 L8.27793445,11.9086726 C7.98579433,11.5966629 7.51151306,11.5962629 7.21937294,11.9078726 C6.92687569,12.2194823 6.92687569,12.723498 7.21937294,13.0351077 L9.78399176,15.7767931 C9.92434758,15.9263977 10.1147029,16 10.3132725,16 L10.3175582,16 C10.5175563,16 10.7089831,15.9227976 10.8486246,15.7699928 L16.7867832,9.35379308 C17.0757091,9.03858326 17.070352,8.5353676 16.7746405,8.22735801"
         id="Fill-1"
-        fill="#FF3F6C"
+        fill="#3880FF"
       ></path>
     </g>
   </svg>

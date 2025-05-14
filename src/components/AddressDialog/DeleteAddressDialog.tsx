@@ -50,7 +50,7 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
           <div className="border-l border-gray-300 h-5 mx-2" />
           <button
             onClick={onConfirm}
-            className="flex-1 uppercase text-[#ff3f6c] p-1 focus:outline-none cursor-pointer"
+            className="flex-1 uppercase text-[#3880FF] p-1 focus:outline-none cursor-pointer"
           >
             Delete
           </button>

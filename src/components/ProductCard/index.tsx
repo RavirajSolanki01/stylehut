@@ -98,7 +98,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 <div
                   key={index}
                   className={`w-1 h-1 rounded-full transition-colors duration-300 ${
-                    index === currentImageIndex ? "bg-[#ff3e6c]" : "bg-gray-300"
+                    index === currentImageIndex ? "bg-[#3880FF]" : "bg-gray-300"
                   }`}
                 />
               ))}
@@ -119,8 +119,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         >
           {isWishlisted ? (
             <Favorite
-              fill="bg-[#ff3e6c]"
-              className="text-[#ff3e6c] "
+              fill="bg-[#3880FF]"
+              className="text-[#3880FF] "
               style={{ fontSize: "1rem" }}
             />
           ) : (

@@ -299,7 +299,7 @@ export const CartAddresses = () => {
 
           <div
             onClick={() => handleClickOpen(undefined)}
-            className="rounded shadow-sm mb-4 transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] cursor-pointer text-[#ff3f6c] p-4 border border-dashed border-[#282c3f60]"
+            className="rounded shadow-sm mb-4 transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] cursor-pointer text-[#3880FF] p-4 border border-dashed border-[#282c3f60]"
           >
             <AddIcon className="mr-1" /> Add New Address
           </div>
@@ -362,7 +362,15 @@ const AddressCard: React.FC<AddressCardProps> = ({
     >
       <div className="flex justify-between items-start p-4">
         <div className="flex items-start">
-          <CustomRadioButton checked={isSelected} />
+          <CustomRadioButton 
+            checked={isSelected}
+            sx={{
+              color: '#3880FF',
+              '&.Mui-checked': {
+                color: '#3880FF',
+              },
+            }}
+          />
           <div>
             <p className="font-semibold text-[#696b79] mb-2">
               <span>{full_name}</span> &nbsp;
