@@ -510,7 +510,7 @@ export const CustomInput = styled(TextField)({
 
 export const CustomRadioButton = styled(Radio)({
   "&.Mui-checked": {
-    color: pink[600],
+    color: "#3880FF",
   },
 });
 

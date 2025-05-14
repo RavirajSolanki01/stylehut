@@ -33,6 +33,7 @@ type Props = {
   cartItems: CartItems[];
   activeStep: number;
   setCartItems: React.Dispatch<React.SetStateAction<CartItems[]>>;
+  setTotalPrice: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const ProductCart: React.FC = () => {
@@ -42,6 +43,7 @@ export const ProductCart: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItems[]>([]);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [maxAllowedStep, setMaxAllowedStep] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<string>("");
 
   const handleStepClick = (index: number) => {
     if (index <= maxAllowedStep) {
@@ -121,6 +123,7 @@ export const ProductCart: React.FC = () => {
         {activeStep === 0 ? (
           <CartItemsList
             cartItems={cartItems}
+            setTotalPrice={setTotalPrice}
             activeStep={activeStep}
             setCartItems={setCartItems}
             setMaxAllowedStep={setMaxAllowedStep}
@@ -132,6 +135,7 @@ export const ProductCart: React.FC = () => {
               <CartAddresses />
             </div>
             <PriceSummary
+              setTotalPrice={setTotalPrice}
               activeStep={activeStep}
               setActiveStep={setActiveStep}
               setMaxAllowedStep={setMaxAllowedStep}
@@ -142,9 +146,10 @@ export const ProductCart: React.FC = () => {
         ) : (
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-[70%]">
-              <PaymentScreen />
+              <PaymentScreen totalPrice={totalPrice} />
             </div>
             <PriceSummary
+              setTotalPrice={setTotalPrice}
               activeStep={activeStep}
               setActiveStep={setActiveStep}
               setMaxAllowedStep={setMaxAllowedStep}
@@ -161,13 +166,16 @@ export const ProductCart: React.FC = () => {
 const PriceSummary: React.FC<Props> = ({
   setMaxAllowedStep,
   setActiveStep,
+  setTotalPrice,
   cartItems,
   activeStep,
 }) => {
-  const { selectedCoupon, availableCoupons } = useSelector((state: RootState) => ({
-    selectedCoupon: state.cart.coupon,
-    availableCoupons: state.cart.availableCoupons,
-  }));
+  const { selectedCoupon, availableCoupons } = useSelector(
+    (state: RootState) => ({
+      selectedCoupon: state.cart.coupon,
+      availableCoupons: state.cart.availableCoupons,
+    })
+  );
   const [openCouponDialog, setOpenCouponDialog] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(
     selectedCoupon
@@ -228,6 +236,7 @@ const PriceSummary: React.FC<Props> = ({
         setMaxAllowedStep(1);
         setActiveStep(1);
       }
+      setTotalPrice(totalAmount);
     }
   };
 
@@ -239,12 +248,14 @@ const PriceSummary: React.FC<Props> = ({
   }, [selectedItems]);
 
   useEffect(() => {
-    const coupon = availableCoupons && availableCoupons.find(
-      (coupon: { code: string }) =>
-        coupon.code.toLowerCase() === appliedCoupon?.code.toLowerCase()
-    );
-    setAppliedCoupon(coupon as Coupon)
-  },[]);
+    const coupon =
+      availableCoupons &&
+      availableCoupons.find(
+        (coupon: { code: string }) =>
+          coupon.code.toLowerCase() === appliedCoupon?.code.toLowerCase()
+      );
+    setAppliedCoupon(coupon as Coupon);
+  }, []);
 
   return (
     <div className="w-full lg:w-[30%] md:w-[100%] py-5 sm:py-0">
@@ -341,6 +352,7 @@ const CartItemsList: React.FC<Props> = ({
   setMaxAllowedStep,
   setActiveStep,
   setCartItems,
+  setTotalPrice,
   activeStep,
 }) => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
@@ -714,6 +726,7 @@ const CartItemsList: React.FC<Props> = ({
         setCartItems={setCartItems}
         cartItems={cartItems}
         activeStep={activeStep}
+        setTotalPrice={setTotalPrice}
       />
 
       <ConfirmDeleteModal
