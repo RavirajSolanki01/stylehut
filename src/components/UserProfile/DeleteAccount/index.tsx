@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { DeleteAccountImage } from "../../../assets";
 import { Checkbox, FormControlLabel } from "@mui/material";
-import { pink } from "@mui/material/colors";
 
 export const DeleteAccount: React.FC = () => {
   const [checked, setChecked] = useState<boolean>(false);

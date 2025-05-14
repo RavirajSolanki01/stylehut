@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Logo } from "../../assets";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@mui/material";
-import { pink } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   getCartProducts,
