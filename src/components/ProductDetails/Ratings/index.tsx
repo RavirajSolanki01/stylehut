@@ -29,7 +29,6 @@ const ProductRating = ({
     ...rating,
     percentage: totalCount > 0 ? (rating.count / totalCount) * 100 : 0,
   }));
-  console.log(">><< ratingWithPercentages", ratingWithPercentages);
 
   return (
     <div className="text-start">

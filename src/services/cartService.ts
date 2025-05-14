@@ -56,8 +56,6 @@ export const moveAllFromCartToWishlist = (product_ids: number[]) => {
   );
 };
 
-export const getCouponsForUser = (params: {
-  cart_amount: number;
-}) => {
+export const getCouponsForUser = (params: { cart_amount: number }) => {
   return api.get(GET_COUPONS_API_ENDPOINT, { params, withAuth: true });
 };

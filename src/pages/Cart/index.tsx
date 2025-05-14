@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Logo } from "../../assets";
 import { useNavigate } from "react-router-dom";
-import { Checkbox, Dialog, IconButton, styled } from "@mui/material";
+import { Checkbox } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -14,7 +14,6 @@ import { CartItems, Coupon, FormAddressData, Product } from "../../utils/types";
 import { toast } from "react-toastify";
 import { postWishlist } from "../../services/wishlistService";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../../store/slice/loading.slice";
 import { LoaderOverlay } from "../../components/Loader";
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -26,6 +25,8 @@ import { ChangeAddressModal } from "./Dialogs/ChangeAddressModal";
 import PaymentScreen from "./PaymentScreen";
 import { addAppliedCoupon } from "../../store/slice/cart.slice";
 import { RootState } from "../../store";
+import { ConfirmDeleteModal } from "./Dialogs/ConfirmDeleteModal";
+import { withLoading } from "../../utils/reusable-functions";
 
 type Props = {
   setMaxAllowedStep: React.Dispatch<React.SetStateAction<number>>;
@@ -37,6 +38,7 @@ type Props = {
 
 export const ProductCart: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const steps = ["BAG", "ADDRESS", "PAYMENT"];
   const [cartItems, setCartItems] = useState<CartItems[]>([]);
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -57,6 +59,21 @@ export const ProductCart: React.FC = () => {
       return "text-[#d3d3d3] cursor-not-allowed";
     }
   };
+
+  const refreshCart = async () => {
+    const response = await getCartProducts({ page: 1, pageSize: 100 });
+
+    const items: CartItems[] = response.data.data.items.map((item: any) => ({
+      ...item,
+      isSelected: false,
+      isAvailable: item.product?.quantity > 0,
+    }));
+    setCartItems(items);
+  };
+
+  useEffect(() => {
+    withLoading(dispatch, "refresh-cart", refreshCart);
+  }, []);
 
   return (
     <>
@@ -148,8 +165,9 @@ const PriceSummary: React.FC<Props> = ({
   cartItems,
   activeStep,
 }) => {
-  const { selectedCoupon } = useSelector((state: RootState) => ({
+  const { selectedCoupon, availableCoupons } = useSelector((state: RootState) => ({
     selectedCoupon: state.cart.coupon,
+    availableCoupons: state.cart.availableCoupons,
   }));
   const [openCouponDialog, setOpenCouponDialog] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(
@@ -188,7 +206,7 @@ const PriceSummary: React.FC<Props> = ({
     appliedCoupon && Number(totalMRP) >= Number(appliedCoupon.min_order_amount)
       ? Math.min(
           Number(appliedCoupon.max_savings_amount),
-          Number(totalMRP) * 0.15
+          (Number(totalMRP) * Number(appliedCoupon.discount)) / 100
         )
       : 0;
 
@@ -221,6 +239,14 @@ const PriceSummary: React.FC<Props> = ({
     }
   }, [selectedItems]);
 
+  useEffect(() => {
+    const coupon = availableCoupons && availableCoupons.find(
+      (coupon: { code: string }) =>
+        coupon.code.toLowerCase() === appliedCoupon?.code.toLowerCase()
+    );
+    setAppliedCoupon(coupon as Coupon)
+  },[]);
+
   return (
     <div className="w-full lg:w-[30%] md:w-[100%] py-5 sm:py-0">
       <p className="text-[#535766] font-bold text-xs sm:text-sm uppercase mb-2">
@@ -229,16 +255,30 @@ const PriceSummary: React.FC<Props> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <SellOutlinedIcon fontSize="small" />
-          <p className="font-bold text-[#282c3f] text-xs sm:text-sm ml-3">
-            Apply Coupon
-          </p>
+          {appliedCoupon?.id && selectedItems.length > 0 ? (
+            <>
+              <div>
+                <p className="font-bold text-[#282c3f]  text-xs sm:text-sm ml-3">
+                  1 Coupon Applied
+                </p>
+                <p className="font-normal text-[#28a02e] text-[12px] ml-4">
+                  You saved ₹ {appliedCoupon.max_savings_amount}{" "}
+                </p>
+              </div>
+            </>
+          ) : (
+            <p className="font-bold text-[#282c3f] text-xs sm:text-sm ml-3">
+              Apply Coupon
+            </p>
+          )}
         </div>
         <button
           onClick={handleOpenCouponDialog}
+          disabled={selectedItems.length <= 0}
           className="cursor-pointer bg-transparent border border-[#ff3f6c] text-[#ff3f6c] text-center 
             px-[10px] max-w-[80px] w-full py-[5px] text-xs sm:text-sm font-[700] uppercase 
-            hover:font-[700] transition-colors duration-300
-            hover:border-[#ff3f6c] hover:bg-[#ffeaef] focus:outline-none"
+            hover:font-[700] transition-colors duration-300 disabled:cursor-not-allowed
+            hover:border-[#ff3f6c] hover:bg-[#ffeaef] focus:outline-none disabled:border-[#fccdd7] disabled:text-[#ffb8c7]"
         >
           Apply
         </button>
@@ -357,17 +397,6 @@ const CartItemsList: React.FC<Props> = ({
     (item) => item.isSelected && item.isAvailable
   );
 
-  const withLoading = async (key: string, callback: () => Promise<void>) => {
-    try {
-      dispatch(setLoading({ key, value: true }));
-      await callback();
-    } catch (error) {
-      toast.error("Something went wrong!");
-    } finally {
-      dispatch(setLoading({ key, value: false }));
-    }
-  };
-
   const refreshCart = async () => {
     const response = await getCartProducts({ page: 1, pageSize: 100 });
 
@@ -388,7 +417,7 @@ const CartItemsList: React.FC<Props> = ({
 
   const handleRemoveFromCart = async (productId: number) => {
     setOpenConfirmDialog(false);
-    await withLoading("remove-from-cart", async () => {
+    await withLoading(dispatch, "remove-from-cart", async () => {
       const response = await removeFromCart(productId);
       if (response.status === 200) {
         toast.success("Item removed from Bag");
@@ -398,7 +427,7 @@ const CartItemsList: React.FC<Props> = ({
   };
 
   const handleRemoveAllSelectedItems = async () => {
-    await withLoading("remove-all-from-cart", async () => {
+    await withLoading(dispatch, "remove-all-from-cart", async () => {
       const productIds = selectedItems.flatMap((item) => item.product_id);
       const response = await removeAllFromCart(productIds);
       if (response.status === 200) {
@@ -409,7 +438,7 @@ const CartItemsList: React.FC<Props> = ({
   };
 
   const handleMoveAllSelectedItemsToWishlist = async () => {
-    await withLoading("remove-all-to-wishlist", async () => {
+    await withLoading(dispatch, "remove-all-to-wishlist", async () => {
       const productIds = selectedItems.flatMap((item) => item.product_id);
       const response = await moveAllFromCartToWishlist(productIds);
       if (response.status === 200) {
@@ -422,7 +451,7 @@ const CartItemsList: React.FC<Props> = ({
   const handleAddToWishlist = async () => {
     if (!selectedProduct?.id) return;
 
-    await withLoading("add-to-wishlist", async () => {
+    await withLoading(dispatch, "add-to-wishlist", async () => {
       setOpenConfirmDialog(false);
       const wishlistResponse = await postWishlist({
         product_id: Number(selectedProduct.id),
@@ -439,10 +468,6 @@ const CartItemsList: React.FC<Props> = ({
       }
     });
   };
-
-  useEffect(() => {
-    withLoading("refresh-cart", refreshCart);
-  }, []);
 
   const handleDeleteClick = (product: Product, itemId: number) => {
     setSelectedItemId(itemId);
@@ -692,64 +717,13 @@ const CartItemsList: React.FC<Props> = ({
         activeStep={activeStep}
       />
 
-      <Dialog
-        open={openConfirmDialog}
-        onClose={() => setOpenConfirmDialog(false)}
-        aria-labelledby="confirm-dialog-title"
-        aria-describedby="confirm-dialog-description"
-      >
-        <StyledIconButton
-          aria-label="close"
-          sx={() => ({
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: "#282c3f",
-            fontSize: "16px",
-          })}
-          onClick={() => setOpenConfirmDialog(false)}
-        >
-          <CloseIcon />
-        </StyledIconButton>
-        <div className="p-4 pb-0">
-          <div className="flex">
-            <div className="">
-              <img
-                src={selectedProduct?.image[0]}
-                alt={selectedProduct?.name}
-                className="object-cover max-w-[70px] w-full max-h-[70px] h-full"
-              />
-            </div>
-            <div>
-              <p className="text-sm text-gray-600 font-bold px-3">
-                Move from Bag
-              </p>
-              <p className="text-xs sm:text-sm text-gray-600 px-3 font-normal max-w-[300px]">
-                Are you sure you want to move this item from bag?
-              </p>
-            </div>
-          </div>
-
-          <hr className="mt-5 border-gray-300" />
-
-          <div className="flex items-center text-xs sm:text-sm font-semibold my-2 ">
-            <button
-              type="button"
-              onClick={() => handleConfirmDelete()}
-              className="flex-1 text-xs text-[#636363] p-1 focus:outline-none cursor-pointer uppercase"
-            >
-              Remove
-            </button>
-            <div className="border-l border-gray-300 h-5 mx-2" />
-            <button
-              onClick={() => handleAddToWishlist()}
-              className="flex-1 text-xs uppercase text-[#ff3f6c] p-1 focus:outline-none cursor-pointer"
-            >
-              Move to wishlist
-            </button>
-          </div>
-        </div>
-      </Dialog>
+      <ConfirmDeleteModal
+        handleAddToWishlist={handleAddToWishlist}
+        handleCloseConfirmDialog={() => setOpenConfirmDialog(false)}
+        handleConfirmDelete={handleConfirmDelete}
+        openConfirmDialog={openConfirmDialog}
+        selectedProduct={selectedProduct as Product}
+      />
 
       <SizeModal
         handleCloseSizeDialog={handleCloseSizeDialog}
@@ -768,18 +742,8 @@ const CartItemsList: React.FC<Props> = ({
       <ChangeAddressModal
         handleCloseAddressDialog={handleCloseChangeAddressDialog}
         openAddressDialog={openAddressDialog}
-        refreshCart={refreshCart}
+        setDefaultAddress={setDefaultAddress}
       />
     </div>
   );
 };
-
-const StyledIconButton = styled(IconButton)({
-  position: "absolute",
-  right: 8,
-  top: 8,
-  color: "#282c3f",
-  "& .MuiSvgIcon-root": {
-    fontSize: "20px",
-  },
-});

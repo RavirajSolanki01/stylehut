@@ -11,7 +11,6 @@ export const TermsOfUse = () => {
       setTerms(res.data.data);
     });
   }, []);
-  console.log(terms);
 
   return (
     <div className="p-4">

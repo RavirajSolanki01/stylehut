@@ -35,7 +35,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 interface ChangeAddressModalProps {
   openAddressDialog: boolean;
   handleCloseAddressDialog: () => void;
-  refreshCart: () => Promise<void>;
+  setDefaultAddress: React.Dispatch<React.SetStateAction<FormAddressData | null>>;
 }
 
 interface AddressCardProps {
@@ -49,7 +49,7 @@ interface AddressCardProps {
 
 export const ChangeAddressModal: React.FC<ChangeAddressModalProps> = ({
   openAddressDialog,
-  refreshCart,
+  setDefaultAddress,
   handleCloseAddressDialog,
 }) => {
   const [addresses, setAddresses] = useState<FormAddressData[]>([]);
@@ -156,7 +156,7 @@ export const ChangeAddressModal: React.FC<ChangeAddressModalProps> = ({
           items.find((a: FormAddressData) => a.is_default) || {};
         setAddresses(items);
         setSelectedAddressId(defaultAddress?.id);
-        refreshCart()
+        setDefaultAddress(defaultAddress)
       },
     });
 
@@ -179,7 +179,6 @@ export const ChangeAddressModal: React.FC<ChangeAddressModalProps> = ({
         onSuccess: () => {
           toast.success("Address updated successfully.");
           fetchAddresses();
-          refreshCart();
         },
       }
     );

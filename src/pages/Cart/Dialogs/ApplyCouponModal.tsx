@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCouponsForUser } from "../../../services/cartService";
 import { Coupon } from "../../../utils/types";
 import { RootState } from "../../../store";
+import { setAvailableCouponsForUser } from "../../../store/slice/cart.slice";
 
 interface ApplyCouponModalProps {
   openCouponDialog: boolean;
@@ -25,10 +26,10 @@ export const ApplyCouponModal: React.FC<ApplyCouponModalProps> = ({
     appliedCoupon: state.cart.coupon,
   }));
   const [enteredCode, setEnteredCode] = useState("");
-  const [selectedCode, setSelectedCode] = useState<string | null>(appliedCoupon?.code as string);
+
   const [error, setError] = useState("");
   const [availableCoupons, setAvailableCoupons] = useState<Coupon[]>([]);
-
+  const [selectedCode, setSelectedCode] = useState<string | null>("");
   const dispatch = useDispatch();
 
   const handleCheck = () => {
@@ -69,6 +70,12 @@ export const ApplyCouponModal: React.FC<ApplyCouponModalProps> = ({
       .then((res) => {
         if (res?.data) {
           setAvailableCoupons(res.data?.data?.couponForUser);
+          dispatch(setAvailableCouponsForUser(res.data?.data?.couponForUser))
+          const couponCode = res.data?.data?.couponForUser.find(
+            (coupon: { code: string }) =>
+              coupon.code.toLowerCase() === appliedCoupon?.code.toLowerCase()
+          )?.code;
+          setSelectedCode(couponCode)
         }
       })
       .catch((err) => {
@@ -81,7 +88,7 @@ export const ApplyCouponModal: React.FC<ApplyCouponModalProps> = ({
       .finally(() => {
         dispatch(setLoading({ key: "get-coupons", value: false }));
       });
-  }, [totalAmount]);
+  }, [openCouponDialog]);
 
   return (
     <Dialog open={openCouponDialog} onClose={handleCloseCouponDialog} fullWidth>

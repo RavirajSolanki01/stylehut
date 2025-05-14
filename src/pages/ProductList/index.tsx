@@ -161,7 +161,6 @@ export const ProductList = () => {
         ),
         brand_id: selectedBrand
       });
-      console.log(response.data.data.items, "??>><<response.data.data.items");
 
       setProducts(response.data.data.items);
       setPagination({

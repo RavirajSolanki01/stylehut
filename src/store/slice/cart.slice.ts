@@ -4,11 +4,13 @@ import { CartItems, Coupon } from "../../utils/types";
 interface CartState {
   cartItems: CartItems[];
   coupon: Coupon | null;
+  availableCoupons: Coupon[];
 }
 
 const initialState: CartState = {
   cartItems: [],
   coupon: null,
+  availableCoupons: []
 };
 
 const cartSlice = createSlice({
@@ -32,6 +34,9 @@ const cartSlice = createSlice({
     addAppliedCoupon: (state, action: PayloadAction<Coupon | null>) => {
       state.coupon = action.payload;
     },
+    setAvailableCouponsForUser : (state, action: PayloadAction<Coupon[]>) => {
+      state.availableCoupons = action.payload;
+    },
   },
 });
 
@@ -40,6 +45,7 @@ export const {
   clearCart,
   removeItemFromCart,
   addItemToCart,
+  setAvailableCouponsForUser,
   addAppliedCoupon,
 } = cartSlice.actions;
 export default cartSlice.reducer;
