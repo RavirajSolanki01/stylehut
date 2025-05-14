@@ -181,7 +181,7 @@ export const VerifyOtpPage: React.FC = () => {
               {!isResendDisabled ? (
                 <p
                   onClick={handleResendOtp}
-                  className="text-[#fb527b] text-justify font-[700] text-xs hover:text-[#fb527b] cursor-pointer uppercase"
+                  className="text-[#3880FF] text-justify font-[700] text-xs hover:text-[#3880FF] cursor-pointer uppercase"
                 >
                   Resend OTP
                 </p>
@@ -195,7 +195,7 @@ export const VerifyOtpPage: React.FC = () => {
               )}
               <p className="py-[5px] text-start text-xs text-[#424553] font-normal">
                 Having trouble logging in? {""}
-                <span className="text-[#fb527b] text-justify font-[700] text-xs hover:text-[#fb527b] cursor-pointer">
+                <span className="text-[#3880FF] text-justify font-[700] text-xs hover:text-[#3880FF] cursor-pointer">
                   Get Help
                 </span>
               </p>
