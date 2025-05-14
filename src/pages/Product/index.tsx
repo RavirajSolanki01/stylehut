@@ -112,12 +112,11 @@ const ProductDetailPage: React.FC = () => {
 
   const handleAddToCard = async () => {
     try {
-      const addCartResponse = await postAddToCart({
+      await postAddToCart({
         product_id: Number(id),
         quantity: 1,
       });
       toast.success("Product added to cart");
-      console.log(addCartResponse, ">><<<add to cart");
       setIsAddedToCart(true);
     } catch (error: unknown) {
       const errorMessage =
@@ -132,7 +131,6 @@ const ProductDetailPage: React.FC = () => {
         toast.error("Please login to add to cart");
       } else {
         toast.error("Unexpected error occurred. Please try again later!");
-        console.log("Unexpected error", error);
       }
     }
   };

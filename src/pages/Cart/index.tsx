@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Logo } from "../../assets";
 import { useNavigate } from "react-router-dom";
-import { Checkbox, Dialog, IconButton, styled } from "@mui/material";
-import { pink } from "@mui/material/colors";
+import { Checkbox } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { getCartProducts, removeFromCart } from "../../services/cartService";
-import { CartItems, FormAddressData, Product } from "../../utils/types";
+import {
+  getCartProducts,
+  moveAllFromCartToWishlist,
+  removeAllFromCart,
+  removeFromCart,
+} from "../../services/cartService";
+import { CartItems, Coupon, FormAddressData, Product } from "../../utils/types";
 import { toast } from "react-toastify";
 import { postWishlist } from "../../services/wishlistService";
-import { useDispatch } from "react-redux";
-import { setLoading } from "../../store/slice/loading.slice";
+import { useDispatch, useSelector } from "react-redux";
 import { LoaderOverlay } from "../../components/Loader";
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -17,11 +20,16 @@ import { CartAddresses } from "./CartAddress";
 import { SizeModal } from "./Dialogs/SizeModal";
 import { QuantityModal } from "./Dialogs/QuantityModal";
 import { ApplyCouponModal } from "./Dialogs/ApplyCouponModal";
+import { ChangeAddressModal } from "./Dialogs/ChangeAddressModal";
 import PaymentScreen from "./PaymentScreen";
+import { addAppliedCoupon } from "../../store/slice/cart.slice";
+import { RootState } from "../../store";
+import { ConfirmDeleteModal } from "./Dialogs/ConfirmDeleteModal";
+import { withLoading } from "../../utils/reusable-functions";
 
 type Props = {
-  setMaxAllowedStep: () => void;
-  setActiveStep: () => void;
+  setMaxAllowedStep: React.Dispatch<React.SetStateAction<number>>;
+  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
   cartItems: CartItems[];
   activeStep: number;
   setCartItems: React.Dispatch<React.SetStateAction<CartItems[]>>;
@@ -30,19 +38,12 @@ type Props = {
 
 export const ProductCart: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const steps = ["BAG", "ADDRESS", "PAYMENT"];
   const [cartItems, setCartItems] = useState<CartItems[]>([]);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [maxAllowedStep, setMaxAllowedStep] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<string>("");
-
-  const handleIncreaseSetMaxAllowedStep = () => {
-    setMaxAllowedStep((prev) => prev + 1);
-  };
-
-  const handleIncreaseSetActiveStep = () => {
-    setActiveStep((prev) => prev + 1);
-  };
 
   const handleStepClick = (index: number) => {
     if (index <= maxAllowedStep) {
@@ -59,6 +60,21 @@ export const ProductCart: React.FC = () => {
       return "text-[#d3d3d3] cursor-not-allowed";
     }
   };
+
+  const refreshCart = async () => {
+    const response = await getCartProducts({ page: 1, pageSize: 100 });
+
+    const items: CartItems[] = response.data.data.items.map((item: any) => ({
+      ...item,
+      isSelected: false,
+      isAvailable: item.product?.quantity > 0,
+    }));
+    setCartItems(items);
+  };
+
+  useEffect(() => {
+    withLoading(dispatch, "refresh-cart", refreshCart);
+  }, []);
 
   return (
     <>
@@ -110,8 +126,8 @@ export const ProductCart: React.FC = () => {
             setTotalPrice={setTotalPrice}
             activeStep={activeStep}
             setCartItems={setCartItems}
-            setMaxAllowedStep={handleIncreaseSetMaxAllowedStep}
-            setActiveStep={handleIncreaseSetActiveStep}
+            setMaxAllowedStep={setMaxAllowedStep}
+            setActiveStep={setActiveStep}
           />
         ) : activeStep === 1 ? (
           <div className="flex flex-col md:flex-row gap-6">
@@ -119,10 +135,10 @@ export const ProductCart: React.FC = () => {
               <CartAddresses />
             </div>
             <PriceSummary
-              activeStep={activeStep}
               setTotalPrice={setTotalPrice}
-              setActiveStep={handleIncreaseSetActiveStep}
-              setMaxAllowedStep={handleIncreaseSetMaxAllowedStep}
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              setMaxAllowedStep={setMaxAllowedStep}
               setCartItems={setCartItems}
               cartItems={cartItems}
             />
@@ -135,8 +151,8 @@ export const ProductCart: React.FC = () => {
             <PriceSummary
               setTotalPrice={setTotalPrice}
               activeStep={activeStep}
-              setActiveStep={handleIncreaseSetActiveStep}
-              setMaxAllowedStep={handleIncreaseSetMaxAllowedStep}
+              setActiveStep={setActiveStep}
+              setMaxAllowedStep={setMaxAllowedStep}
               setCartItems={setCartItems}
               cartItems={cartItems}
             />
@@ -154,18 +170,26 @@ const PriceSummary: React.FC<Props> = ({
   cartItems,
   activeStep,
 }) => {
+  const { selectedCoupon, availableCoupons } = useSelector(
+    (state: RootState) => ({
+      selectedCoupon: state.cart.coupon,
+      availableCoupons: state.cart.availableCoupons,
+    })
+  );
   const [openCouponDialog, setOpenCouponDialog] = useState(false);
-  const [appliedCoupon, setAppliedCoupon] = useState<{
-    code: string;
-    maxSavings: number;
-    minPurchase: number;
-  } | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(
+    selectedCoupon
+  );
+  const dispatch = useDispatch();
 
   const handleCloseCouponDialog = () => setOpenCouponDialog(false);
-  const handleOpenCouponDialog = () => setOpenCouponDialog(true);
+  const handleOpenCouponDialog = () => {
+    setOpenCouponDialog(true);
+  };
 
   const handleApplyCoupon = (coupon: typeof appliedCoupon) => {
     setAppliedCoupon(coupon);
+    dispatch(addAppliedCoupon(coupon));
     handleCloseCouponDialog();
   };
 
@@ -186,8 +210,11 @@ const PriceSummary: React.FC<Props> = ({
     .toFixed(0);
 
   const couponDiscount =
-    appliedCoupon && Number(totalMRP) >= appliedCoupon.minPurchase
-      ? Math.min(appliedCoupon.maxSavings, Number(totalMRP) * 0.15)
+    appliedCoupon && Number(totalMRP) >= Number(appliedCoupon.min_order_amount)
+      ? Math.min(
+          Number(appliedCoupon.max_savings_amount),
+          (Number(totalMRP) * Number(appliedCoupon.discount)) / 100
+        )
       : 0;
 
   const totalAmount =
@@ -202,11 +229,33 @@ const PriceSummary: React.FC<Props> = ({
 
   const handlePlaceOrder = () => {
     if (selectedItems && selectedItems.length > 0) {
-      setMaxAllowedStep();
-      setActiveStep();
+      if (activeStep === 1) {
+        setActiveStep(2);
+        setMaxAllowedStep(2);
+      } else {
+        setMaxAllowedStep(1);
+        setActiveStep(1);
+      }
       setTotalPrice(totalAmount);
     }
   };
+
+  useEffect(() => {
+    if (selectedItems.length <= 0) {
+      setMaxAllowedStep(0);
+      setActiveStep(0);
+    }
+  }, [selectedItems]);
+
+  useEffect(() => {
+    const coupon =
+      availableCoupons &&
+      availableCoupons.find(
+        (coupon: { code: string }) =>
+          coupon.code.toLowerCase() === appliedCoupon?.code.toLowerCase()
+      );
+    setAppliedCoupon(coupon as Coupon);
+  }, []);
 
   return (
     <div className="w-full lg:w-[30%] md:w-[100%] py-5 sm:py-0">
@@ -216,16 +265,29 @@ const PriceSummary: React.FC<Props> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <SellOutlinedIcon fontSize="small" />
-          <p className="font-bold text-[#282c3f] text-xs sm:text-sm ml-3">
-            Apply Coupon
-          </p>
+          {appliedCoupon?.id && selectedItems.length > 0 ? (
+            <>
+              <div>
+                <p className="font-bold text-[#282c3f]  text-xs sm:text-sm ml-3">
+                  1 Coupon Applied
+                </p>
+                <p className="font-normal text-[#28a02e] text-[12px] ml-4">
+                  You saved ₹ {appliedCoupon.max_savings_amount}{" "}
+                </p>
+              </div>
+            </>
+          ) : (
+            <p className="font-bold text-[#282c3f] text-xs sm:text-sm ml-3">
+              Apply Coupon
+            </p>
+          )}
         </div>
         <button
           onClick={handleOpenCouponDialog}
-          className="cursor-pointer bg-transparent border border-[#ff3f6c] text-[#ff3f6c] text-center 
+          className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
             px-[10px] max-w-[80px] w-full py-[5px] text-xs sm:text-sm font-[700] uppercase 
             hover:font-[700] transition-colors duration-300
-            hover:border-[#ff3f6c] hover:bg-[#ffeaef] focus:outline-none"
+            hover:border-[#3880FF] hover:bg-[#eaebff] focus:outline-none"
         >
           Apply
         </button>
@@ -247,7 +309,7 @@ const PriceSummary: React.FC<Props> = ({
             </div>
             <div className="text-xs sm:text-sm flex justify-between font-normal my-1 text-[#282c3f]">
               <span>Coupon Discount</span>{" "}
-              <span className="text-[#ff3f6c]">
+              <span className="text-[#3880FF]">
                 -₹{couponDiscount ? couponDiscount.toFixed(0) : 0}
               </span>
             </div>
@@ -266,7 +328,7 @@ const PriceSummary: React.FC<Props> = ({
         </div>
         {activeStep < 2 && (
           <button
-            className="w-full mt-4 cursor-pointer bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]"
+            className="w-full mt-4 cursor-pointer bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#3880FF9b]"
             disabled={selectedItems?.length === 0}
             onClick={handlePlaceOrder}
           >
@@ -279,6 +341,7 @@ const PriceSummary: React.FC<Props> = ({
         handleCloseCouponDialog={handleCloseCouponDialog}
         openCouponDialog={openCouponDialog}
         onApplyCoupon={handleApplyCoupon}
+        totalAmount={Number(totalAmount)}
       />
     </div>
   );
@@ -302,6 +365,7 @@ const CartItemsList: React.FC<Props> = ({
   const [defaultAddress, setDefaultAddress] = useState<FormAddressData | null>(
     null
   );
+  const [openAddressDialog, setOpenAddressDialog] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -310,6 +374,8 @@ const CartItemsList: React.FC<Props> = ({
     setSelectedProduct(product);
   };
   const handleCloseSizeDialog = () => setOpenSizeDialog(false);
+  const handleCloseChangeAddressDialog = () => setOpenAddressDialog(false);
+  const handleOpenChangeAddressDialog = () => setOpenAddressDialog(true);
 
   const handleOpenQuantityDialog = (product: Product) => {
     setOpenQuantityDialog(true);
@@ -318,27 +384,28 @@ const CartItemsList: React.FC<Props> = ({
   const handleCloseQuantityDialog = () => setOpenQuantityDialog(false);
 
   const handleSelectItem = (id: number) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
+    setCartItems((prev) => {
+      const updatedCartItems = prev.map((item) =>
         item.id === id ? { ...item, isSelected: !item.isSelected } : item
-      )
-    );
+      );
+      return updatedCartItems;
+    });
+  };
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+
+    setCartItems((prev) => {
+      const updatedCartItems = prev.map((item) =>
+        item.isAvailable ? { ...item, isSelected: isChecked } : item
+      );
+      return updatedCartItems;
+    });
   };
 
   const selectedItems = cartItems.filter(
     (item) => item.isSelected && item.isAvailable
   );
-
-  const withLoading = async (callback: () => Promise<void>) => {
-    try {
-      dispatch(setLoading({ key: "cart", value: true }));
-      await callback();
-    } catch (error) {
-      toast.error("Something went wrong!");
-    } finally {
-      dispatch(setLoading({ key: "cart", value: false }));
-    }
-  };
 
   const refreshCart = async () => {
     const response = await getCartProducts({ page: 1, pageSize: 100 });
@@ -360,7 +427,7 @@ const CartItemsList: React.FC<Props> = ({
 
   const handleRemoveFromCart = async (productId: number) => {
     setOpenConfirmDialog(false);
-    await withLoading(async () => {
+    await withLoading(dispatch, "remove-from-cart", async () => {
       const response = await removeFromCart(productId);
       if (response.status === 200) {
         toast.success("Item removed from Bag");
@@ -369,10 +436,32 @@ const CartItemsList: React.FC<Props> = ({
     });
   };
 
+  const handleRemoveAllSelectedItems = async () => {
+    await withLoading(dispatch, "remove-all-from-cart", async () => {
+      const productIds = selectedItems.flatMap((item) => item.product_id);
+      const response = await removeAllFromCart(productIds);
+      if (response.status === 200) {
+        toast.success("All selected items removed from Bag");
+        await refreshCart();
+      }
+    });
+  };
+
+  const handleMoveAllSelectedItemsToWishlist = async () => {
+    await withLoading(dispatch, "remove-all-to-wishlist", async () => {
+      const productIds = selectedItems.flatMap((item) => item.product_id);
+      const response = await moveAllFromCartToWishlist(productIds);
+      if (response.status === 200) {
+        toast.success("All selected items moved to wishlist");
+        await refreshCart();
+      }
+    });
+  };
+
   const handleAddToWishlist = async () => {
     if (!selectedProduct?.id) return;
 
-    await withLoading(async () => {
+    await withLoading(dispatch, "add-to-wishlist", async () => {
       setOpenConfirmDialog(false);
       const wishlistResponse = await postWishlist({
         product_id: Number(selectedProduct.id),
@@ -390,10 +479,6 @@ const CartItemsList: React.FC<Props> = ({
     });
   };
 
-  useEffect(() => {
-    withLoading(refreshCart);
-  }, []);
-
   const handleDeleteClick = (product: Product, itemId: number) => {
     setSelectedItemId(itemId);
     setSelectedProduct(product);
@@ -403,67 +488,74 @@ const CartItemsList: React.FC<Props> = ({
   return (
     <div className="flex flex-col lg:flex-row gap-2">
       <div className="w-full lg:w-[70%] md:w-[100%]">
-        <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#fff6f4] border border-[#eaeaec] rounded-md">
-          <div>
-            <p className="text-[#282c3f] text-xs font-normal">
-              Deliver to :{" "}
-              <span className="text-[#282c3f] font-bold">
-                {defaultAddress?.full_name}, {defaultAddress?.postal_code}
-              </span>
-            </p>
-            <p className="text-[#282c3f] text-xs font-normal">
-              {defaultAddress?.address_line1}, {defaultAddress?.address_line2},{" "}
-              {defaultAddress?.city} , {defaultAddress?.state}
-            </p>
-          </div>
-          <button
-            className="cursor-pointer bg-transparent border border-[#ff3f6c] text-[#ff3f6c] text-center 
+        {defaultAddress !== null && (
+          <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#8bc7ff46] border border-[#eaeaec] rounded-md">
+            <div>
+              <p className="text-[#282c3f] text-xs font-normal">
+                Deliver to :{" "}
+                <span className="text-[#282c3f] font-bold">
+                  {defaultAddress?.full_name}, {defaultAddress?.postal_code}
+                </span>
+              </p>
+              <p className="text-[#282c3f] text-xs font-normal">
+                {defaultAddress?.address_line1}, {defaultAddress?.address_line2}
+                , {defaultAddress?.city} , {defaultAddress?.state}
+              </p>
+            </div>
+            <button
+              onClick={handleOpenChangeAddressDialog}
+              className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
               px-[10px] w-full sm:max-w-[160px] py-[7px] my-2 sm:my-[15px] text-xs sm:text-md font-[700] rounded-md capitalize 
              hover:font-[700] transition-colors duration-300
-              hover:border-[#ff3f6c]  focus:outline-none sm:uppercase"
-          >
-            Change address
-          </button>
-        </div>
+              hover:border-[#3880FF]  focus:outline-none sm:uppercase"
+            >
+              Change address
+            </button>
+          </div>
+        )}
         <div className="flex flex-col md:flex-row justify-between sm:items-center my-2 sm:my-3">
           <div className="py-1 ml-2 font-semibold text-gray-800 text-xs sm:text-sm normal-case sm:uppercase">
             <Checkbox
               sx={{
-                color: pink[500],
+                color: "#3880FF",
                 "&.Mui-checked": {
-                  color: pink[500],
+                  color: "#3880FF",
                 },
               }}
               checked={
                 selectedItems.length ===
                 cartItems.filter((i) => i.isAvailable).length
               }
-              onChange={(e) =>
-                setCartItems((prev) =>
-                  prev.map((item) =>
-                    item.isAvailable
-                      ? { ...item, isSelected: e.target.checked }
-                      : item
-                  )
-                )
-              }
+              onChange={handleSelectAll}
             />
             {selectedItems.length}/{cartItems.length} Items Selected
           </div>
           <div className="flex w-full max-w-[310px] ml-3 sm:ml-0 items-center text-xs sm:text-sm font-semibold py-0 sm:py-2">
-            <button className=" max-w-[60px] sm:max-w-[100px] w-full font-bold text-[#535766] p-1 text-xs sm:text-sm focus:outline-none normal-case sm:uppercase">
-              Remove
+            <button
+              disabled={selectedItems.length <= 0}
+              onClick={() => handleRemoveAllSelectedItems()}
+              className="cursor-pointer max-w-[60px] sm:max-w-[100px] w-full font-bold text-[#535766] p-1 text-xs sm:text-sm focus:outline-none normal-case sm:uppercase disabled:text-gray-300 disabled:cursor-not-allowed"
+            >
+              Remove All
             </button>
             <div className="border-l border-gray-300 h-5 mx-2" />
-            <button className="max-w-[160px] sm:max-w-[200px] text-justify sm:text-center w-full font-bold text-[#535766] p-1 text-xs sm:text-sm focus:outline-none normal-case sm:uppercase">
-              Move to whishlist
+            <button
+              disabled={selectedItems.length <= 0}
+              onClick={() => handleMoveAllSelectedItemsToWishlist()}
+              className="cursor-pointer max-w-[160px] sm:max-w-[200px] text-justify sm:text-center w-full font-bold text-[#535766] p-1 text-xs sm:text-sm focus:outline-none normal-case sm:uppercase disabled:text-gray-300 disabled:cursor-not-allowed"
+            >
+              Move to wishlist
             </button>
           </div>
         </div>
         {cartItems.map((item) => (
-          <div className="border border-[#eaeaec] rounded-md p-4 mb-2">
+          <div
+            key={item.id}
+            className="border border-[#eaeaec] rounded-md p-4 mb-2"
+          >
             <div className="relative">
               <button
+                title="remove"
                 className="absolute right-1 text-gray-500 hover:text-black cursor-pointer hover:bg-[#f5f5f5] p-2 rounded-[50%]"
                 onClick={() => handleDeleteClick(item.product, item.id)}
               >
@@ -485,10 +577,10 @@ const CartItemsList: React.FC<Props> = ({
                       onChange={() => handleSelectItem(item.id)}
                       className="mr-4"
                       sx={{
-                        color: pink[500],
+                        color: "#3880FF",
                         backdropFilter: "#fff",
                         "&.Mui-checked": {
-                          color: pink[500],
+                          color: "#3880FF",
                         },
                       }}
                     />
@@ -637,64 +729,13 @@ const CartItemsList: React.FC<Props> = ({
         setTotalPrice={setTotalPrice}
       />
 
-      <Dialog
-        open={openConfirmDialog}
-        onClose={() => setOpenConfirmDialog(false)}
-        aria-labelledby="confirm-dialog-title"
-        aria-describedby="confirm-dialog-description"
-      >
-        <StyledIconButton
-          aria-label="close"
-          sx={() => ({
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: "#282c3f",
-            fontSize: "16px",
-          })}
-          onClick={() => setOpenConfirmDialog(false)}
-        >
-          <CloseIcon />
-        </StyledIconButton>
-        <div className="p-4 pb-0">
-          <div className="flex">
-            <div className="">
-              <img
-                src={selectedProduct?.image[0]}
-                alt={selectedProduct?.name}
-                className="object-cover max-w-[70px] w-full max-h-[70px] h-full"
-              />
-            </div>
-            <div>
-              <p className="text-sm text-gray-600 font-bold px-3">
-                Move from Bag
-              </p>
-              <p className="text-xs sm:text-sm text-gray-600 px-3 font-normal max-w-[300px]">
-                Are you sure you want to move this item from bag?
-              </p>
-            </div>
-          </div>
-
-          <hr className="mt-5 border-gray-300" />
-
-          <div className="flex items-center text-xs sm:text-sm font-semibold my-2 ">
-            <button
-              type="button"
-              onClick={() => handleConfirmDelete()}
-              className="flex-1 text-xs text-[#636363] p-1 focus:outline-none cursor-pointer uppercase"
-            >
-              Remove
-            </button>
-            <div className="border-l border-gray-300 h-5 mx-2" />
-            <button
-              onClick={() => handleAddToWishlist()}
-              className="flex-1 text-xs uppercase text-[#ff3f6c] p-1 focus:outline-none cursor-pointer"
-            >
-              Move to whishlist
-            </button>
-          </div>
-        </div>
-      </Dialog>
+      <ConfirmDeleteModal
+        handleAddToWishlist={handleAddToWishlist}
+        handleCloseConfirmDialog={() => setOpenConfirmDialog(false)}
+        handleConfirmDelete={handleConfirmDelete}
+        openConfirmDialog={openConfirmDialog}
+        selectedProduct={selectedProduct as Product}
+      />
 
       <SizeModal
         handleCloseSizeDialog={handleCloseSizeDialog}
@@ -709,16 +750,12 @@ const CartItemsList: React.FC<Props> = ({
         selectedQuantity={selectedQuantity as number}
         setSelectedQuantity={setSelectedQuantity}
       />
+
+      <ChangeAddressModal
+        handleCloseAddressDialog={handleCloseChangeAddressDialog}
+        openAddressDialog={openAddressDialog}
+        setDefaultAddress={setDefaultAddress}
+      />
     </div>
   );
 };
-
-const StyledIconButton = styled(IconButton)({
-  position: "absolute",
-  right: 8,
-  top: 8,
-  color: "#282c3f",
-  "& .MuiSvgIcon-root": {
-    fontSize: "20px",
-  },
-});

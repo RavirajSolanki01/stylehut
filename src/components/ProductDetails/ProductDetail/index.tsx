@@ -55,7 +55,7 @@ const ProductDetail = ({description}:{description: string}) => {
         {specs.length > VISIBLE_COUNT && (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="button-none text-[#ff3f6c] text-[14px]/normal font-[700] hover:border-[transparent] p-[0px] bg-[#fff] mt-[10px] mb-[20px]"
+            className="button-none text-[#3880FF] text-[14px]/normal font-[700] hover:border-[transparent] p-[0px] bg-[#fff] mt-[10px] mb-[20px]"
           >
             {expanded ? "See less" : "See more"}
           </button>

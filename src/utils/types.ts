@@ -59,7 +59,6 @@ export interface AddressCardProps {
   handleDeleteClick: (index: number) => void;
 }
 
-
 // ADD TO CART >>>>>>>------------------------------------------------------>>>>>>>>>>---------------------------------------------------------------->>>>>>>>>>>>>>
 
 export interface CartResponse {
@@ -90,6 +89,19 @@ export interface CartItems {
   product: Product;
   isAvailable: boolean;
   isSelected: boolean;
+}
+
+export interface Coupon {
+  id: number;
+  code: string;
+  discount: string;
+  discount_text: string;
+  min_order_amount: string;
+  max_savings_amount: string;
+  expiry_date: string;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
 }
 
 export interface Product {

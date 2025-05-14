@@ -161,7 +161,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
               </Typography>
             ))}
             <Box
-              className="mt-1 text-sm text-[#ff3f6c] font-medium flex items-center gap-1 cursor-pointer"
+              className="mt-1 text-sm text-[#3880FF] font-medium flex items-center gap-1 cursor-pointer"
               onClick={() => setShowMore(!showMore)}
             >
               {showMore ? (
@@ -191,7 +191,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                     border: "1px solid #eaeaec",
                     borderLeft:
                       selectedPaymentMethod === method.label
-                        ? "4px solid #ff3f6c"
+                        ? "4px solid #3880FF"
                         : "1px solid #eaeaec",
                     backgroundColor:
                       selectedPaymentMethod === method.label
@@ -217,7 +217,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                           fontSize: "12px !important",
                           color:
                             selectedPaymentMethod === method.label
-                              ? "#ff3f6c"
+                              ? "#3880FF"
                               : "#424553",
                         }}
                       >
@@ -324,7 +324,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                           boxSizing: "border-box",
                         }}
                       >
-                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                           PLACE ORDER
                         </button>
                       </Box>
@@ -405,7 +405,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                           boxSizing: "border-box",
                         }}
                       >
-                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                           PLACE ORDER
                         </button>
                       </Box>
@@ -491,7 +491,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                           boxSizing: "border-box",
                         }}
                       >
-                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                           PAY NOW
                         </button>
                       </Box>
@@ -594,7 +594,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                           }}
                           onClick={handlePayNow}
                         >
-                          <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                          <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                             PAY NOW
                           </button>
                         </Box>
@@ -863,7 +863,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                           boxSizing: "border-box",
                         }}
                       >
-                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                           PAY NOW
                         </button>
                       </Box>
@@ -953,7 +953,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                           boxSizing: "border-box",
                         }}
                       >
-                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                           PAY NOW
                         </button>
                       </Box>
@@ -1036,7 +1036,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                           boxSizing: "border-box",
                         }}
                       >
-                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                           PAY NOW
                         </button>
                       </Box>
@@ -1121,7 +1121,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                             boxSizing: "border-box",
                           }}
                         >
-                          <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                          <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                             PAY NOW
                           </button>
                           <Typography
@@ -1217,7 +1217,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                             boxSizing: "border-box",
                           }}
                         >
-                          <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                          <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                             PAY NOW
                           </button>
                         </Box>
@@ -1401,7 +1401,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                                 boxSizing: "border-box",
                               }}
                             >
-                              <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                              <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                                 PAY NOW
                               </button>
                             </Box>
@@ -1493,7 +1493,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                                 boxSizing: "border-box",
                               }}
                             >
-                              <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                              <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                                 PAY NOW
                               </button>
                             </Box>
@@ -1543,7 +1543,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                           boxSizing: "border-box",
                         }}
                       >
-                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#ff3f6c] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
+                        <button className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]">
                           PAY NOW
                         </button>
                       </Box>
@@ -1646,7 +1646,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
             </Box>
           </Box>
 
-          <div className="flex align-center justify-between rounded shadow-sm mb-4 transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] cursor-pointer text-[#ff3f6c] p-4 border border-gray-200">
+          <div className="flex align-center justify-between rounded shadow-sm mb-4 transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] cursor-pointer text-[#3880FF] p-4 border border-gray-200">
             <span className="text-[#424553] flex align-center">
               <GiftCardIcon /> &nbsp; Have A Gift Card ?
             </span>
@@ -1713,10 +1713,10 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
               }
               sx={{
                 textTransform: "none",
-                backgroundColor: "#ff3f6c",
+                backgroundColor: "#3880FF",
                 color: "#fff",
                 "&:hover": {
-                  backgroundColor: "#bbb",
+                  backgroundColor: "#3880FF",
                 },
                 "&.Mui-disabled": {
                   backgroundColor: "#d3d3d3",

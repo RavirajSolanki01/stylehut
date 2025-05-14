@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { getWishlist, postWishlist } from "../../services/wishlistService";
 import { setLoading } from "../../store/slice/loading.slice";
 import { useDispatch } from "react-redux";
+import { LoaderOverlay } from "../../components/Loader";
 
 const ProductCard = ({
   product,
@@ -113,7 +114,7 @@ const ProductCard = ({
           textAlign="center"
           fontWeight={700}
           fontSize={14}
-          color="#ff3e6c"
+          color="#3880FF"
         >
           MOVE TO BAG
         </Typography>
@@ -140,7 +141,9 @@ export const Wishlist = () => {
           "Something went wrong.";
         toast.error(`Remove item from wishlist Failed: ${errorMessage}`);
       })
-      .finally(() => dispatch(setLoading({ key: "remove-from-wishlist", value: false })));
+      .finally(() =>
+        dispatch(setLoading({ key: "remove-from-wishlist", value: false }))
+      );
   };
 
   const fetchWishlist = () => {
@@ -159,7 +162,9 @@ export const Wishlist = () => {
           "Something went wrong.";
         toast.error(`Fetch wishlist data Failed: ${errorMessage}`);
       })
-      .finally(() => dispatch(setLoading({ key: "get-wishlist", value: false })));
+      .finally(() =>
+        dispatch(setLoading({ key: "get-wishlist", value: false }))
+      );
   };
 
   useEffect(() => {
@@ -168,6 +173,8 @@ export const Wishlist = () => {
 
   return (
     <div className="max-w-[1640px] w-full mx-auto">
+      <LoaderOverlay />
+
       <p className="mx-8 my-4 font-bold text-[18px] text-[#282c3f] text-left flex items-center align-middle wishlist-items">
         My Wishlist &nbsp;
         <span className="font-[400] text-[18px] text-[#282c3f]">{`${wishlist_page_data.length} items`}</span>

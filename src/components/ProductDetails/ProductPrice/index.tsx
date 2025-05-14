@@ -99,7 +99,7 @@ const ProductPrice = ({
       {/* product size */}
       <div className="flex gap-[30px] items-center my-[12px]">
         <div className="font-[700] text-[16px] m-[0px]">SELECT SIZE</div>
-        <div className="font-[700] text-[14px] cursor-pointer text-[#ff3e6c] leading-[16px] m-[0px] flex items-center">
+        <div className="font-[700] text-[14px] cursor-pointer text-[#3880FF] leading-[16px] m-[0px] flex items-center">
           SIZE CHART
           <NavigateNextIcon />
         </div>
@@ -134,7 +134,7 @@ const ProductPrice = ({
         {isAddedToCart ? (
           <button
             onClick={()=>navigate("/cart")}
-            className="cursor-pointer bg-[#ff3f6c]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#ff527b] hover:border-transparent h-10"
+            className="cursor-pointer bg-[#3880FF]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#3880FF] hover:border-transparent h-10"
           >
             <span>GO TO BAG</span>
             <ArrowRightAltSharp className="!w-[20px] !h-[20px]" />
@@ -142,7 +142,7 @@ const ProductPrice = ({
         ) : (
           <button
             onClick={addToCart}
-            className="cursor-pointer bg-[#ff3f6c]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#ff527b] hover:border-transparent h-10"
+            className="cursor-pointer bg-[#3880FF]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#3880FF] hover:border-transparent h-10"
           >
             <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
             <span>ADD TO BAG</span>
@@ -157,8 +157,8 @@ const ProductPrice = ({
         >
           {isWishlisted ? (
             <Favorite
-              fill="bg-[#ff3e6c]"
-              className="text-[#ff3e6c] "
+              fill="bg-[#3880FF]"
+              className="text-[#3880FF] "
               style={{ fontSize: "1rem" }}
             />
           ) : (
@@ -188,7 +188,7 @@ const ProductPrice = ({
           />
           <button
             // type="submit"
-            className="text-sm font-medium text-[#ff3f6c] bg-transparent px-4 py-2 hover:bg-transparent hover:border-transparent"
+            className="text-sm font-medium text-[#3880FF] bg-transparent px-4 py-2 hover:bg-transparent hover:border-transparent"
           >
             Check
           </button>

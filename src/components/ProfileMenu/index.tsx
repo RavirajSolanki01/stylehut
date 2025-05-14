@@ -51,10 +51,10 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({
         </p>
         <button
           onClick={() => handleNavigate("login")}
-          className="cursor-pointer bg-transparent border border-[#d2d2d2] text-[#ff3f6c] text-center 
+          className="cursor-pointer bg-transparent border border-[#d2d2d2] text-primary text-center 
               px-[10px] w-[145px] py-[10px] my-[15px] text-[14px] font-[700] rounded-none uppercase 
              hover:font-[700] transition-colors duration-300
-              hover:border-[#ff3f6c]  focus:outline-none"
+              hover:border-[#3880FF]  focus:outline-none"
         >
           Login/Signup
         </button>

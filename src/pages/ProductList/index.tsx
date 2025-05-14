@@ -161,7 +161,6 @@ export const ProductList = () => {
         ),
         brand_id: selectedBrand
       });
-      console.log(response.data.data.items, "??>><<response.data.data.items");
 
       setProducts(response.data.data.items);
       setPagination({
@@ -416,11 +415,11 @@ export const ProductList = () => {
                     name="brand-selection"
                     checked={selectedBrand === brand.id}
                     onChange={() => setSelectedBrand(brand.id)}
-                    className="h-[18px] w-[18px] rounded-[3px] border-2 border-[#ff3f6c] text-[#ff3f6c] cursor-pointer accent-[#ff3f6c] appearance-none bg-[#fff] checked:text-[#fff] checked:bg-[#ff3f6c]"
+                    className="h-[18px] w-[18px] rounded-[3px] border-2 border-[#3880FF] text-[#3880FF] cursor-pointer accent-[#3880FF] appearance-none bg-[#fff] checked:text-[#fff] checked:bg-[#3880FF]"
                   />
                   <label
                     htmlFor={`brand-${brand.id}-radio`}
-                    className="ml-[10px] text-[14px] text-[#282c3f] cursor-pointer hover:text-[#ff3f6c] font-[400]"
+                    className="ml-[10px] text-[14px] text-[#282c3f] cursor-pointer hover:text-[#3880FF] font-[400]"
                   >
                     {brand.name}
                   </label>
@@ -428,7 +427,7 @@ export const ProductList = () => {
               ))}
               {selectedBrand !== 0 && (
                 <div
-                  className="text-left px-[20px] text-[14px] mt-[5px] cursor-pointer text-[#ff3f6c] hover:underline"
+                  className="text-left px-[20px] text-[14px] mt-[5px] cursor-pointer text-[#3880FF] hover:underline"
                   onClick={() => setSelectedBrand(0)}
                 >
                   Clear
@@ -453,18 +452,18 @@ export const ProductList = () => {
                   placeholder="d"
                   value="100"
                   disabled
-                  className="absolute top-1/2 left-0 w-full h-[2px] appearance-none bg-[#ff3f6c] rounded-lg pointer-events-none 
+                  className="absolute top-1/2 left-0 w-full h-[2px] appearance-none bg-[#3880FF] rounded-lg pointer-events-none 
       [&::-webkit-slider-thumb]:appearance-none 
       [&::-webkit-slider-thumb]:h-3 
       [&::-webkit-slider-thumb]:w-3 
       [&::-webkit-slider-thumb]:rounded-full 
       [&::-webkit-slider-thumb]:bg-[#fff]
       [&::-webkit-slider-thumb]:border-4 
-      [&::-webkit-slider-thumb]:border-[#ff3f6c]
+      [&::-webkit-slider-thumb]:border-[#3880FF]
       [&::-moz-range-thumb]:h-5 
       [&::-moz-range-thumb]:w-5 
       [&::-moz-range-thumb]:rounded-full 
-      [&::-moz-range-thumb]:bg-[#ff3f6c]
+      [&::-moz-range-thumb]:bg-[#3880FF]
       [&::-moz-range-thumb]:border-4 
       [&::-moz-range-thumb]:border-white
       "
@@ -487,11 +486,11 @@ export const ProductList = () => {
       [&::-webkit-slider-thumb]:rounded-full 
       [&::-webkit-slider-thumb]:bg-[#fff]
       [&::-webkit-slider-thumb]:border-4 
-      [&::-webkit-slider-thumb]:border-[#ff3f6c]
+      [&::-webkit-slider-thumb]:border-[#3880FF]
       [&::-moz-range-thumb]:h-5 
       [&::-moz-range-thumb]:w-5 
       [&::-moz-range-thumb]:rounded-full 
-      [&::-moz-range-thumb]:bg-[#ff3f6c]
+      [&::-moz-range-thumb]:bg-[#3880FF]
       [&::-moz-range-thumb]:border-4 
       [&::-moz-range-thumb]:border-white
       "

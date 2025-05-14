@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
@@ -12,7 +11,6 @@ import App from "./App.tsx";
 import theme from "./utils/theme.ts";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
     <ThemeProvider theme={theme}>
       <ToastContainer position="top-center" />
       <CssBaseline />
@@ -24,5 +22,4 @@ createRoot(document.getElementById("root")!).render(
         </PersistGate>
       </Provider>
     </ThemeProvider>
-  </StrictMode>
 );

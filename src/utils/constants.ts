@@ -46,12 +46,12 @@ import CODIcon from "../assets/Cart/SVGs/CODIcon";
 
 export const colorMap: Record<string, string> = {
   Beauty: "#0db7af",
-  Men: "#ff3f6c",
-  Women: "#fb56c1",
-  Kids: "#f26a10",
-  Home: "#f2c210",
-  Genz: "#ff3f6c",
-  Studio: "#f26a10",
+  Men: "#3880FF",
+  Women: "#3880FF",
+  Kids: "#3880FF",
+  Home: "#3880FF",
+  Genz: "#3880FF",
+  Studio: "#3880FF",
 };
 
 export const ShopByCategoryData = [
@@ -148,13 +148,13 @@ export const ShopByCategoryData = [
 ];
 
 export const headerMenuItems = [
-  { id: 0, label: "Men", color: "#ff3f6c" },
-  { id: 0, label: "Women", color: "#fb56c1" },
-  { id: 0, label: "Kids", color: "#f26a10" },
-  { id: 0, label: "Home", color: "#f2c210" },
+  { id: 0, label: "Men", color: "#3880FF" },
+  { id: 0, label: "Women", color: "#3880FF" },
+  { id: 0, label: "Kids", color: "#3880FF" },
+  { id: 0, label: "Home", color: "#3880FF" },
   { id: 0, label: "Beauty", color: "#0db7af" },
-  { id: 0, label: "Genz", color: "#ff3f6c" },
-  { id: 0, label: "Studio", color: "#f26a10" },
+  { id: 0, label: "Genz", color: "#3880FF" },
+  { id: 0, label: "Studio", color: "#3880FF" },
 ];
 
 export const ProfileMenuItems = [
@@ -202,7 +202,7 @@ export const accountSections = [
   {
     icon: Addersses,
     title: "Addresses",
-    path: "adderesses",
+    path: "Addresses",
     subtitle: "Save addresses for a hassle-free checkout",
   },
   {
@@ -307,7 +307,7 @@ export const PaymentSections = [
   {
     icon: Addersses,
     title: "Addresses",
-    path: "adderesses",
+    path: "Addresses",
     subtitle: "Save addresses for a hassle-free checkout",
   },
   {

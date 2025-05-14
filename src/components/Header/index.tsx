@@ -26,12 +26,15 @@ import { CategoryResponse, ISearchOption } from "../../utils/types";
 import useDebounce from "../../hooks";
 import { getheaderSearch } from "../../services/headerSearch";
 import { removeAuthToken } from "../../store/slice/auth.slice";
-import { addCategories, addSubCategories } from "../../store/slice/categories.slice";
+import {
+  addCategories,
+  addSubCategories,
+} from "../../store/slice/categories.slice";
 
 export const Header: React.FC = () => {
-  const { auth , categoryList} = useSelector((state: RootState) => ({
+  const { auth, categoryList } = useSelector((state: RootState) => ({
     auth: state.auth,
-    categoryList: state.categories
+    categoryList: state.categories,
   }));
 
   const navigate = useNavigate();
@@ -49,7 +52,9 @@ export const Header: React.FC = () => {
   const [menuItems, setMenuItems] = useState<
     { label: string; color: string; id: number }[]
   >(categoryList.categories);
-  const [categories, setCategories] = useState<CategoryResponse[]>(categoryList.subCategories as CategoryResponse[]);
+  const [categories, setCategories] = useState<CategoryResponse[]>(
+    categoryList.subCategories as CategoryResponse[]
+  );
   const [inputValue, setInputValue] = useState("");
   const [labelValue, setLabelValue] = useState("");
   const [options, setOptions] = useState<ISearchOption[]>([]);
@@ -81,7 +86,7 @@ export const Header: React.FC = () => {
     setActivePopoverIndex(index);
   };
   useEffect(() => {
-    dispatch(setLoading({ key: "search", value: true }));
+    // dispatch(setLoading({ key: "search", value: true }));
     if (debouncedSearchTerm)
       getheaderSearch(inputValue)
         .then((res) => {
@@ -119,7 +124,7 @@ export const Header: React.FC = () => {
   useEffect(() => {
     const hasFetched = sessionStorage.getItem("hasFetchedCategories");
 
-    if (!hasFetched) {
+    if (!hasFetched || !categories.length || !menuItems.length) {
       dispatch(setLoading({ key: "category", value: true }));
       getCategories()
         .then((res) => {
@@ -172,7 +177,7 @@ export const Header: React.FC = () => {
         <img
           onClick={() => navigate("/home")}
           src={Logo}
-          alt="myntra_logo"
+          alt="logo"
           className="max-h-[60px] max-w-[60px] h-full w-full cursor-pointer"
         />
 
@@ -192,9 +197,24 @@ export const Header: React.FC = () => {
                       ? `4px solid ${item.color}`
                       : "",
                 }}
-                onMouseEnter={() => handleCategoryClick(index, `${item.label+'requestid'+ item.id}`)}
-                onMouseLeave={() => handleCategoryClick(index, `${item.label+'requestid'+ item.id}`)}
-                onClick={() => handleCategoryClick(index, `${item.label+'requestid'+ item.id}`)}
+                onMouseEnter={() =>
+                  handleCategoryClick(
+                    index,
+                    `${item.label + "requestid" + item.id}`
+                  )
+                }
+                onMouseLeave={() =>
+                  handleCategoryClick(
+                    index,
+                    `${item.label + "requestid" + item.id}`
+                  )
+                }
+                onClick={() =>
+                  handleCategoryClick(
+                    index,
+                    `${item.label + "requestid" + item.id}`
+                  )
+                }
               >
                 <div>{item.label}</div>
               </li>
@@ -231,19 +251,25 @@ export const Header: React.FC = () => {
           }
           onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
           onChange={(_, option) => {
-            if (option && typeof option !== 'string') {
+            if (option && typeof option !== "string") {
               navigate(option.path);
             }
           }}
-          style={{ width: "100%" }}          
+          style={{ width: "100%" }}
           renderGroup={(params) => (
             <li key={params.key}>
-              <GroupHeader className="ul-test">{params.group && "All others"}</GroupHeader>
+              <GroupHeader className="ul-test">
+                {params.group && "All others"}
+              </GroupHeader>
               <GroupItems>{params.children}</GroupItems>
             </li>
           )}
           renderOption={(props, option) => (
-            <li {...props} key={option.id} className="cursor-pointer font-light my-1 pl-2 hover:text-[#ff3f6c]">
+            <li
+              {...props}
+              key={option.id}
+              className="cursor-pointer font-light my-1 pl-2 hover:text-[#3880FF]"
+            >
               {option.name}
             </li>
           )}
@@ -264,8 +290,8 @@ export const Header: React.FC = () => {
         />
         <div className="flex items-center gap-x-[30px]">
           <div
-            className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#ff3f6c]"
-            style={{ borderBottom: open ? "4px solid #ff3f6c" : "" }}
+            className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#3880ff]"
+            style={{ borderBottom: open ? "4px solid #3880FF" : "" }}
             ref={buttonRef}
             onClick={handlePopoverOpen}
           >
@@ -294,17 +320,20 @@ export const Header: React.FC = () => {
           )}
 
           <div
-            className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#ff3f6c]"
+            className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#3880ff]"
             onClick={() => navigate("/wishlist")}
           >
             <FavoriteBorderOutlinedIcon />
             <p className="text-[11px] my-[0px] font-[700]">Wishlist</p>
           </div>
 
-          <div onClick={() => navigate("/cart")} className="text-[#282c3f] cursor-pointer flex flex-col items-center h-full min-h-[60px] w-full min-w-[40px] justify-center border-b-4 border-b-transparent hover:border-b-[#ff3f6c]">
+          <div
+            onClick={() => navigate("/cart")}
+            className="text-[#282c3f] cursor-pointer flex flex-col items-center h-full min-h-[60px] w-full min-w-[40px] justify-center border-b-4 border-b-transparent hover:border-b-[#3880ff]"
+          >
             <Badge
               badgeContent={5}
-              color="error"
+              color="info"
               overlap="circular"
               anchorOrigin={{ vertical: "top", horizontal: "right" }}
             >
