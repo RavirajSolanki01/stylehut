@@ -25,7 +25,7 @@ import PaymentScreen from "./PaymentScreen";
 import { addAppliedCoupon } from "../../store/slice/cart.slice";
 import { RootState } from "../../store";
 import { ConfirmDeleteModal } from "./Dialogs/ConfirmDeleteModal";
-import { withLoading } from "../../utils/reusable-functions";
+import { formatPrice, withLoading } from "../../utils/reusable-functions";
 
 type Props = {
   setMaxAllowedStep: React.Dispatch<React.SetStateAction<number>>;
@@ -53,7 +53,7 @@ export const ProductCart: React.FC = () => {
 
   const getStepStyle = (index: number) => {
     if (index === activeStep) {
-      return "text-[#03A685] border-b-2 border-[#03A685] pb-[2px] cursor-pointer";
+      return "text-[#3880ff] border-b-2 border-[#3880ff] pb-[2px] cursor-pointer";
     } else if (index <= maxAllowedStep) {
       return "text-[#282c3f] cursor-pointer hover:text-[#03A685]";
     } else {
@@ -272,7 +272,8 @@ const PriceSummary: React.FC<Props> = ({
                   1 Coupon Applied
                 </p>
                 <p className="font-normal text-[#28a02e] text-[12px] ml-4">
-                  You saved ₹ {appliedCoupon.max_savings_amount}{" "}
+                  You saved ₹{" "}
+                  {formatPrice(Number(appliedCoupon.max_savings_amount))}{" "}
                 </p>
               </div>
             </>
@@ -300,17 +301,20 @@ const PriceSummary: React.FC<Props> = ({
           PRICE DETAILS ({selectedItems?.length} Item)
         </p>
         <div className="text-xs sm:text-sm flex justify-between font-normal my-1 text-[#282c3f]">
-          <span>Total MRP</span> <span>₹{totalMRP}</span>
+          <span>Total MRP</span> <span>₹{formatPrice(Number(totalMRP))}</span>
         </div>
         {selectedItems && selectedItems.length > 0 && (
           <div>
             <div className="text-xs sm:text-sm flex justify-between font-normal my-1 text-green-600">
-              <span>Discount on MRP</span> <span>-₹{totalDiscount}</span>
+              <span>Discount on MRP</span>{" "}
+              <span>-₹{formatPrice(Number(totalDiscount))}</span>
             </div>
             <div className="text-xs sm:text-sm flex justify-between font-normal my-1 text-[#282c3f]">
               <span>Coupon Discount</span>{" "}
               <span className="text-[#3880FF]">
-                -₹{couponDiscount ? couponDiscount.toFixed(0) : 0}
+                {formatPrice(
+                  Number(couponDiscount ? couponDiscount.toFixed(0) : 0)
+                )}
               </span>
             </div>
             <div className="text-xs sm:text-sm flex justify-between font-normal my-1 text-[#282c3f]">
@@ -324,7 +328,8 @@ const PriceSummary: React.FC<Props> = ({
         )}
         <hr className="my-3 text-[#eaeaec]" />
         <div className="font-bold flex text-xs sm:text-sm justify-between my-1 text-[#3e4152]">
-          <span>Total Amount</span> <span>₹{totalAmount}</span>
+          <span>Total Amount</span>{" "}
+          <span>₹{formatPrice(Number(totalAmount))}</span>
         </div>
         {activeStep < 2 && (
           <button
@@ -624,15 +629,17 @@ const CartItemsList: React.FC<Props> = ({
                   <div className="flex items-center gap-2 text-xs sm:text-sm justify-center sm:justify-start">
                     <span className="text-gray-900">
                       Rs.
-                      {(
-                        Number(item.product.price) -
-                        Number(item.product.price) *
-                          (item.product.discount / 100)
-                      ).toFixed(0)}
+                      {formatPrice(
+                        Math.floor(
+                          Number(item.product.price) -
+                            Number(item.product.price) *
+                              (item.product.discount / 100)
+                        )
+                      )}
                     </span>
 
                     <span className="line-through text-[#7e818c] text-xs sm:text-sm">
-                      ₹{Number(item.product.price).toFixed(0)}
+                      ₹{formatPrice(Number(item.product.price))}
                     </span>
 
                     <span className="font-normal text-[#ff905a] text-xs sm:text-sm ">

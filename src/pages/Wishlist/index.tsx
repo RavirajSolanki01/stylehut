@@ -1,127 +1,10 @@
-import { Box, Typography, Divider, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getWishlist, postWishlist } from "../../services/wishlistService";
 import { setLoading } from "../../store/slice/loading.slice";
 import { useDispatch } from "react-redux";
 import { LoaderOverlay } from "../../components/Loader";
-
-const ProductCard = ({
-  product,
-  onRemove,
-}: {
-  product: any;
-  onRemove: (product_id: number) => void;
-}) => {
-  const products = product.products;
-  const getDiscountedPrice = (
-    price: number,
-    discountPercent: number
-  ): number => {
-    const discountAmount = (price * discountPercent) / 100;
-    return Math.floor(price - discountAmount);
-  };
-
-  return (
-    <Box
-      sx={{
-        width: 240,
-        m: 1,
-        border: "1px solid #e0e0e0",
-        borderRadius: 1,
-        overflow: "hidden",
-        position: "relative",
-      }}
-    >
-      <Box sx={{ position: "relative" }}>
-        <Box
-          component="img"
-          src={products.image[0]}
-          alt={products.name}
-          sx={{
-            width: "100%",
-            height: 280,
-            objectFit: "cover",
-          }}
-        />
-
-        <IconButton
-          size="small"
-          onClick={() => onRemove(product.product_id)}
-          sx={{
-            position: "absolute",
-            top: 8,
-            right: 8,
-            backgroundColor: "#fff",
-            opacity: 0.7,
-            boxShadow: 1,
-            zIndex: 1,
-            "&:hover": {
-              backgroundColor: "#f0f0f0",
-              opacity: 0.6,
-            },
-          }}
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      </Box>
-
-      <Box sx={{ p: 1 }}>
-        <Typography
-          textAlign="center"
-          color="text.secondary"
-          noWrap
-          sx={{
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            display: "block",
-            maxWidth: "100%",
-          }}
-        >
-          {products.description}
-        </Typography>
-
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          gap={1}
-          mt={1}
-        >
-          <Typography variant="body2" fontWeight="bold" color="text.primary">
-            Rs.{getDiscountedPrice(products.price, products.discount)}
-          </Typography>
-
-          <Typography
-            variant="body2"
-            sx={{ textDecoration: "line-through", color: "#7e818c" }}
-          >
-            ₹{products.price}
-          </Typography>
-
-          <Typography variant="body2" fontWeight="bold" color="#ff905a">
-            ({products.discount}% OFF)
-          </Typography>
-        </Box>
-      </Box>
-
-      <Divider />
-
-      <Box sx={{ p: 1, cursor: "pointer" }}>
-        <Typography
-          textAlign="center"
-          fontWeight={700}
-          fontSize={14}
-          color="#3880FF"
-        >
-          MOVE TO BAG
-        </Typography>
-      </Box>
-    </Box>
-  );
-};
+import ProductCardBase from "./components/ProductCard";
 
 export const Wishlist = () => {
   const dispatch = useDispatch();
@@ -186,7 +69,24 @@ export const Wishlist = () => {
               key={`${item.id}-${index}`}
               className="flex justify-center items-center my-1"
             >
-              <ProductCard product={item} onRemove={handleRemoveFromWishlist} />
+              {item.quantity <=0 ? (
+                <ProductCardBase
+                  product={item}
+                  onRemove={handleRemoveFromWishlist}
+                  imageHeight={250}
+                  bottomLabel="Show Similar"
+                  showOutOfStock
+                  fetchWishlist={fetchWishlist}
+                />
+              ) : (
+                <ProductCardBase
+                  product={item}
+                  onRemove={handleRemoveFromWishlist}
+                  imageHeight={280}
+                  bottomLabel="MOVE TO BAG"
+                  fetchWishlist={fetchWishlist}
+                />
+              )}
             </div>
           ))}
         </div>
