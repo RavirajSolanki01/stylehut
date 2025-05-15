@@ -171,4 +171,5 @@ export interface IFilterOption {
   startDate: string;
   endDate: string;
   status: string;
+  timeStatus: string;
 }

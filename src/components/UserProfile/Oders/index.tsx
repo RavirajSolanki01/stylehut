@@ -21,12 +21,13 @@ import { ErrorV2Icon, Product1, Product3 } from "../../../assets";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CircleIcon from "@mui/icons-material/Circle";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getDateRange } from "../../../utils/reusable-functions";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import { IFilterOption } from "../../../utils/types";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { getUserOrderList } from "../../../services/userOrderService";
+import { SkeletonOrderCard } from "./SkeletonOrderCard";
 
 const orderReviews = [
   {
@@ -104,6 +105,7 @@ export const Orders = () => {
     startDate: "",
     endDate: "",
     status: "",
+    timeStatus: "",
   });
   const [{ currentPage, totalPages }, setPagination] = useState({
     currentPage: 1,
@@ -118,6 +120,22 @@ export const Orders = () => {
     setIsFilterOpen(false);
   };
 
+  const handleApplyFilterClick = () => {
+    fetchUserOrderList();
+    handleFilterClose();
+  };
+
+  const handleClearFilterClick = () => {
+    setFilterOption({
+      startDate: "",
+      endDate: "",
+      timeStatus: "",
+      status: "",
+    });
+    fetchUserOrderList();
+    handleFilterClose();
+  };
+
   const handleTimeFilterChange = (selectedTime: string) => {
     const { startDate, endDate } = getDateRange(selectedTime);
 
@@ -125,6 +143,7 @@ export const Orders = () => {
       ...prevState,
       startDate: startDate ? startDate.toLocaleString() : "",
       endDate: endDate ? endDate.toLocaleString() : "",
+      timeStatus: selectedTime,
     }));
   };
 
@@ -141,15 +160,11 @@ export const Orders = () => {
     }));
   };
 
-  const fetchProducts = async (
-    pageNo?: number,
-    order?: string,
-    sortingBy?: string
-  ) => {
+  const fetchUserOrderList = async (pageNo?: number) => {
     setIsLoading(true);
     try {
       const response = await getUserOrderList({
-        page: currentPage,
+        page: pageNo || currentPage,
         pageSize: 10,
         sortBy: "created_at",
         status: filterOption.status,
@@ -160,7 +175,7 @@ export const Orders = () => {
         search: "",
       });
 
-      setProducts(response.data.data.items);
+      // setProducts(response.data.data.items);
       setPagination({
         currentPage: response.data.data.meta.page,
         totalPages: response.data.data.meta.totalPages,
@@ -168,9 +183,13 @@ export const Orders = () => {
     } catch (error) {
       console.error("Failed to fetch products:", error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchUserOrderList();
+  }, [currentPage]);
 
   console.log("filter=>", filterOption, currentPage);
 
@@ -205,66 +224,68 @@ export const Orders = () => {
         </div>
       </div>
       <div className="bg-[#f5f5f5] p-[10px]">
-        {orderReviews.map((review) => {
-          return (
-            <div className="px-[21px] mt-[12px] pb-[5px] bg-[#ffffff]">
-              <div className="flex gap-[12px] pt-[16px]">
-                <div className="h-[32px] w-[32px] rounded-[50%] bg-[#696e79] flex justify-center items-center">
-                  <KeyboardReturnIcon />
-                </div>
-                <div>
-                  <p className="text-[#1f845a] font-[700] text-[14px]">
-                    {review.status}
-                  </p>
-                  <p className="text-[#686b77] font-[500] text-[14px]">
-                    {review.deliveryDate}
-                  </p>
-                </div>
-              </div>
-              <div className="bg-[#f5f5f5] p-[12px] mt-[12px] flex justify-between items-center hover:bg-[#ebebeb]">
-                <div className="flex gap-[26px]">
-                  <img
-                    src={review.imgUrl}
-                    className="h-[70px] r w-[53px] rounded-[8px]"
-                  />
+        {orderReviews.length !== 0 &&
+          !isLoading &&
+          orderReviews.map((review) => {
+            return (
+              <div className="px-[21px] mt-[12px] pb-[5px] bg-[#ffffff]">
+                <div className="flex gap-[12px] pt-[16px]">
+                  <div className="h-[32px] w-[32px] rounded-[50%] bg-[#696e79] flex justify-center items-center">
+                    <KeyboardReturnIcon />
+                  </div>
                   <div>
-                    <p className="text-[#282c3f] font-[700] text-[14px] mt-[2px]">
-                      {review.product.brand}
+                    <p className="text-[#1f845a] font-[700] text-[14px]">
+                      {review.status}
                     </p>
-                    <p className="text-[#282c3f] font-[500] text-[12px] mt-[2px]">
-                      {review.product.name}
-                    </p>
-                    <p className="text-[#282c3f] font-[500] text-[12px] mt-[2px]">
-                      Size: {review.product.size}
+                    <p className="text-[#686b77] font-[500] text-[14px]">
+                      {review.deliveryDate}
                     </p>
                   </div>
                 </div>
-                <StyledArrowForwardIosIcon />
+                <div className="bg-[#f5f5f5] p-[12px] mt-[12px] flex justify-between items-center hover:bg-[#ebebeb]">
+                  <div className="flex gap-[26px]">
+                    <img
+                      src={review.imgUrl}
+                      className="h-[70px] r w-[53px] rounded-[8px]"
+                    />
+                    <div>
+                      <p className="text-[#282c3f] font-[700] text-[14px] mt-[2px]">
+                        {review.product.brand}
+                      </p>
+                      <p className="text-[#282c3f] font-[500] text-[12px] mt-[2px]">
+                        {review.product.name}
+                      </p>
+                      <p className="text-[#282c3f] font-[500] text-[12px] mt-[2px]">
+                        Size: {review.product.size}
+                      </p>
+                    </div>
+                  </div>
+                  <StyledArrowForwardIosIcon />
+                </div>
+                <div className="bg-[#f5f5f5] px-[20px] py-[14px] flex items-center mt-[2px] gap-[11px] hover:bg-[#ebebeb]">
+                  <StyledCircleIcon />
+                  <p className="text-[#696e79] text-[14px] font-[400]">
+                    Exchange/Return window closed on {review.returnWindowClosed}
+                  </p>
+                </div>
+                <div className="bg-[#f5f5f5] px-[20px] py-[14px] mt-[2px]">
+                  <StyledRating
+                    name="simple-controlled"
+                    value={review.rating || value}
+                    onChange={(_, newValue) => {
+                      setValue(newValue);
+                    }}
+                  />
+                  <p className="text-[#282c3f] font-[400] text-[14px] leading-[20px]">
+                    Rate & Review to{" "}
+                    <span className="font-[700]">earn Myntra Credit</span>
+                  </p>
+                </div>
               </div>
-              <div className="bg-[#f5f5f5] px-[20px] py-[14px] flex items-center mt-[2px] gap-[11px] hover:bg-[#ebebeb]">
-                <StyledCircleIcon />
-                <p className="text-[#696e79] text-[14px] font-[400]">
-                  Exchange/Return window closed on {review.returnWindowClosed}
-                </p>
-              </div>
-              <div className="bg-[#f5f5f5] px-[20px] py-[14px] mt-[2px]">
-                <StyledRating
-                  name="simple-controlled"
-                  value={review.rating || value}
-                  onChange={(_, newValue) => {
-                    setValue(newValue);
-                  }}
-                />
-                <p className="text-[#282c3f] font-[400] text-[14px] leading-[20px]">
-                  Rate & Review to{" "}
-                  <span className="font-[700]">earn Myntra Credit</span>
-                </p>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
-      {orderReviews.length !== 0 && (
+      {orderReviews.length !== 0 && !isLoading && (
         <div className="flex justify-center items-center gap-2 mt-8">
           <button
             className={`default px-4 py-2 rounded-md font-bold flex justify-center items-center
@@ -313,7 +334,7 @@ export const Orders = () => {
           </button>
         </div>
       )}
-      {orderReviews.length === 0 && (
+      {orderReviews.length === 0 && !isLoading && (
         <div className="flex justify-center flex-col items-center h-[100%]">
           <img src={ErrorV2Icon} className="mb-[20px]" />
           <p className="text-[#282c3f] text-[20px] font-[700] leading-[28px]">
@@ -325,6 +346,14 @@ export const Orders = () => {
           </p>
         </div>
       )}
+      {isLoading && !orderReviews.length && (
+        <div className="flex flex-wrap">
+          {[...Array(10)].map((_, i) => (
+            <SkeletonOrderCard key={i} />
+          ))}
+        </div>
+      )}
+
       {/* filter dialog */}
       <Dialog
         open={isFilterOpen}
@@ -364,10 +393,11 @@ export const Orders = () => {
               aria-labelledby="demo-radio-buttons-group-label"
               defaultValue="female"
               name="radio-buttons-group"
+              value={filterOption.status}
             >
               {statusOption.map((option) => (
                 <StyledFormControlLabel
-                  value={option.value}
+                  value={option.label}
                   control={<StyledRadio />}
                   onChange={() => handleStatusFilterChange(option.label)}
                   label={option.label}
@@ -393,10 +423,11 @@ export const Orders = () => {
               aria-labelledby="demo-radio-buttons-group-label"
               defaultValue="female"
               name="radio-buttons-group"
+              value={filterOption.timeStatus}
             >
               {timeOption.map((option) => (
                 <StyledFormControlLabel
-                  value={option.value}
+                  value={option.label}
                   control={<StyledRadio />}
                   label={option.label}
                   onChange={() => handleTimeFilterChange(option.label)}
@@ -416,11 +447,15 @@ export const Orders = () => {
           <ClearFilterButton
             variant="outlined"
             autoFocus
-            onClick={handleFilterClose}
+            onClick={handleClearFilterClick}
           >
             Clear Filter
           </ClearFilterButton>
-          <ApplyFilterButton onClick={handleFilterClose} autoFocus fullWidth>
+          <ApplyFilterButton
+            onClick={handleApplyFilterClick}
+            autoFocus
+            fullWidth
+          >
             Apply
           </ApplyFilterButton>
         </StyledDialogActions>
