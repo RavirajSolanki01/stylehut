@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store/index.ts";
 import { ProductCart } from "./pages/Cart/index.tsx";
 import { Reviews } from "./pages/Reviews/index.tsx";
+import NotFoundPage from "./pages/not-found/index.tsx";
 
 function App() {
   const { users } = useSelector((state: RootState) => ({
@@ -156,6 +157,7 @@ function App() {
             element={<PrivacyPolicy />}
           />
         </Route>
+          <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </React.Fragment>
   );
