@@ -24,3 +24,7 @@ export const withLoading = async (
     dispatch(setLoading({ key, value: false }));
   }
 };
+
+export const formatPrice = (price: number): string => {
+  return new Intl.NumberFormat("en-IN").format(price);
+};

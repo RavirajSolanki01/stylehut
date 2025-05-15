@@ -62,9 +62,7 @@ export const ProfileDetails: React.FC = () => {
     dispatch(setLoading({ key: "profile", value: true }));
     updateUserProfile(updatedData)
       .then((res) => {
-        if (
-          res.data.data
-        ) {
+        if (res.data.data) {
           const userData = res.data.data;
           reset(userData);
           toast.success("Profile updated successfully");
@@ -166,6 +164,12 @@ export const ProfileDetails: React.FC = () => {
             render={({ field }) => (
               <CustomInput
                 {...field}
+                onChange={(e) => {
+                  const onlyDigits = e.target.value.replace(/\D/g, "");
+                  if (onlyDigits.length <= 10) {
+                    field.onChange(onlyDigits);
+                  }
+                }}
                 id="mobile"
                 label="Mobile Number*"
                 placeholder="Enter Mobile Number"
@@ -247,6 +251,9 @@ const schema = Yup.object().shape({
       /^[A-Za-z\s]+$/,
       "Full name should only contain letters and spaces."
     )
+    .test("not-only-spaces", "Full name cannot be only spaces.", (value) => {
+      return !!value && value.trim().length > 0;
+    })
     .min(3, "Full name must be at least 3 characters."),
 
   email: Yup.string()
@@ -265,7 +272,10 @@ const schema = Yup.object().shape({
 
   mobile: Yup.string()
     .required("Mobile number is required.")
-    .matches(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number."),
+    .matches(/^\d{10}$/, "Enter a valid 10-digit mobile number.")
+    .test("numeric-only", "Mobile number must contain only digits.", (value) =>
+      /^\d+$/.test(value || "")
+    ),
 
   birth_date: Yup.string()
     .required("Birth date is required.")
@@ -275,7 +285,6 @@ const schema = Yup.object().shape({
     )
     .test("is-valid-date", "Enter a valid date", (value) => {
       if (!value) return false;
-
       const [day, month, year] = value.split("/").map(Number);
       const date = new Date(`${year}-${month}-${day}`);
       return (
@@ -283,6 +292,13 @@ const schema = Yup.object().shape({
         date.getMonth() + 1 === month &&
         date.getDate() === day
       );
+    })
+    .test("not-in-future", "Birth date cannot be in the future", (value) => {
+      if (!value) return false;
+      const [day, month, year] = value.split("/").map(Number);
+      const selectedDate = new Date(`${year}-${month}-${day}`);
+      const today = new Date();
+      return selectedDate <= today;
     }),
 
   gender_id: Yup.number()
