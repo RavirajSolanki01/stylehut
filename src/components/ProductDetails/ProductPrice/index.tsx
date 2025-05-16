@@ -1,12 +1,16 @@
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 import StarIcon from "@mui/icons-material/Star";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
+import { ArrowRightAltSharp, Favorite } from "@mui/icons-material";
+
+import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 import { DeliveryIcon } from "../../../assets";
 import { getRatingColor } from "../../../utils/reusable-functions";
-import { ArrowRightAltSharp, Favorite } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import SizeChart from "../SizeChart";
 
 const ProductPrice = ({
   productName,
@@ -20,6 +24,7 @@ const ProductPrice = ({
   addToCart,
   isWishlisted = false,
   isAddedToCart,
+  images,
 }: {
   productName: string;
   brandName: string;
@@ -32,10 +37,16 @@ const ProductPrice = ({
   addToCart?: () => void;
   isWishlisted?: boolean;
   isAddedToCart?: boolean;
+  images: string[];
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const [isOpenSizeChart, setIsOpenSizeChart] = useState(false);
+  const handleSizeChartClick = () => {
+    setIsOpenSizeChart(!isOpenSizeChart);
+  };
   return (
-    <div className="flex items-center flex-col items-start">
+    <div className="flex flex-col items-start">
       {/* product info */}
       <div className="mb-[12px]">
         <h2 className="font-[700] text-[24px] text-[#282c3f] m-[0px] leading-[1] text-start">
@@ -50,13 +61,15 @@ const ProductPrice = ({
             className="flex items-center justify-between px-[8px] py-[2px] max-w-[150px] border-1 border-solid border-[#eaeaec] cursor-pointer hover:border-[#535766]"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[16px] font-[700]">{averageRating > 0 ? averageRating.toFixed(1) : 0}</span>
+              <span className="text-[16px] font-[700]">
+                {averageRating > 0 ? averageRating.toFixed(1) : 0}
+              </span>
               <StarIcon
                 className={`border-r-2 border-[#eaeaec] scale-[0.7]`}
                 style={{ color: getRatingColor(averageRating) }}
               />
             </div>
-            <span className="text-[16px] text-[400] text-[#535766]">
+            <span className="text-[16px]  text-[#535766]">
               {totalRatings} Ratings
             </span>
           </div>
@@ -99,7 +112,10 @@ const ProductPrice = ({
       {/* product size */}
       <div className="flex gap-[30px] items-center my-[12px]">
         <div className="font-[700] text-[16px] m-[0px]">SELECT SIZE</div>
-        <div className="font-[700] text-[14px] cursor-pointer text-[#3880FF] leading-[16px] m-[0px] flex items-center">
+        <div
+          className="font-[700] text-[14px] cursor-pointer text-[#3880FF] leading-[16px] m-[0px] flex items-center"
+          onClick={handleSizeChartClick}
+        >
           SIZE CHART
           <NavigateNextIcon />
         </div>
@@ -133,7 +149,7 @@ const ProductPrice = ({
       <div className="flex gap-[10px] h-[54px] w-full mb-[23px]  flex-wrap sm:flex-nowrap ">
         {isAddedToCart ? (
           <button
-            onClick={()=>navigate("/cart")}
+            onClick={() => navigate("/cart")}
             className="cursor-pointer bg-[#3880FF]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#3880FF] hover:border-transparent h-10"
           >
             <span>GO TO BAG</span>
@@ -208,6 +224,14 @@ const ProductPrice = ({
         </p>
       </div>
       {/* delivery option */}
+
+      {/* Size chart */}
+      {isOpenSizeChart && (
+        <SizeChart
+          images={images}
+          handleSizeChartClick={handleSizeChartClick}
+        />
+      )}
     </div>
   );
 };

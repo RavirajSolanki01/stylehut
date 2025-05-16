@@ -61,7 +61,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <div
-      className="  relative max-w-[210px] mx-[10px] mb-[20px] w-auto hover:shadow-lg cursor-pointer group"
+      className="relative max-w-[210px] mx-[10px] mb-[20px] w-auto hover:shadow-lg cursor-pointer group h-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -115,7 +115,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           className={` cursor-pointer ${
             isWishlisted ? " text-[#fff]" : ""
           } default rounded-full text-[#535766] text-[12px] h-[30px] w-[30px] bg-white flex items-center justify-center gap-2 !border border-gray-300 hover:!border-black transition-colors py-1`}
-           
         >
           {isWishlisted ? (
             <Favorite
@@ -159,7 +158,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <span>Sizes: L</span>
       </div> */}
 
-      <div className="text-left text-[16px] text-[700] px-[10px] mt-[12px] mb-[6px] ">
+      <div className="text-left text-[16px] text-[#282c3f] font-semibold px-[10px] mt-[12px] mb-[6px] ">
         {name}
       </div>
       <div className="text-left text-[14px] text-[#535766] px-[10px] mb-[6px] ">
