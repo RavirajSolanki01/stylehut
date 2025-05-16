@@ -3,7 +3,7 @@ import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 import { useState } from "react";
 
-const ProductDetail = ({description}:{description: string}) => {
+const ProductDetail = ({ description }: { description: string }) => {
   const [expanded, setExpanded] = useState(false);
   const VISIBLE_COUNT = 8;
 
@@ -19,9 +19,7 @@ const ProductDetail = ({description}:{description: string}) => {
         <ArticleOutlinedIcon className="!h-[22px] !w-[18px]" />
       </div>
       <div>
-        <p className="product-description-content">
-          {description}
-        </p>
+        <p className="product-description-content">{description}</p>
       </div>
       <div>
         <p className="product-description-title">Size & Fit</p>
