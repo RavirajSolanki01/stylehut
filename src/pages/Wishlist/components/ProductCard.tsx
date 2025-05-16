@@ -215,11 +215,11 @@ const ProductCardBase = ({
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 place-items-center">
-            {SimilarProducts.map((products) => {
+            {SimilarProducts.map((products, index) => {
               const data = products.products;
               return (
                 <div
-                  key={data?.id}
+                  key={`${index}-${data?.id}`}
                   className="w-[220px] m-2 cursor-pointer rounded overflow-hidden relative transition-shadow duration-300 hover:shadow-[0px_4px_20px_rgba(0,0,0,0.2)]"
                 >
                   <div className="relative">
