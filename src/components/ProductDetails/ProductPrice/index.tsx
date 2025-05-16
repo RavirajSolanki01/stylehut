@@ -35,7 +35,7 @@ const ProductPrice = ({
 }) => {
   const navigate = useNavigate()
   return (
-    <div className="flex items-center flex-col items-start">
+    <div className="flex flex-col items-start">
       {/* product info */}
       <div className="mb-[12px]">
         <h2 className="font-[700] text-[24px] text-[#282c3f] m-[0px] leading-[1] text-start">
@@ -56,7 +56,7 @@ const ProductPrice = ({
                 style={{ color: getRatingColor(averageRating) }}
               />
             </div>
-            <span className="text-[16px] text-[400] text-[#535766]">
+            <span className="text-[16px] font-[400] text-[#535766]">
               {totalRatings} Ratings
             </span>
           </div>
