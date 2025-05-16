@@ -34,7 +34,7 @@ const SimilarProduct = ({
   };
 
   return (
-    <div className="text-center">
+    <div className="">
       <div className="flex gap-[8px] justify-start items-center mb-[16px]">
         <p className="font-[700] text-[16px] m-[0px] leading-1 text-[#282c3f] uppercase">
           Similar Product
@@ -54,15 +54,37 @@ const SimilarProduct = ({
               className="hover:shadow-lg cursor-pointer block bg-white shadow-secondary-1 w-[220px] border border-[#e9e9eb]"
               key={product.id}
             >
-              <div className="relative">
-                <img
-                  className="w-full h-[260px]"
-                  src={product.image[0]}
-                  alt={product.name}
-                />
-                <div className="absolute w-[32px] h-[16px] bg-[#fff] border border-[#eaeaec] leading-[11px] left-[10px] bottom-[10px] p-[3px] text-[10px] font-[700] text-[#282c3f] flex gap-[2px]">
-                  3.2
-                  <GradeRoundedIcon className="text-[#14958f] !text-[9px]" />
+              <div className="hover:shadow-lg block bg-white shadow-secondary-1 border border-[#e9e9eb]">
+                <div className="relative">
+                  <img
+                    className="w-full h-[260px] object-cover"
+                    src={product.image[0]}
+                    alt={product.name}
+                  />
+                  <div className="absolute w-[32px] h-[16px] bg-[#fff] border border-[#eaeaec] left-[10px] bottom-[10px] p-[3px]  font-[700] text-[#282c3f] flex gap-[2px] text-sm items-center">
+                    3.2{" "}
+                    <GradeRoundedIcon className="text-[#14958f] !text-[12px]" />
+                  </div>
+                </div>
+                <div className="p-[10px] text-surface w-full">
+                  <p className="font-[700] text-[#282c3f] text-[16px] m-[0px]">
+                    {product.brand.name}
+                  </p>
+                  <p className="w-full whitespace-nowrap overflow-hidden text-ellipsis font-[400] text-[14px] text-[#535766] m-[0px] mt-[4px] mb-[8px]">
+                    {product.name}
+                  </p>
+                  <div className="w-full whitespace-nowrap overflow-hidden text-ellipsis font-[400] text-[14px] text-[#535766] m-[0px] mt-[4px] mb-[8px]">
+                    <p className="font-[700] text-[#282c3f] text-[16px] m-[0px] pr-[3px]">
+                      Rs. {discountedPrice}{" "}
+                      <span className="font-[700] text-[#535665] text-[12px] m-[0px] px-[3px] line-through">
+                        Rs. {product.price}
+                      </span>
+                      <span className="font-[700] text-[#ff905a] text-[12px] m-[0px] px-[3px] uppercase">
+                        {" "}
+                        ({product.discount}% off)
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
               <div className="p-[10px] text-surface w-full">

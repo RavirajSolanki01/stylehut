@@ -219,3 +219,12 @@ button.default{
   margin: 0 0px 0 0;
   visibility: hidden;
 }
+
+.swiper-slide {
+  height: 100%;
+}
+
+.image-zoom figure {
+  max-height: 100vh;
+  margin: auto;
+}
