@@ -205,6 +205,7 @@ const ProductDetailPage: React.FC = () => {
                 isWishlisted={isWishlisted}
                 addToCart={handleAddToCard}
                 isAddedToCart={isAddedToCart}
+                images={productData.image as []}
               />
               <BestOffers />
               <hr className="border-t-[0px] w-full border-[#d2d2d2] mt-[0px]" />

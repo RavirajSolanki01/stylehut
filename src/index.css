@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Assistant";
+  src: url("../public/font/Assistant-Regular.woff") format("woff2"),
+    url("../public/font/Assistant-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Assistant";
+  src: url("../public/font/Assistant-Bold.woff") format("woff2"),
+    url("../public/font/Assistant-Bold.woff") format("woff");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Assistant";
+  src: url("../public/font/Assistant-Bold.woff") format("woff2"),
+    url("../public/font/Assistant-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
 @theme {
 }
 
@@ -110,4 +134,64 @@ button.default{
 
 .Toastify__toast--info .Toastify__toast-icon svg {
   fill: var(--primary-color);
+}
+
+.sizeChartWeb-newCell {
+  padding: 10px;
+}
+
+.common-newCustomRadio input:checked ~ .common-radioIndicatorNew:before {
+  border-color: #3880ff !important;
+  background: #3880ff !important;
+}
+
+.common-customRadio input:checked ~ .common-radioIndicator:before {
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  border-color: #3880ff;
+  visibility: visible;
+  background: #3880ff;
+  -webkit-box-shadow: inset 0 0 0 3px #fff;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+.sizeChartWeb-radioIndicatorNew:before {
+  border-color: #7e818c !important;
+  padding: 7px !important;
+}
+
+.sizeChartWeb-radioIndicator:before,
+.sizeChartWeb-radioIndicatorNew:before {
+  border: 2px solid #3880ff !important;
+  top: 8px;
+  left: 12px;
+}
+.common-radioIndicator:before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #c3c2c9;
+  border-radius: 50%;
+  visibility: visible;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 2px;
+  text-align: center;
+}
+.common-radioIndicator {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.common-customRadio {
+  position: relative;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.common-customRadio input {
+  margin: 0 0px 0 0;
+  visibility: hidden;
 }
