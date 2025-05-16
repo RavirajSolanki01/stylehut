@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { A11y, Navigation } from "swiper/modules";
 
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
 
@@ -41,24 +41,7 @@ const SimilarProduct = ({
         </p>
       </div>
 
-      <Swiper
-        modules={[Autoplay, Pagination, Scrollbar, A11y]}
-        spaceBetween={16}
-        slidesPerView={"auto"}
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-        }}
-        loop={true}
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        style={{ paddingBottom: "24px" }}
-        breakpoints={{
-          640: { slidesPerView: 2, spaceBetween: 16 },
-          768: { slidesPerView: 3, spaceBetween: 20 },
-          1024: { slidesPerView: 4, spaceBetween: 24 },
-        }}
-      >
+      <div className="hidden lg:flex flex-wrap gap-[27px] text-start">
         {sameCategoryProducts.slice(0, 10).map((product) => {
           const discountedPrice = Math.round(
             Number(product.price.toString().replace(/[^\d]/g, "")) *
@@ -66,48 +49,105 @@ const SimilarProduct = ({
           );
 
           return (
-            <SwiperSlide
-              key={product.id}
-              style={{ width: "194px", cursor: "pointer" }}
+            <div
               onClick={() => handleGotoProduct(product.id)}
+              className="hover:shadow-lg cursor-pointer block bg-white shadow-secondary-1 w-[220px] border border-[#e9e9eb]"
+              key={product.id}
             >
-              <div className="hover:shadow-lg block bg-white shadow-secondary-1 border border-[#e9e9eb]">
-                <div className="relative">
-                  <img
-                    className="w-full h-[260px] object-cover"
-                    src={product.image[0]}
-                    alt={product.name}
-                  />
-                  <div className="absolute w-[32px] h-[16px] bg-[#fff] border border-[#eaeaec] leading-[11px] left-[10px] bottom-[10px] p-[3px] text-[10px] font-[700] text-[#282c3f] flex gap-[2px]">
-                    3.2{" "}
-                    <GradeRoundedIcon className="text-[#14958f] !text-[9px]" />
-                  </div>
-                </div>
-                <div className="p-[10px] text-surface w-full">
-                  <p className="font-[700] text-[#282c3f] text-[16px] m-[0px]">
-                    {product.brand.name}
-                  </p>
-                  <p className="w-full whitespace-nowrap overflow-hidden text-ellipsis font-[400] text-[14px] text-[#535766] m-[0px] mt-[4px] mb-[8px]">
-                    {product.name}
-                  </p>
-                  <div className="w-full whitespace-nowrap overflow-hidden text-ellipsis font-[400] text-[14px] text-[#535766] m-[0px] mt-[4px] mb-[8px]">
-                    <p className="font-[700] text-[#282c3f] text-[16px] m-[0px] pr-[3px]">
-                      Rs. {discountedPrice}{" "}
-                      <span className="font-[700] text-[#535665] text-[12px] m-[0px] px-[3px] line-through">
-                        Rs. {product.price}
-                      </span>
-                      <span className="font-[700] text-[#ff905a] text-[12px] m-[0px] px-[3px] uppercase">
-                        {" "}
-                        ({product.discount}% off)
-                      </span>
-                    </p>
-                  </div>
+              <div className="relative">
+                <img
+                  className="w-full h-[260px]"
+                  src={product.image[0]}
+                  alt={product.name}
+                />
+                <div className="absolute w-[32px] h-[16px] bg-[#fff] border border-[#eaeaec] leading-[11px] left-[10px] bottom-[10px] p-[3px] text-[10px] font-[700] text-[#282c3f] flex gap-[2px]">
+                  3.2
+                  <GradeRoundedIcon className="text-[#14958f] !text-[9px]" />
                 </div>
               </div>
-            </SwiperSlide>
+              <div className="p-[10px] text-surface w-full">
+                <p className="font-[700] text-[#282c3f] text-[16px] m-[0px]">
+                  {product.brand.name}
+                </p>
+                <p className="w-full whitespace-nowrap overflow-hidden text-ellipsis font-[400] text-[14px] text-[#535766] m-[0px] mt-[4px] mb-[8px]">
+                  {product.name}
+                </p>
+                <div className="w-full whitespace-nowrap overflow-hidden text-ellipsis font-[400] text-[14px] text-[#535766] m-[0px] mt-[4px] mb-[8px]">
+                  <p className="font-[700] text-[#282c3f] text-[16px] m-[0px] pr-[3px]">
+                    Rs. {discountedPrice}
+                    <span className="font-[700] text-[#535665] text-[12px] m-[0px] px-[3px] line-through">
+                      Rs. {product.price}
+                    </span>
+                    <span className="font-[700] text-[#ff905a] text-[12px] m-[0px] px-[3px] uppercase">
+                      ({product.discount}% off)
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
           );
         })}
-      </Swiper>
+      </div>
+
+      <div className="flex lg:hidden flex-wrap gap-[27px] text-start">
+        <Swiper
+          modules={[Navigation, A11y]}
+          spaceBetween={16}
+          slidesPerView={1}
+          centeredSlides={true}
+          navigation
+        >
+          {sameCategoryProducts.slice(0, 10).map((product) => {
+            const discountedPrice = Math.round(
+              Number(product.price.toString().replace(/[^\d]/g, "")) *
+                (1 - product.discount / 100)
+            );
+
+            return (
+              <SwiperSlide
+                key={product.id}
+                style={{ width: "100%", cursor: "pointer" }}
+              >
+                <div
+                  onClick={() => handleGotoProduct(product.id)}
+                  className="hover:shadow-lg cursor-pointer block bg-white shadow-secondary-1 w-[100%] border border-[#e9e9eb]"
+                >
+                  <div className="relative">
+                    <img
+                      className="w-auto h-[260px] m-auto"
+                      src={product.image[0]}
+                      alt=""
+                    />
+                    <div className="absolute w-[32px] h-[16px] bg-[#fff] border border-[#eaeaec] leading-[11px] left-[10px] bottom-[10px] p-[3px] text-[10px] font-[700] text-[#282c3f] flex gap-[2px]">
+                      3.2
+                      <GradeRoundedIcon className="text-[#14958f] !text-[9px]" />
+                    </div>
+                  </div>
+                  <div className="p-[10px] text-surface w-full">
+                    <p className="font-[700] text-[#282c3f] text-[16px] m-[0px]">
+                      {product.brand.name}
+                    </p>
+                    <p className="w-full whitespace-nowrap overflow-hidden text-ellipsis font-[400] text-[14px] text-[#535766] m-[0px] mt-[4px] mb-[8px]">
+                      {product.name}
+                    </p>
+                    <div className="w-full whitespace-nowrap overflow-hidden text-ellipsis font-[400] text-[14px] text-[#535766] m-[0px] mt-[4px] mb-[8px]">
+                      <p className="font-[700] text-[#282c3f] text-[16px] m-[0px] pr-[3px]">
+                        Rs. {discountedPrice}
+                        <span className="font-[700] text-[#535665] text-[12px] m-[0px] px-[3px] line-through">
+                          Rs. {product.price}
+                        </span>
+                        <span className="font-[700] text-[#ff905a] text-[12px] m-[0px] px-[3px] uppercase">
+                          ({product.discount}% off)
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
     </div>
   );
 };

@@ -10,6 +10,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getBrandList } from "../../services/brandService";
 import EmptyCart from "./empty.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 export const ProductList = () => {
   const navigate = useNavigate();
@@ -21,6 +23,11 @@ export const ProductList = () => {
   const sub_category_type = queryParams
     .get("sub_category_type")
     ?.split("requestid")[0];
+
+  const { users } = useSelector((state: RootState) => ({
+    users: state.users.user,
+  }));
+  const isAuthenticated: boolean = users.isAuthenticated;
 
   const [sortBy, setSortBy] = useState("Recommended");
 
@@ -98,7 +105,9 @@ export const ProductList = () => {
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [productsList, setProducts] = useState([]);
   const [wishlistIDs, setWishlistIDs] = useState<number[]>([]);
-  const [brandList, setBrandList] = useState<{name: string, id:number}[]>([]);
+  const [brandList, setBrandList] = useState<{ name: string; id: number }[]>(
+    []
+  );
   const [selectedBrand, setSelectedBrand] = useState<number>(0);
   const [{ ordering, sorting }, setOrderBy] = useState({
     sorting: "create_at",
@@ -115,18 +124,25 @@ export const ProductList = () => {
   };
 
   const handleAddToWishlist = async (product_id: number) => {
-    try {
-      const wishlistResponse = await postWishlist({ product_id });
+    if (isAuthenticated) {
+      try {
+        const wishlistResponse = await postWishlist({ product_id });
 
-      if (wishlistResponse?.data?.message.startsWith("Add")) {
-        setWishlistIDs((prevIDs) => [...prevIDs, product_id]);
-      } else {
-        setWishlistIDs((prevIDs) => prevIDs.filter(item=> item  != product_id));
+        if (wishlistResponse?.data?.message.startsWith("Add")) {
+          setWishlistIDs((prevIDs) => [...prevIDs, product_id]);
+        } else {
+          setWishlistIDs((prevIDs) =>
+            prevIDs.filter((item) => item != product_id)
+          );
+        }
+        toast.success(wishlistResponse?.data?.message);
+      } catch (error) {
+        toast.error("Please login to add product to wishlist");
+        console.error("Failed to add to wishlist", error);
+        navigate("/login");
       }
-      toast.success(wishlistResponse?.data?.message)
-    } catch (error) {
-      toast.error("Please login to add product to wishlist");
-      console.error("Failed to add to wishlist", error);
+    } else {
+      toast.error("Sign in to add product in wishlist");
       navigate("/login");
     }
   };
@@ -159,7 +175,7 @@ export const ProductList = () => {
         sub_category_type_id: Number(
           queryParams.get("sub_category_type")?.split("requestid")[1]
         ),
-        brand_id: selectedBrand
+        brand_id: selectedBrand,
       });
 
       setProducts(response.data.data.items);
@@ -176,7 +192,12 @@ export const ProductList = () => {
 
   const fetchBrandList = async () => {
     const response = await getBrandList();
-    setBrandList(response.data.data.items.map((item: {name: string, id:number}) => ({name: item.name, id: item.id}))); 
+    setBrandList(
+      response.data.data.items.map((item: { name: string; id: number }) => ({
+        name: item.name,
+        id: item.id,
+      }))
+    );
   };
 
   useEffect(() => {
@@ -408,7 +429,10 @@ export const ProductList = () => {
               </div>
 
               {brandList.map((brand) => (
-                <div key={brand.id} className="text-left px-[20px] text-[14px] flex items-center gap-2 mt-[5px]">
+                <div
+                  key={brand.id}
+                  className="text-left px-[20px] text-[14px] flex items-center gap-2 mt-[5px]"
+                >
                   <input
                     type="radio"
                     id={`brand-${brand.id}-radio`}
@@ -524,7 +548,10 @@ export const ProductList = () => {
                     name: string;
                     discount: number;
                     price: number;
-                    ratingStats: { totalRatings: number; averageRating: number };
+                    ratingStats: {
+                      totalRatings: number;
+                      averageRating: number;
+                    };
                   }) => (
                     <div
                       key={product.id}

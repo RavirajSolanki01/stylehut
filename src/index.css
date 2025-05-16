@@ -136,6 +136,30 @@ button.default{
   fill: var(--primary-color);
 }
 
+.swiper-button-prev,
+.swiper-button-next {
+  display: block;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background-color: #3880ff;
+}
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 20px !important;
+  color: #ffffff;
+}
+
+@media (min-width: 1023px) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none !important;
+  }
+}
+
 .sizeChartWeb-newCell {
   padding: 10px;
 }

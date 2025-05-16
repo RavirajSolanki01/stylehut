@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProductImage from "../../components/ProductDetails/ProductImage";
 import ProductDetail from "../../components/ProductDetails/ProductDetail";
 import BestOffers from "../../components/ProductDetails/BestOffers";
@@ -16,9 +16,12 @@ import { postWishlist } from "../../services/wishlistService";
 import ProductDetailSkeleton from "./skeletonDetails";
 import { toast } from "react-toastify";
 import { postAddToCart } from "../../services/cartService";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const ratingRef = useRef<HTMLDivElement>(null);
   const [productData, setProductData] = useState<{
     id: number;
@@ -69,6 +72,11 @@ const ProductDetailPage: React.FC = () => {
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { users } = useSelector((state: RootState) => ({
+    users: state.users.user,
+  }));
+  const isAuthenticated: boolean = users.isAuthenticated;
+
   const fetchProductDetail = async () => {
     setIsLoading(true);
     try {
@@ -96,17 +104,21 @@ const ProductDetailPage: React.FC = () => {
   };
 
   const handleAddToWishlist = async () => {
-    try {
-      const wishlistResponse = await postWishlist({ product_id: Number(id) });
-      if (wishlistResponse.data.message.startsWith("Added")) {
-        // fetchProductDetail();
-        setIsWishlist(true);
-      } else {
-        setIsWishlist(false);
+    if (isAuthenticated) {
+      try {
+        const wishlistResponse = await postWishlist({ product_id: Number(id) });
+        if (wishlistResponse.data.message.startsWith("Added")) {
+          setIsWishlist(true);
+        } else {
+          setIsWishlist(false);
+        }
+      } catch (error) {
+        toast.error("Failed to add to wishlist");
+        console.error("Failed to add to wishlist", error);
       }
-    } catch (error) {
-      toast.error("Failed to add to wishlist");
-      console.error("Failed to add to wishlist", error);
+    } else {
+      toast.error("Sign in to add product in wishlist");
+      navigate("/login");
     }
   };
 
