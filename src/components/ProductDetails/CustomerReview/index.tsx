@@ -50,10 +50,10 @@ const CustomerReview = ({
             {reviewsToShow.map((review, index) => (
               <div key={index} className="relative !pl-[40px]">
                 <div
-                  className="absolute top-[3px] left-[0px] w-[32px] h-[16px] leading-[8px] flex items-center"
+                  className="absolute top-[3px] left-[0px] w-[32px] h-[16px] flex items-center"
                   style={{ backgroundColor: getRatingColor(review.ratings) }}
                 >
-                  <span className="text-[#fff] font-[700] p-[3px] text-[10px]">
+                  <span className="text-[#fff] font-[700] p-[3px] text-sm">
                     {review?.ratings}
                   </span>
                   <GradeRoundedIcon className="text-[#fff] !text-[12px] font-[700]" />
