@@ -160,7 +160,7 @@ export const headerMenuItems = [
 export const ProfileMenuItems = [
   {
     title: "Orders",
-    path: "orders",
+    path: "/orders",
   },
   {
     title: "Wishlist",

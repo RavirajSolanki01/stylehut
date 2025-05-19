@@ -33,7 +33,7 @@ export const LoggedInUserProfileMenu: React.FC<LoggedInProfileMenuProps> = ({
     handleNavigate("/login");
     dispatch(removeAuthToken());
     dispatch(removeLoggedInUser());
-    handlePopoverClose()
+    handlePopoverClose();
   };
   return (
     <Popover
@@ -75,6 +75,7 @@ export const LoggedInUserProfileMenu: React.FC<LoggedInProfileMenuProps> = ({
               <li
                 key={index}
                 className="text-[#6c6c6c] mt-[3px] mb-[3px] font-[400] w-full justify-center hover:text-[#40414b] hover:font-[700]"
+                onClick={() => navigate(item.path)}
               >
                 {item.title}
               </li>
@@ -98,7 +99,7 @@ export const LoggedInUserProfileMenu: React.FC<LoggedInProfileMenuProps> = ({
           <li
             onClick={() => {
               navigate("/profile/my-profile");
-              handlePopoverClose()
+              handlePopoverClose();
             }}
             className="text-[#6c6c6c] mt-[3px] mb-[3px] font-[400] w-full justify-center hover:text-[#40414b] hover:font-[700]"
           >

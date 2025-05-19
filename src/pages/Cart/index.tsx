@@ -34,6 +34,7 @@ type Props = {
   activeStep: number;
   setCartItems: React.Dispatch<React.SetStateAction<CartItems[]>>;
   setTotalPrice: React.Dispatch<React.SetStateAction<string>>;
+  disabled?: boolean;
 };
 
 export const ProductCart: React.FC = () => {
@@ -41,6 +42,7 @@ export const ProductCart: React.FC = () => {
   const dispatch = useDispatch();
   const steps = ["BAG", "ADDRESS", "PAYMENT"];
   const [cartItems, setCartItems] = useState<CartItems[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [maxAllowedStep, setMaxAllowedStep] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<string>("");
@@ -132,7 +134,10 @@ export const ProductCart: React.FC = () => {
         ) : activeStep === 1 ? (
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-[70%]">
-              <CartAddresses />
+              <CartAddresses
+                setSelectedIndex={setSelectedIndex}
+                selectedIndex={selectedIndex}
+              />
             </div>
             <PriceSummary
               setTotalPrice={setTotalPrice}
@@ -141,6 +146,7 @@ export const ProductCart: React.FC = () => {
               setMaxAllowedStep={setMaxAllowedStep}
               setCartItems={setCartItems}
               cartItems={cartItems}
+              disabled={!selectedIndex}
             />
           </div>
         ) : (
@@ -169,6 +175,7 @@ const PriceSummary: React.FC<Props> = ({
   setTotalPrice,
   cartItems,
   activeStep,
+  disabled,
 }) => {
   const { selectedCoupon, availableCoupons } = useSelector(
     (state: RootState) => ({
@@ -334,7 +341,7 @@ const PriceSummary: React.FC<Props> = ({
         {activeStep < 2 && (
           <button
             className="w-full mt-4 cursor-pointer bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#3880FF9b]"
-            disabled={selectedItems?.length === 0}
+            disabled={disabled}
             onClick={handlePlaceOrder}
           >
             PLACE ORDER
@@ -493,7 +500,7 @@ const CartItemsList: React.FC<Props> = ({
   return (
     <div className="flex flex-col lg:flex-row gap-2">
       <div className="w-full lg:w-[70%] md:w-[100%]">
-        {defaultAddress !== null && (
+        {defaultAddress && Object.keys(defaultAddress).length > 0 && (
           <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#8bc7ff46] border border-[#eaeaec] rounded-md">
             <div>
               <p className="text-[#282c3f] text-xs font-normal">
@@ -728,6 +735,7 @@ const CartItemsList: React.FC<Props> = ({
       </div>
       <div className="hidden md:block w-px bg-gray-300 mx-4" />
       <PriceSummary
+        disabled={selectedItems?.length === 0}
         setActiveStep={setActiveStep}
         setMaxAllowedStep={setMaxAllowedStep}
         setCartItems={setCartItems}

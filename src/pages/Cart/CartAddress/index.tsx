@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  CheckboxProps,
-  Chip,
-} from "@mui/material";
+import { CheckboxProps, Chip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, useWatch } from "react-hook-form";
@@ -27,9 +24,16 @@ import {
 import ConfirmDeleteDialog from "../../../components/AddressDialog/DeleteAddressDialog";
 import { AddressDialog } from "../../../components/AddressDialog";
 
-export const CartAddresses = () => {
+type Props = {
+  selectedIndex: number;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export const CartAddresses: React.FC<Props> = ({
+  selectedIndex,
+  setSelectedIndex,
+}) => {
   const [defaultIndex, setDefaultIndex] = useState<number>(0);
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [addresses, setAddresses] = useState<FormAddressData[]>([]);
@@ -184,7 +188,7 @@ export const CartAddresses = () => {
         setAddresses(items);
         setDefaultAddress(defaultAddress);
         setDefaultIndex(defaultAddress.id);
-        setSelectedIndex(defaultAddress.id);
+        setSelectedIndex(defaultAddress.id || items?.[0].id);
       },
     });
 
@@ -362,12 +366,12 @@ const AddressCard: React.FC<AddressCardProps> = ({
     >
       <div className="flex justify-between items-start p-4">
         <div className="flex items-start">
-          <CustomRadioButton 
+          <CustomRadioButton
             checked={isSelected}
             sx={{
-              color: '#3880FF',
-              '&.Mui-checked': {
-                color: '#3880FF',
+              color: "#3880FF",
+              "&.Mui-checked": {
+                color: "#3880FF",
               },
             }}
           />
