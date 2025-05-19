@@ -63,7 +63,7 @@ export const LoginPage: React.FC = () => {
 
   return (
     <React.Fragment>
-      <div className="bg-gradient-to-br from-[#feedf6] mt-[80px] to-[#fcf0e2] min-h-[820px] flex justify-center items-center bottom-container">
+      <div className="bg-gradient-to-br from-[#eff8ff] to-[#bbddf8] mt-[80px] min-h-[820px] flex justify-center items-center bottom-container">
         <div className="flex flex-col dialog-container">
           <img
             src={Offers_Banner}

@@ -146,7 +146,7 @@ export const VerifyOtpPage: React.FC = () => {
   return (
     <React.Fragment>
       <Header />
-      <div className="bg-gradient-to-br from-[#feedf6] mt-[80px] to-[#fcf0e2] min-h-[820px] flex justify-center items-center bottom-container">
+      <div className="bg-gradient-to-br from-[#eff8ff] to-[#bbddf8] mt-[80px] min-h-[820px] flex justify-center items-center bottom-container">
         <div className="flex flex-col m-[30px] h-full max-h-[497px] mx-auto w-full max-w-[400px] p-[60px] bg-[#fff] responsive-verify-otp-component">
           <div className="flex flex-col justify-start ">
             <img

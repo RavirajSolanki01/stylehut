@@ -30,6 +30,8 @@ import {
   addCategories,
   addSubCategories,
 } from "../../store/slice/categories.slice";
+import { withLoading } from "../../utils/reusable-functions";
+import { getCartProducts } from "../../services/cartService";
 
 export const Header: React.FC = () => {
   const { auth, categoryList } = useSelector((state: RootState) => ({
@@ -42,6 +44,8 @@ export const Header: React.FC = () => {
 
   const buttonRef = useRef<HTMLDivElement | null>(null);
   const headerItemRefs = useRef<(HTMLLIElement | null)[]>([]);
+
+  const [cartItemsCount, setCartItemsCount] = useState<number | null>(0);
 
   const [activePopoverIndex, setActivePopoverIndex] = useState<number | null>(
     null
@@ -121,8 +125,16 @@ export const Header: React.FC = () => {
         .finally(() => dispatch(setLoading({ key: "search", value: false })));
   }, [debouncedSearchTerm]);
 
+  const refreshCart = async () => {
+    const response = await getCartProducts({ page: 1, pageSize: 100 });
+
+    const cartItems = response.data.data.items.length;
+    setCartItemsCount(cartItems);
+  };
+
   useEffect(() => {
     const hasFetched = sessionStorage.getItem("hasFetchedCategories");
+    withLoading(dispatch, "refresh-cart", refreshCart);
 
     if (!hasFetched || !categories.length || !menuItems.length) {
       dispatch(setLoading({ key: "category", value: true }));
@@ -134,12 +146,15 @@ export const Header: React.FC = () => {
               (a: { id: number }, b: { id: number }) => a.id - b.id
             );
             const sortedMenuItems = sorted.map(
-              (cat: { name: string | number; id: number }) => ({
-                label: cat.name,
-                color: colorMap[cat.name],
-                id: cat.id,
-              })
-            );
+              (cat: { name: string | number; id: number }) => {
+                console.log(cat.name, colorMap[cat.name])
+                return ({
+                  label: cat.name,
+                  color: colorMap[cat.name],
+                  id: cat.id,
+                })
+              });
+              console.log(sortedMenuItems)
             setMenuItems(sortedMenuItems);
             setCategories(sorted);
             dispatch(addCategories(sortedMenuItems));
@@ -183,7 +198,9 @@ export const Header: React.FC = () => {
 
         <div className="relative ml-[20px]">
           <ul className="list-none flex gap-x-[20px] h-full max-h-[35px] text-[#282c3f] font-[700] cursor-pointer uppercase mb-0 relative">
-            {menuItems.map((item, index) => (
+            {menuItems.map((item, index) => {
+              console.log(activePopoverIndex=== index, item.color)
+              return (
               <li
                 key={index}
                 ref={(el) => {
@@ -218,7 +235,7 @@ export const Header: React.FC = () => {
               >
                 <div>{item.label}</div>
               </li>
-            ))}
+            )})}
           </ul>
 
           {activePopoverIndex !== null && (
@@ -332,7 +349,7 @@ export const Header: React.FC = () => {
             className="text-[#282c3f] cursor-pointer flex flex-col items-center h-full min-h-[60px] w-full min-w-[40px] justify-center border-b-4 border-b-transparent hover:border-b-[#3880ff]"
           >
             <Badge
-              badgeContent={5}
+              badgeContent={cartItemsCount}
               color="info"
               overlap="circular"
               anchorOrigin={{ vertical: "top", horizontal: "right" }}

@@ -45,13 +45,13 @@ import UPIIcon from "../assets/Cart/SVGs/UPIIcon";
 import CODIcon from "../assets/Cart/SVGs/CODIcon";
 
 export const colorMap: Record<string, string> = {
-  Beauty: "#0db7af",
-  Men: "#3880FF",
-  Women: "#3880FF",
-  Kids: "#3880FF",
-  Home: "#3880FF",
-  Genz: "#3880FF",
-  Studio: "#3880FF",
+  BEAUTY: "#0db7af",
+  MEN: "#3880FF",
+  WOMEN: "#fb56c1",
+  KIDS: "#f26a10",
+  HOME: "#f2c210",
+  GENZ: "#3880FF",
+  Studio: "#f26a10",
 };
 
 export const ShopByCategoryData = [
@@ -149,12 +149,12 @@ export const ShopByCategoryData = [
 
 export const headerMenuItems = [
   { id: 0, label: "Men", color: "#3880FF" },
-  { id: 0, label: "Women", color: "#3880FF" },
-  { id: 0, label: "Kids", color: "#3880FF" },
-  { id: 0, label: "Home", color: "#3880FF" },
-  { id: 0, label: "Beauty", color: "#0db7af" },
-  { id: 0, label: "Genz", color: "#3880FF" },
-  { id: 0, label: "Studio", color: "#3880FF" },
+  { id: 1, label: "Women", color: "#3880FF" },
+  { id: 2, label: "Kids", color: "#3880FF" },
+  { id: 3, label: "Home", color: "#3880FF" },
+  { id: 4, label: "Beauty", color: "#0db7af" },
+  { id: 5, label: "Genz", color: "#3880FF" },
+  { id: 6, label: "Studio", color: "#3880FF" },
 ];
 
 export const ProfileMenuItems = [
