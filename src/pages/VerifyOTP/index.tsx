@@ -29,6 +29,7 @@ export const VerifyOtpPage: React.FC = () => {
 
   const [timer, setTimer] = useState<number>(30);
   const [isResendDisabled, setIsResendDisabled] = useState<boolean>(true);
+  const [otpAttempts, setOtpAttempts] = useState<number>(0);
 
   useEffect(() => {
     let countdown: number | null = null;
@@ -47,24 +48,30 @@ export const VerifyOtpPage: React.FC = () => {
   }, [timer, isResendDisabled]);
 
   const handleResendOtp = () => {
-    registerUser({ email: users.email })
-      .then((res) => {
-        if (res.status === 200 && res.data.message === "OTP sent to email.") {
-          toast.success(res.data.message);
-          navigate("/verify-otp");
-        }
-      })
-      .catch((err) => {
-        const errorMessage =
-          err?.response?.data?.message ||
-          err?.response?.data ||
-          "Something went wrong.";
+    if (otpAttempts >= 3) {
+      toast.error("You have exceeded the maximum number of OTP attempts.");
+      return;
+    } else {
+      registerUser({ email: users.email })
+        .then((res) => {
+          if (res.status === 200 && res.data.message === "OTP sent to email.") {
+            toast.success(res.data.message);
+            navigate("/verify-otp");
+          }
+        })
+        .catch((err) => {
+          const errorMessage =
+            err?.response?.data?.message ||
+            err?.response?.data ||
+            "Something went wrong.";
 
-        toast.error(`Login Failed: ${errorMessage}`);
-      });
+          toast.error(`Login Failed: ${errorMessage}`);
+        });
 
-    setTimer(30);
-    setIsResendDisabled(true);
+      setOtpAttempts((prev) => prev + 1);
+      setTimer(30);
+      setIsResendDisabled(true);
+    }
   };
 
   const { register, setValue, handleSubmit, getValues } = useForm<FormData>({

@@ -2,24 +2,24 @@
 
 @font-face {
   font-family: "Assistant";
-  src: url("../public/font/Assistant-Regular.woff") format("woff2"),
-    url("../public/font/Assistant-Regular.woff") format("woff");
+  src: url("font/Assistant-Regular.woff") format("woff2"),
+    url("font/Assistant-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Assistant";
-  src: url("../public/font/Assistant-Bold.woff") format("woff2"),
-    url("../public/font/Assistant-Bold.woff") format("woff");
+  src: url("font/Assistant-Bold.woff") format("woff2"),
+    url("font/Assistant-Bold.woff") format("woff");
   font-weight: 800;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Assistant";
-  src: url("../public/font/Assistant-Bold.woff") format("woff2"),
-    url("../public/font/Assistant-Bold.woff") format("woff");
+  src: url("font/Assistant-Bold.woff") format("woff2"),
+    url("font/Assistant-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
 }
@@ -218,4 +218,13 @@ button.default{
 .common-customRadio input {
   margin: 0 0px 0 0;
   visibility: hidden;
+}
+
+.swiper-slide {
+  height: 100%;
+}
+
+.image-zoom figure {
+  max-height: 100vh;
+  margin: auto;
 }
