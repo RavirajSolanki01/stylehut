@@ -1,13 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Logo } from "../../assets";
-import {
-  Autocomplete,
-  Badge,
-  InputAdornment,
-  TextField,
-  styled,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Badge, TextField, styled } from "@mui/material";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -22,9 +15,7 @@ import { CategoriesPopover } from "../CategoriesPopover";
 import { toast } from "react-toastify";
 import { setLoading } from "../../store/slice/loading.slice";
 import { getCategories } from "../../services/categoriesService";
-import { CategoryResponse, ISearchOption } from "../../utils/types";
-import useDebounce from "../../hooks";
-import { getheaderSearch } from "../../services/headerSearch";
+import { CategoryResponse } from "../../utils/types";
 import { removeAuthToken } from "../../store/slice/auth.slice";
 import {
   addCategories,
@@ -32,6 +23,7 @@ import {
 } from "../../store/slice/categories.slice";
 import { withLoading } from "../../utils/reusable-functions";
 import { getCartProducts } from "../../services/cartService";
+import { HeaderSearch } from "../HeaderSearch";
 
 export const Header: React.FC = () => {
   const { auth, categoryList } = useSelector((state: RootState) => ({
@@ -59,11 +51,7 @@ export const Header: React.FC = () => {
   const [categories, setCategories] = useState<CategoryResponse[]>(
     categoryList.subCategories as CategoryResponse[]
   );
-  const [inputValue, setInputValue] = useState("");
   const [labelValue, setLabelValue] = useState("");
-  const [options, setOptions] = useState<ISearchOption[]>([]);
-  const debouncedSearchTerm = useDebounce(inputValue, 500);
-
   const isUserLoggedIn = useMemo(() => !!auth?.token?.length, [auth.token]);
 
   const handlePopoverOpen = () => {
@@ -89,41 +77,6 @@ export const Header: React.FC = () => {
     setActivePopoverIndex((prevIndex) => (prevIndex !== index ? null : index));
     setActivePopoverIndex(index);
   };
-  useEffect(() => {
-    // dispatch(setLoading({ key: "search", value: true }));
-    if (debouncedSearchTerm)
-      getheaderSearch(inputValue)
-        .then((res) => {
-          const { success } = res.data;
-          if (success) {
-            const { brands, subCategoriesType } = res.data.data;
-
-            const groupedOptions: ISearchOption[] = [
-              ...brands.map((item: ISearchOption) => ({
-                ...item,
-                group: "Brands",
-              })),
-              ...subCategoriesType.map((item: any) => ({
-                ...item,
-                name: `${item.name} for ${item.category.name}`,
-                group: "SubCategories",
-                path: `/product-list?category=${item.category.name}requestid${item.category.id}&subcategory=${item.sub_category.name}requestid${item.sub_category.id}&sub_category_type=${item.name}requestid${item.id}`,
-              })),
-            ];
-
-            setOptions(groupedOptions);
-          }
-        })
-        .catch((err) => {
-          setMenuItems(headerMenuItems);
-          const errorMessage =
-            err?.response?.data?.message ||
-            err?.response?.data ||
-            "Something went wrong.";
-          toast.error(`Fetch categories data Failed: ${errorMessage}`);
-        })
-        .finally(() => dispatch(setLoading({ key: "search", value: false })));
-  }, [debouncedSearchTerm]);
 
   const refreshCart = async () => {
     const response = await getCartProducts({ page: 1, pageSize: 100 });
@@ -147,14 +100,15 @@ export const Header: React.FC = () => {
             );
             const sortedMenuItems = sorted.map(
               (cat: { name: string | number; id: number }) => {
-                console.log(cat.name, colorMap[cat.name])
-                return ({
+                console.log(cat.name, colorMap[cat.name]);
+                return {
                   label: cat.name,
                   color: colorMap[cat.name],
                   id: cat.id,
-                })
-              });
-              console.log(sortedMenuItems)
+                };
+              }
+            );
+            console.log(sortedMenuItems);
             setMenuItems(sortedMenuItems);
             setCategories(sorted);
             dispatch(addCategories(sortedMenuItems));
@@ -188,7 +142,7 @@ export const Header: React.FC = () => {
         <HeaderResponsive categories={categories} menuItems={menuItems} />
       </div>
 
-      <div className="w-full flex items-center py-[10px] headerItem">
+      <div className="w-full flex items-center py-[10px] headerItem gap-[10px]">
         <img
           onClick={() => navigate("/home")}
           src={Logo}
@@ -196,46 +150,46 @@ export const Header: React.FC = () => {
           className="max-h-[60px] max-w-[60px] h-full w-full cursor-pointer"
         />
 
-        <div className="relative ml-[20px]">
-          <ul className="list-none flex gap-x-[20px] h-full max-h-[35px] text-[#282c3f] font-[700] cursor-pointer uppercase mb-0 relative">
+        <div className="relative max-w-[450px] w-full">
+          <ul className="list-none flex justify-center h-full max-h-[35px] text-[#282c3f] font-[700] cursor-pointer uppercase mb-0 relative">
             {menuItems.map((item, index) => {
-              console.log(activePopoverIndex=== index, item.color)
               return (
-              <li
-                key={index}
-                ref={(el) => {
-                  headerItemRefs.current[index] = el;
-                }}
-                className="flex h-full pb-[18px] pt-[10px] max-h-[60px] items-center relative min-w-[55px] w-full justify-center"
-                style={{
-                  zIndex: 1000,
-                  borderBottom:
-                    activePopoverIndex === index
-                      ? `4px solid ${item.color}`
-                      : "",
-                }}
-                onMouseEnter={() =>
-                  handleCategoryClick(
-                    index,
-                    `${item.label + "requestid" + item.id}`
-                  )
-                }
-                onMouseLeave={() =>
-                  handleCategoryClick(
-                    index,
-                    `${item.label + "requestid" + item.id}`
-                  )
-                }
-                onClick={() =>
-                  handleCategoryClick(
-                    index,
-                    `${item.label + "requestid" + item.id}`
-                  )
-                }
-              >
-                <div>{item.label}</div>
-              </li>
-            )})}
+                <li
+                  key={index}
+                  ref={(el) => {
+                    headerItemRefs.current[index] = el;
+                  }}
+                  className="flex h-full pb-[18px] pt-[10px] max-h-[60px] items-center relative min-w-[55px] w-full justify-center"
+                  style={{
+                    zIndex: 1000,
+                    borderBottom:
+                      activePopoverIndex === index
+                        ? `4px solid ${item.color}`
+                        : "",
+                  }}
+                  onMouseEnter={() =>
+                    handleCategoryClick(
+                      index,
+                      `${item.label + "requestid" + item.id}`
+                    )
+                  }
+                  onMouseLeave={() =>
+                    handleCategoryClick(
+                      index,
+                      `${item.label + "requestid" + item.id}`
+                    )
+                  }
+                  onClick={() =>
+                    handleCategoryClick(
+                      index,
+                      `${item.label + "requestid" + item.id}`
+                    )
+                  }
+                >
+                  <div>{item.label}</div>
+                </li>
+              );
+            })}
           </ul>
 
           {activePopoverIndex !== null && (
@@ -257,54 +211,8 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-full flex items-center py-[10px] justify-end gap-x-[50px] headerItem">
-        <Autocomplete
-          freeSolo
-          open
-          options={options}
-          groupBy={(option) => option.group}
-          getOptionLabel={(option) =>
-            typeof option === "string" ? option : option.name
-          }
-          onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
-          onChange={(_, option) => {
-            if (option && typeof option !== "string") {
-              navigate(option.path);
-            }
-          }}
-          style={{ width: "100%" }}
-          renderGroup={(params) => (
-            <li key={params.key}>
-              <GroupHeader className="ul-test">
-                {params.group && "All others"}
-              </GroupHeader>
-              <GroupItems>{params.children}</GroupItems>
-            </li>
-          )}
-          renderOption={(props, option) => (
-            <li
-              {...props}
-              key={option.id}
-              className="cursor-pointer font-light my-1 pl-2 hover:text-[#3880FF]"
-            >
-              {option.name}
-            </li>
-          )}
-          renderInput={(params) => (
-            <CustomTextField
-              {...params}
-              placeholder="Search for products, brands and more"
-              InputProps={{
-                ...params.InputProps,
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon className="search-icon" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          )}
-        />
+      <div className="w-full flex items-center py-[10px] justify-end gap-x-[20px] lg:gap-x-[50px] headerItem ml-[20px] lg:ml-[0px]">
+        <HeaderSearch />
         <div className="flex items-center gap-x-[30px]">
           <div
             className="text-[#282c3f] cursor-pointer h-full min-h-[60px] w-full min-w-[40px] flex flex-col items-center relative justify-center border-b-4 border-b-transparent hover:border-b-[#3880ff]"
@@ -364,7 +272,7 @@ export const Header: React.FC = () => {
   );
 };
 
-const CustomTextField = styled(TextField)({
+export const CustomHederSearchTextField = styled(TextField)({
   maxWidth: 600,
   width: "100%",
   height: 40,
@@ -390,13 +298,21 @@ const CustomTextField = styled(TextField)({
   "@media (max-width: 1350px)": {
     maxWidth: "420px",
   },
+  "& .MuiInputAdornment-root": {
+    "@media (max-width:1024px)": {
+      marginRight: 0,
+    },
+  },
   "& .search-icon": {
     color: "#696e79",
     marginRight: 20,
+    "@media (max-width:1024px)": {
+      marginRight: 0,
+    },
   },
 });
 
-const GroupHeader = styled("div")({
+export const GroupHeader = styled("div")({
   position: "sticky",
   top: 0,
   padding: "6px 10px",
@@ -406,7 +322,7 @@ const GroupHeader = styled("div")({
   borderBottom: `1px solid #f5f5f6`,
 });
 
-const GroupItems = styled("ul")({
+export const GroupItems = styled("ul")({
   padding: 0,
   margin: 0,
   listStyle: "none",

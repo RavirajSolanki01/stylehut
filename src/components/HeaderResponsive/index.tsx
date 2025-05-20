@@ -8,6 +8,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
+  Autocomplete,
+  InputAdornment,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Logo } from "../../assets";
@@ -17,20 +19,24 @@ import { RootState } from "../../store";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { useNavigate } from "react-router-dom";
 import { CategoryResponse } from "../../utils/types";
+import { HeaderSearch } from "../HeaderSearch";
 
 interface HeaderResponsiveProps {
   menuItems: { label: string; color: string }[];
-  categories: CategoryResponse[]
+  categories: CategoryResponse[];
 }
 
-export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, menuItems}) => {
+export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
+  categories,
+  menuItems,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [hoveredItemIndex, setHoveredItemIndex] = useState<number | null>(null);
-  
+
   const sidebarRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { auth } = useSelector((state: RootState) => ({
     auth: state.auth,
@@ -61,8 +67,8 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
 
   return (
     <div className="fixed w-full top-[0px] left-[0px] pl-[28px] pr-[28px] z-50 max-w-[600px] mx-auto bg-white flex justify-between menuIcon">
-      <div className="flex justify-between w-full">
-        <div className="flex justify-between max-w-[70px] w-full items-center">
+      <div className="flex justify-between w-full gap-[20px] sm:gap-[50px]">
+        <div className="flex justify-between max-w-[20px] w-full items-center">
           <div ref={iconRef}>
             <MenuIcon
               fontSize="medium"
@@ -71,6 +77,7 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
             />
           </div>
         </div>
+        <HeaderSearch />
         <div className="flex justify-between max-w-[105px] w-full items-center">
           <img
             src={Logo}
@@ -90,65 +97,79 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
         <div>
           {menuItems.map((item, index) => (
             <div key={`menu-item-${index}-${item.label}`}>
-              {item.label.toLowerCase() !== "studio" && <div>
-              <CustomAccordion
-                key={index}
-                expanded={hoveredIndex === index}
-                onClick={() =>
-                  setHoveredIndex((prevIndex) =>
-                    prevIndex === index ? null : index
-                  )
-                }
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon className="text-[#000] cursor-pointer" />}
-                >
-                  <Typography component="span">{item.label}</Typography>
-                </AccordionSummary>
-                <SmoothAccordionDetails onClick={(e) => e.stopPropagation()}>
-                  {categories[hoveredIndex as number]?.sub_categories.map((i, index) => (
-                    <CustomSubcategoriesAccordion
-                      key={`sub-${index}-${hoveredIndex}`}
-                      expanded={hoveredItemIndex === index}
-                      onClick={() =>
-                        setHoveredItemIndex((prevIndex) =>
-                          prevIndex === index ? null : index
-                        )
+              {item.label.toLowerCase() !== "studio" && (
+                <div>
+                  <CustomAccordion
+                    key={index}
+                    expanded={hoveredIndex === index}
+                    onClick={() =>
+                      setHoveredIndex((prevIndex) =>
+                        prevIndex === index ? null : index
+                      )
+                    }
+                  >
+                    <AccordionSummary
+                      expandIcon={
+                        <ExpandMoreIcon className="text-[#000] cursor-pointer" />
                       }
                     >
-                      <AccordionSummary
-                        expandIcon={
-                          <ExpandMoreIcon className="text-primary cursor-pointer"/>
-                        }
-                      >
-                        <Typography  className="text-primary" component="span">
-                          {i.name}
-                        </Typography>
-                      </AccordionSummary>
-                      <SmoothAccordionDetails className="h-full max-h-[250px] overflow-auto">
-                        {i.sub_category_types.map((sub, subIndex) => (
-                          <Typography
-                            key={`${sub.name}-${subIndex}`}
-                            className="text-sm text-[#282C3F] text-start py-[5px]"
+                      <Typography component="span">{item.label}</Typography>
+                    </AccordionSummary>
+                    <SmoothAccordionDetails
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {categories[hoveredIndex as number]?.sub_categories.map(
+                        (i, index) => (
+                          <CustomSubcategoriesAccordion
+                            key={`sub-${index}-${hoveredIndex}`}
+                            expanded={hoveredItemIndex === index}
+                            onClick={() =>
+                              setHoveredItemIndex((prevIndex) =>
+                                prevIndex === index ? null : index
+                              )
+                            }
                           >
-                            {sub.name}
-                          </Typography>
-                        ))}
-                      </SmoothAccordionDetails>
-                    </CustomSubcategoriesAccordion>
-                  ))}
-                </SmoothAccordionDetails>
-              </CustomAccordion>
-              {index === menuItems.length - 2 && (
-                <div className="border-t border-[#3880FF]"></div>
+                            <AccordionSummary
+                              expandIcon={
+                                <ExpandMoreIcon className="text-primary cursor-pointer" />
+                              }
+                            >
+                              <Typography
+                                className="text-primary"
+                                component="span"
+                              >
+                                {i.name}
+                              </Typography>
+                            </AccordionSummary>
+                            <SmoothAccordionDetails className="h-full max-h-[250px] overflow-auto">
+                              {i.sub_category_types.map((sub, subIndex) => (
+                                <Typography
+                                  key={`${sub.name}-${subIndex}`}
+                                  className="text-sm text-[#282C3F] text-start py-[5px]"
+                                >
+                                  {sub.name}
+                                </Typography>
+                              ))}
+                            </SmoothAccordionDetails>
+                          </CustomSubcategoriesAccordion>
+                        )
+                      )}
+                    </SmoothAccordionDetails>
+                  </CustomAccordion>
+                  {index === menuItems.length - 2 && (
+                    <div className="border-t border-[#3880FF]"></div>
+                  )}
+                </div>
               )}
-            </div>}
             </div>
           ))}
         </div>
         <div>
           <div className="flex flex-col justify-between w-full items-center mb-[100px]">
-            <div onClick={() => navigate("/profile/overview")} className="flex pl-[25px] border-b py-[12px] border-[#3880FF] w-full text-[#282c3f] cursor-pointer items-center">
+            <div
+              onClick={() => navigate("/profile/overview")}
+              className="flex pl-[25px] border-b py-[12px] border-[#3880FF] w-full text-[#282c3f] cursor-pointer items-center"
+            >
               <PersonOutlineIcon />
               <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
                 Profile
@@ -274,7 +295,7 @@ const CustomBox = styled(
   scrollbarWidth: "thin",
   display: "flex",
   flexDirection: "column",
-  scrollbarColor: '#3880FF #f1f1f1',
+  scrollbarColor: "#3880FF #f1f1f1",
   transition: "all 0.3s ease",
   "&.closed": {
     transform: "translateX(-100%)",
