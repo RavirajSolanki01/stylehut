@@ -76,7 +76,7 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({
         <ul className="list-none h-full text-[#282c3f] cursor-pointer mb-[0px] pl-[0px]">
           {ProfileDataItems.map((item) => (
             <li className="text-[#6c6c6c] mt-[3px] mb-[3px] font-[400] w-full justify-center hover:text-[#40414b] hover:font-[700]">
-              {item}
+              {item.title}
             </li>
           ))}
         </ul>
