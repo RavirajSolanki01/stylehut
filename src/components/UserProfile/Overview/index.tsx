@@ -3,7 +3,7 @@ import { UserProfile } from "../../../assets";
 import { RootState } from "../../../store";
 import { useNavigate } from "react-router-dom";
 import { removeAuthToken } from "../../../store/slice/auth.slice";
-import React from "react";
+import React, { useState } from "react";
 import {
   accountSections,
   FooterSections,
@@ -13,11 +13,14 @@ import {
 } from "../../../utils/constants";
 import { removeLoggedInUser } from "../../../store/slice/users.slice";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { ConfirmLogoutModal } from "../../ConfirmLogoutDialog";
 
 export const Overview: React.FC = () => {
   const { users } = useSelector((state: RootState) => ({
     users: state.users.user,
   }));
+
+  const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,6 +34,9 @@ export const Overview: React.FC = () => {
     dispatch(removeAuthToken());
     dispatch(removeLoggedInUser());
   };
+
+  const handleCloseConfirmLogoutDialog = () => setOpenLogoutDialog(false);
+  const handleOpenConfirmLogoutDialog = () => setOpenLogoutDialog(true);
 
   return (
     <div className="profile-section justify-center">
@@ -76,7 +82,7 @@ export const Overview: React.FC = () => {
         </div>
         <div className="flex items-center justify-start pb-[80px]">
           <button
-            onClick={handleLogout}
+            onClick={() => handleOpenConfirmLogoutDialog()}
             className="cursor-pointer bg-[#3880FF] text-center px-[12px] w-full py-[12px] 
         text-[#fff] text-[16px] font-[700] rounded-none focus:outline-none focus:border-none hover:outline-none hover:border-transparent uppercase logout-button"
           >
@@ -196,7 +202,7 @@ export const Overview: React.FC = () => {
         </div>
         <div className="flex justify-center pb-[20px]">
           <button
-            onClick={handleLogout}
+            onClick={() => handleOpenConfirmLogoutDialog()}
             className="cursor-pointer bg-primary max-w-[750px] mb-4 text-center px-[12px] w-full py-[12px] 
         text-[#fff] text-[14px] font-[700] rounded focus:outline-none focus:border-none hover:outline-none hover:border-transparent logout-button uppercase"
           >
@@ -204,6 +210,11 @@ export const Overview: React.FC = () => {
           </button>
         </div>
       </div>
+      <ConfirmLogoutModal
+        handleCloseConfirmDialog={handleCloseConfirmLogoutDialog}
+        handleConfirmLogout={handleLogout}
+        openConfirmDialog={openLogoutDialog}
+      />
     </div>
   );
 };

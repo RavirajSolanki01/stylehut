@@ -147,14 +147,12 @@ export const Header: React.FC = () => {
             );
             const sortedMenuItems = sorted.map(
               (cat: { name: string | number; id: number }) => {
-                console.log(cat.name, colorMap[cat.name])
                 return ({
                   label: cat.name,
                   color: colorMap[cat.name],
                   id: cat.id,
                 })
               });
-              console.log(sortedMenuItems)
             setMenuItems(sortedMenuItems);
             setCategories(sorted);
             dispatch(addCategories(sortedMenuItems));
@@ -185,7 +183,7 @@ export const Header: React.FC = () => {
   return (
     <div className="fixed w-full top-0 z-50 bg-white flex justify-between gap-x-5 shadow-md px-[30px] mx-auto responsive-header">
       <div className="menuIcon">
-        <HeaderResponsive categories={categories} menuItems={menuItems} />
+        <HeaderResponsive categories={categories} menuItems={menuItems}  handleNavigate={handleNavigate}/>
       </div>
 
       <div className="w-full flex items-center py-[10px] headerItem">
@@ -199,7 +197,6 @@ export const Header: React.FC = () => {
         <div className="relative ml-[20px]">
           <ul className="list-none flex gap-x-[20px] h-full max-h-[35px] text-[#282c3f] font-[700] cursor-pointer uppercase mb-0 relative">
             {menuItems.map((item, index) => {
-              console.log(activePopoverIndex=== index, item.color)
               return (
               <li
                 key={index}

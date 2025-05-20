@@ -12,25 +12,44 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Logo } from "../../assets";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { useNavigate } from "react-router-dom";
 import { CategoryResponse } from "../../utils/types";
-
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import { ConfirmLogoutModal } from "../ConfirmLogoutDialog";
+import { removeAuthToken } from "../../store/slice/auth.slice";
+import { removeLoggedInUser } from "../../store/slice/users.slice";
 interface HeaderResponsiveProps {
   menuItems: { label: string; color: string }[];
-  categories: CategoryResponse[]
+  categories: CategoryResponse[];
+  handleNavigate: (path: string) => void;
 }
 
-export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, menuItems}) => {
+export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
+  categories,
+  menuItems,
+  handleNavigate,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [hoveredItemIndex, setHoveredItemIndex] = useState<number | null>(null);
-  
+
+  const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    handleNavigate("/login");
+    dispatch(removeAuthToken());
+    dispatch(removeLoggedInUser());
+  };
+
   const sidebarRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { auth } = useSelector((state: RootState) => ({
     auth: state.auth,
@@ -41,6 +60,10 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
+  
+  const handleCloseConfirmLogoutDialog = () => setOpenLogoutDialog(false);
+  const handleOpenConfirmLogoutDialog = () => setOpenLogoutDialog(true);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -90,81 +113,129 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
         <div>
           {menuItems.map((item, index) => (
             <div key={`menu-item-${index}-${item.label}`}>
-              {item.label.toLowerCase() !== "studio" && <div>
-              <CustomAccordion
-                key={index}
-                expanded={hoveredIndex === index}
-                onClick={() =>
-                  setHoveredIndex((prevIndex) =>
-                    prevIndex === index ? null : index
-                  )
-                }
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon className="text-[#000] cursor-pointer" />}
-                >
-                  <Typography component="span">{item.label}</Typography>
-                </AccordionSummary>
-                <SmoothAccordionDetails onClick={(e) => e.stopPropagation()}>
-                  {categories[hoveredIndex as number]?.sub_categories.map((i, index) => (
-                    <CustomSubcategoriesAccordion
-                      key={`sub-${index}-${hoveredIndex}`}
-                      expanded={hoveredItemIndex === index}
-                      onClick={() =>
-                        setHoveredItemIndex((prevIndex) =>
-                          prevIndex === index ? null : index
-                        )
+              {item.label.toLowerCase() !== "studio" && (
+                <div>
+                  <CustomAccordion
+                    key={index}
+                    expanded={hoveredIndex === index}
+                    onClick={() =>
+                      setHoveredIndex((prevIndex) =>
+                        prevIndex === index ? null : index
+                      )
+                    }
+                  >
+                    <AccordionSummary
+                      expandIcon={
+                        <ExpandMoreIcon className="text-[#000] cursor-pointer" />
                       }
                     >
-                      <AccordionSummary
-                        expandIcon={
-                          <ExpandMoreIcon className="text-primary cursor-pointer"/>
-                        }
-                      >
-                        <Typography  className="text-primary" component="span">
-                          {i.name}
-                        </Typography>
-                      </AccordionSummary>
-                      <SmoothAccordionDetails className="h-full max-h-[250px] overflow-auto">
-                        {i.sub_category_types.map((sub, subIndex) => (
-                          <Typography
-                            key={`${sub.name}-${subIndex}`}
-                            className="text-sm text-[#282C3F] text-start py-[5px]"
+                      <Typography component="span">{item.label}</Typography>
+                    </AccordionSummary>
+                    <SmoothAccordionDetails
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {categories[hoveredIndex as number]?.sub_categories.map(
+                        (i, index) => (
+                          <CustomSubcategoriesAccordion
+                            key={`sub-${index}-${hoveredIndex}`}
+                            expanded={hoveredItemIndex === index}
+                            onClick={() =>
+                              setHoveredItemIndex((prevIndex) =>
+                                prevIndex === index ? null : index
+                              )
+                            }
                           >
-                            {sub.name}
-                          </Typography>
-                        ))}
-                      </SmoothAccordionDetails>
-                    </CustomSubcategoriesAccordion>
-                  ))}
-                </SmoothAccordionDetails>
-              </CustomAccordion>
-              {index === menuItems.length - 2 && (
-                <div className="border-t border-[#3880FF]"></div>
+                            <AccordionSummary
+                              expandIcon={
+                                <ExpandMoreIcon className="text-primary cursor-pointer" />
+                              }
+                            >
+                              <Typography
+                                className="text-primary"
+                                component="span"
+                              >
+                                {i.name}
+                              </Typography>
+                            </AccordionSummary>
+                            <SmoothAccordionDetails className="h-full max-h-[250px] overflow-auto">
+                              {i.sub_category_types.map((sub, subIndex) => (
+                                <Typography
+                                  key={`${sub.name}-${subIndex}`}
+                                  onClick={() => {
+                                    const path = `/product-list?category=${encodeURIComponent(
+                                      item.label
+                                    )}&subcategory=${encodeURIComponent(
+                                      i.name
+                                    )}requestid${
+                                      i.id
+                                    }&sub_category_type=${encodeURIComponent(
+                                      sub.name
+                                    )}requestid${sub.id}`;
+                                    navigate(path);
+                                    setIsOpen(false);
+                                  }}
+                                  className="text-sm text-[#282C3F] text-start py-[5px] cursor-pointer hover:text-primary"
+                                >
+                                  {sub.name}
+                                </Typography>
+                              ))}
+                            </SmoothAccordionDetails>
+                          </CustomSubcategoriesAccordion>
+                        )
+                      )}
+                    </SmoothAccordionDetails>
+                  </CustomAccordion>
+                  {index === menuItems.length - 2 && (
+                    <div className="border-t border-[#3880FF]"></div>
+                  )}
+                </div>
               )}
-            </div>}
             </div>
           ))}
         </div>
         <div>
           <div className="flex flex-col justify-between w-full items-center mb-[100px]">
-            <div onClick={() => navigate("/profile/overview")} className="flex pl-[25px] border-b py-[12px] border-[#3880FF] w-full text-[#282c3f] cursor-pointer items-center">
+            <div
+              onClick={() => navigate("/profile/overview")}
+              className="flex pl-[25px] border-b py-[12px] border-[#3880FF] w-full text-[#282c3f] cursor-pointer items-center"
+            >
               <PersonOutlineIcon />
               <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
                 Profile
               </p>
             </div>
             {isUserLoggedIn && (
-              <div className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center">
-                <PowerSettingsNewOutlinedIcon />
-                <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
-                  Logout
-                </p>
+              <div className="w-full">
+                <div onClick={() => navigate("/wishlist")} className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center">
+                  <FavoriteBorderOutlinedIcon />
+                  <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
+                    Wishlist
+                  </p>
+                </div>
+
+                <div onClick={() => navigate("/cart")} className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center">
+                  <ShoppingBagOutlinedIcon />
+                  <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
+                    Bag
+                  </p>
+                </div>
+
+                <div onClick={handleOpenConfirmLogoutDialog} className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center">
+                  <PowerSettingsNewOutlinedIcon />
+                  <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
+                    Logout
+                  </p>
+                </div>
               </div>
             )}
           </div>
         </div>
       </CustomBox>
+      <ConfirmLogoutModal
+        handleCloseConfirmDialog={handleCloseConfirmLogoutDialog}
+        handleConfirmLogout={handleLogout}
+        openConfirmDialog={openLogoutDialog}
+      />
     </div>
   );
 };
@@ -172,7 +243,7 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({categories, m
 const SmoothAccordionDetails = styled(AccordionDetails)({
   scrollbarWidth: "thin",
   overflowY: "auto",
-  padding: "8px 8px 16px 32px",
+  padding: "8px 8px 10px 32px",
   transition: "max-height 0.4s ease, opacity 0.3s ease",
 });
 

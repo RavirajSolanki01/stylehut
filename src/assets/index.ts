@@ -5,6 +5,7 @@ import Slide1 from "./Home/slide1.png";
 import Slide2 from "./Home/slide2.png";
 import Slide3 from "./Home/slide3.png";
 import Slide4 from "./Home/slide4.png";
+import Slide5 from "./Home/slide5.png";
 import UserProfile from "./UserProfile/default_user_profile.png";
 import Orders from "./UserProfile/orders.png";
 import Cards from "./UserProfile/profile-cards.png";
@@ -32,7 +33,6 @@ import LikeIcon from "./Product/like.svg";
 import DislikeIcon from "./Product/dislike.svg";
 import ErrorV2Icon from "./Home/ErroScreenV2.svg";
 import ShopByCategory from "./Home/shoup_by_category.png";
-import OfferTitleImage from "./Home/offer_title.png";
 import FashionCarnivalImage from "./Home/fashion_carnival.png";
 import FootWearImage from "./Home/foot_wear.png";
 import BagsImage from "./Home/bags.png";
@@ -63,6 +63,7 @@ export {
   Slide2,
   Slide3,
   Slide4,
+  Slide5,
   UserProfile,
   Orders,
   Cards,
@@ -90,7 +91,6 @@ export {
   DislikeIcon,
   ErrorV2Icon,
   FashionCarnivalImage,
-  OfferTitleImage,
   ShopByCategory,
   CasualWear,
   ActiveWear,

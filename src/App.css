@@ -84,9 +84,6 @@ body,
   .overview-container {
     max-width: 655px;
   }
-  .header-popover {
-    margin-top: 15px;
-  }
   .search-input {
     display: none !important;
   }

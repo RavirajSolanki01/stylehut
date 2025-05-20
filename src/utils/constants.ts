@@ -168,24 +168,41 @@ export const ProfileMenuItems = [
   },
   {
     title: "Gift Cards",
-    path: "#",
+    path: "/gift-cards",
   },
   {
     title: "Contact Us",
-    path: "#",
+    path: "/contact-us",
   },
   {
     title: "Myntra Insider",
-    path: "#",
+    path: "/insider",
   },
 ];
+
 export const ProfileDataItems = [
-  "Myntra Credit",
-  "Coupons",
-  "Saved Cards",
-  "Saved VPA",
-  "Saved Addresses",
+  {
+    title: "Myntra Credit",
+    path: "/credit",
+  },
+  {
+    title: "Coupons",
+    path: "/coupons",
+  },
+  {
+    title: "Saved Cards",
+    path: "/saved-cards",
+  },
+  {
+    title: "Saved VPA",
+    path: "/saved-upi",
+  },
+  {
+    title: "Saved Addresses",
+    path: "/Addresses",
+  },
 ];
+
 export const accountSections = [
   {
     icon: Orders,
