@@ -14,25 +14,41 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Logo } from "../../assets";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { useNavigate } from "react-router-dom";
 import { CategoryResponse } from "../../utils/types";
 import { HeaderSearch } from "../HeaderSearch";
-
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import { ConfirmLogoutModal } from "../ConfirmLogoutDialog";
+import { removeAuthToken } from "../../store/slice/auth.slice";
+import { removeLoggedInUser } from "../../store/slice/users.slice";
 interface HeaderResponsiveProps {
   menuItems: { label: string; color: string }[];
   categories: CategoryResponse[];
+  handleNavigate: (path: string) => void;
 }
 
 export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
   categories,
   menuItems,
+  handleNavigate,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [hoveredItemIndex, setHoveredItemIndex] = useState<number | null>(null);
+
+  const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    handleNavigate("/login");
+    dispatch(removeAuthToken());
+    dispatch(removeLoggedInUser());
+  };
 
   const sidebarRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);
@@ -47,6 +63,9 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleCloseConfirmLogoutDialog = () => setOpenLogoutDialog(false);
+  const handleOpenConfirmLogoutDialog = () => setOpenLogoutDialog(true);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -145,7 +164,20 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
                               {i.sub_category_types.map((sub, subIndex) => (
                                 <Typography
                                   key={`${sub.name}-${subIndex}`}
-                                  className="text-sm text-[#282C3F] text-start py-[5px]"
+                                  onClick={() => {
+                                    const path = `/product-list?category=${encodeURIComponent(
+                                      item.label
+                                    )}&subcategory=${encodeURIComponent(
+                                      i.name
+                                    )}requestid${
+                                      i.id
+                                    }&sub_category_type=${encodeURIComponent(
+                                      sub.name
+                                    )}requestid${sub.id}`;
+                                    navigate(path);
+                                    setIsOpen(false);
+                                  }}
+                                  className="text-sm text-[#282C3F] text-start py-[5px] cursor-pointer hover:text-primary"
                                 >
                                   {sub.name}
                                 </Typography>
@@ -176,16 +208,46 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
               </p>
             </div>
             {isUserLoggedIn && (
-              <div className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center">
-                <PowerSettingsNewOutlinedIcon />
-                <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
-                  Logout
-                </p>
+              <div className="w-full">
+                <div
+                  onClick={() => navigate("/wishlist")}
+                  className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center"
+                >
+                  <FavoriteBorderOutlinedIcon />
+                  <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
+                    Wishlist
+                  </p>
+                </div>
+
+                <div
+                  onClick={() => navigate("/cart")}
+                  className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center"
+                >
+                  <ShoppingBagOutlinedIcon />
+                  <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
+                    Bag
+                  </p>
+                </div>
+
+                <div
+                  onClick={handleOpenConfirmLogoutDialog}
+                  className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center"
+                >
+                  <PowerSettingsNewOutlinedIcon />
+                  <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
+                    Logout
+                  </p>
+                </div>
               </div>
             )}
           </div>
         </div>
       </CustomBox>
+      <ConfirmLogoutModal
+        handleCloseConfirmDialog={handleCloseConfirmLogoutDialog}
+        handleConfirmLogout={handleLogout}
+        openConfirmDialog={openLogoutDialog}
+      />
     </div>
   );
 };
@@ -193,7 +255,7 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
 const SmoothAccordionDetails = styled(AccordionDetails)({
   scrollbarWidth: "thin",
   overflowY: "auto",
-  padding: "8px 8px 16px 32px",
+  padding: "8px 8px 10px 32px",
   transition: "max-height 0.4s ease, opacity 0.3s ease",
 });
 

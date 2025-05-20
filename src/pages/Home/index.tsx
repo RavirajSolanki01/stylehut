@@ -5,20 +5,20 @@ import {
   CouponsTitle,
   FashionCarnivalImage,
   KnockoutOffers,
-  OfferTitleImage,
   PaymentMethods,
   ShopByCategory,
   Slide1,
   Slide2,
   Slide3,
   Slide4,
+  Slide5,
 } from "../../assets";
 import { Box } from "@mui/material";
 import { ShopByCategoryData } from "../../utils/constants";
 
 export const HomePage: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = [Slide1, Slide2, Slide3, Slide4];
+  const images = [Slide1, Slide5, Slide2, Slide3, Slide4];
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) =>
@@ -34,11 +34,6 @@ export const HomePage: React.FC = () => {
         <div className="pt-[100px] w-full px-8 responsive-home-page">
           <div className="flex flex-col gap-3 mb-5">
             <img
-              src={OfferTitleImage}
-              alt="OfferTitleImage"
-              className="cursor-pointer"
-            />
-            <img
               src={FashionCarnivalImage}
               alt="FashionCarnivalImage"
               className="cursor-pointer fashion-carnival-image"
@@ -46,8 +41,16 @@ export const HomePage: React.FC = () => {
             <img src={PaymentMethods} alt="PaymentMethods" />
             <img src={CouponsTitle} alt="CouponsTitle" />
             <div className="flex flex-wrap gap-2 max-w-[1300px] justify-center">
-              <img className="max-h-[126px] coupons" src={Coupon1} alt="Coupon1" />
-              <img className="max-h-[126px] coupons" src={Coupon2} alt="Coupon2" />
+              <img
+                className="max-h-[126px] coupons"
+                src={Coupon1}
+                alt="Coupon1"
+              />
+              <img
+                className="max-h-[126px] coupons"
+                src={Coupon2}
+                alt="Coupon2"
+              />
             </div>
           </div>
           <div className="relative w-full h-full mx-auto overflow-hidden">
@@ -81,9 +84,9 @@ export const HomePage: React.FC = () => {
                 {ShopByCategoryData.map((item: any, index: number) => (
                   <div
                     key={`${item.id}-${index}`}
-                    className="bg-[#ffb300] p-0.5 cursor-pointer"
+                    className="bg-[#d3e2fe] p-0.5 cursor-pointer"
                   >
-                    <div className="flex justify-center items-center bg-[#ffb300] max-w-[185px] cursor-pointer">
+                    <div className="flex justify-center items-center bg-[#d3e2fe] max-w-[185px] cursor-pointer">
                       <ProductCard product={item} />
                     </div>
                   </div>

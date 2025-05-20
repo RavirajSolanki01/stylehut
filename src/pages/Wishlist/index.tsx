@@ -5,6 +5,7 @@ import { setLoading } from "../../store/slice/loading.slice";
 import { useDispatch } from "react-redux";
 import { LoaderOverlay } from "../../components/Loader";
 import ProductCardBase from "./components/ProductCard";
+import EmptyCart from "./empty.svg";
 
 export const Wishlist = () => {
   const dispatch = useDispatch();
@@ -57,40 +58,51 @@ export const Wishlist = () => {
   return (
     <div className="max-w-[1640px] w-full mx-auto">
       <LoaderOverlay />
+      {wishlist_page_data.length > 0 && (
+        <p className="mx-8 my-4 font-bold text-[18px] text-[#282c3f] text-left flex items-center align-middle wishlist-items">
+          My Wishlist &nbsp;
+          <span className="font-[400] text-[18px] text-[#282c3f]">{`${wishlist_page_data.length} items`}</span>
+        </p>
+      )}
 
-      <p className="mx-8 my-4 font-bold text-[18px] text-[#282c3f] text-left flex items-center align-middle wishlist-items">
-        My Wishlist &nbsp;
-        <span className="font-[400] text-[18px] text-[#282c3f]">{`${wishlist_page_data.length} items`}</span>
-      </p>
-      <div className="flex mx-7 wishlist-items-container">
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 custom-grid">
-          {wishlist_page_data.map((item: any, index: number) => (
-            <div
-              key={`${item.id}-${index}`}
-              className="flex justify-center items-center my-1"
-            >
-              {item.quantity <=0 ? (
-                <ProductCardBase
-                  product={item}
-                  onRemove={handleRemoveFromWishlist}
-                  imageHeight={250}
-                  bottomLabel="Show Similar"
-                  showOutOfStock
-                  fetchWishlist={fetchWishlist}
-                />
-              ) : (
-                <ProductCardBase
-                  product={item}
-                  onRemove={handleRemoveFromWishlist}
-                  imageHeight={280}
-                  bottomLabel="MOVE TO BAG"
-                  fetchWishlist={fetchWishlist}
-                />
-              )}
-            </div>
-          ))}
+      {wishlist_page_data.length > 0 ? (
+        <div className="flex mx-7 wishlist-items-container">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 custom-grid">
+            {wishlist_page_data.map((item: any, index: number) => (
+              <div
+                key={`${item.id}-${index}`}
+                className="flex justify-center items-center my-1"
+              >
+                {item.quantity <= 0 ? (
+                  <ProductCardBase
+                    product={item}
+                    onRemove={handleRemoveFromWishlist}
+                    imageHeight={250}
+                    bottomLabel="Show Similar"
+                    showOutOfStock
+                    fetchWishlist={fetchWishlist}
+                  />
+                ) : (
+                  <ProductCardBase
+                    product={item}
+                    onRemove={handleRemoveFromWishlist}
+                    imageHeight={280}
+                    bottomLabel="MOVE TO BAG"
+                    fetchWishlist={fetchWishlist}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="w-full flex flex-col items-center justify-center my-12">
+          <img src={EmptyCart} alt="empty-cart" className="w-44 h-44 mb-6" />
+          <p className="text-gray-500 text-lg font-semibold mb-2">
+            You haven't added any items to wishlist yet!
+          </p>
+        </div>
+      )}
     </div>
   );
 };
