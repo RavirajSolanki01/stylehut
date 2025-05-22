@@ -35,7 +35,6 @@ export const HeaderSearch: React.FC = () => {
                 path: `/product-list?category=${item.category.name}requestid${item.category.id}&subcategory=${item.sub_category.name}requestid${item.sub_category.id}&sub_category_type=${item.name}requestid${item.id}`,
               })),
             ];
-            console.log("abc=> groupedOptions", groupedOptions);
 
             setOptions(groupedOptions);
           }
