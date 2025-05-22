@@ -10,15 +10,16 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Logo } from "../../assets";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { useNavigate } from "react-router-dom";
-import { CategoryResponse } from "../../utils/types";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import { Logo } from "../../assets";
+import { RootState } from "../../store";
+import { CategoryResponse } from "../../utils/types";
+import { HeaderSearch } from "../HeaderSearch";
 import { ConfirmLogoutModal } from "../ConfirmLogoutDialog";
 import { removeAuthToken } from "../../store/slice/auth.slice";
 import { removeLoggedInUser } from "../../store/slice/users.slice";
@@ -61,7 +62,6 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
     setIsOpen(!isOpen);
   };
 
-  
   const handleCloseConfirmLogoutDialog = () => setOpenLogoutDialog(false);
   const handleOpenConfirmLogoutDialog = () => setOpenLogoutDialog(true);
 
@@ -84,8 +84,8 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
 
   return (
     <div className="fixed w-full top-[0px] left-[0px] pl-[28px] pr-[28px] z-50 max-w-[600px] mx-auto bg-white flex justify-between menuIcon">
-      <div className="flex justify-between w-full">
-        <div className="flex justify-between max-w-[70px] w-full items-center">
+      <div className="flex justify-between w-full gap-[20px] sm:gap-[50px]">
+        <div className="flex justify-between max-w-[20px] w-full items-center">
           <div ref={iconRef}>
             <MenuIcon
               fontSize="medium"
@@ -94,6 +94,7 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
             />
           </div>
         </div>
+        <HeaderSearch />
         <div className="flex justify-between max-w-[105px] w-full items-center">
           <img
             src={Logo}
@@ -206,21 +207,30 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
             </div>
             {isUserLoggedIn && (
               <div className="w-full">
-                <div onClick={() => navigate("/wishlist")} className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center">
+                <div
+                  onClick={() => navigate("/wishlist")}
+                  className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center"
+                >
                   <FavoriteBorderOutlinedIcon />
                   <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
                     Wishlist
                   </p>
                 </div>
 
-                <div onClick={() => navigate("/cart")} className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center">
+                <div
+                  onClick={() => navigate("/cart")}
+                  className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center"
+                >
                   <ShoppingBagOutlinedIcon />
                   <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
                     Bag
                   </p>
                 </div>
 
-                <div onClick={handleOpenConfirmLogoutDialog} className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center">
+                <div
+                  onClick={handleOpenConfirmLogoutDialog}
+                  className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center"
+                >
                   <PowerSettingsNewOutlinedIcon />
                   <p className="text-[14px] my-[0px] font-[500] ml-[15px]">
                     Logout
@@ -345,7 +355,7 @@ const CustomBox = styled(
   scrollbarWidth: "thin",
   display: "flex",
   flexDirection: "column",
-  scrollbarColor: '#3880FF #f1f1f1',
+  scrollbarColor: "#3880FF #f1f1f1",
   transition: "all 0.3s ease",
   "&.closed": {
     transform: "translateX(-100%)",
