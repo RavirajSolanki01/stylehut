@@ -592,7 +592,6 @@ const CartItemsList: React.FC<Props> = ({
                     <div className="absolute top-4.5 sm:top-0.5 z-1 rounded">
                       <Checkbox
                         checked={item.isSelected}
-                        disabled={!item.isAvailable}
                         onChange={() => handleSelectItem(item.id)}
                         className="mr-4"
                         sx={{

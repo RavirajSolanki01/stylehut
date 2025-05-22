@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { postAddToCart } from "../../services/cartService";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { Product, ProductStockItem } from "../../utils/types";
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams();
@@ -71,6 +72,8 @@ const ProductDetailPage: React.FC = () => {
   const [isWishlisted, setIsWishlist] = useState<boolean>(false);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [productSizes, setProductSizes] = useState<ProductStockItem[]>([]);
+  const [relatedProductVariants, setRelatedProductVariants] = useState<Product[]>([]);
 
   const { users } = useSelector((state: RootState) => ({
     users: state.users.user,
@@ -82,7 +85,10 @@ const ProductDetailPage: React.FC = () => {
     try {
       if (!!id) {
         const productData = await getProductDetails(Number(id));
+        const productVariants = productData?.data?.data?.relatedProducts
+        setRelatedProductVariants(productVariants)
         setProductData(productData.data.data);
+        setProductSizes(productData.data.data.size_quantities)
         setIsLoading(false);
       }
     } catch (error) {
@@ -200,6 +206,9 @@ const ProductDetailPage: React.FC = () => {
             <div className="col-span-12 md:col-span-2 ">
               <ProductPrice
                 productName={productData.name}
+                category={productData.category}
+                availableSize={productSizes}
+                relatedProductVariants={relatedProductVariants}
                 brandName={productData?.brand?.name}
                 price={productData?.price as number}
                 discount={productData?.discount as number}
