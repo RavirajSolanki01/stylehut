@@ -1,30 +1,21 @@
-import { Autocomplete, InputAdornment, TextField, styled } from "@mui/material";
 import { useEffect, useState } from "react";
+import { Autocomplete, InputAdornment, TextField, styled } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import SearchIcon from "@mui/icons-material/Search";
+import useDebounce from "../../hooks";
 import { getheaderSearch } from "../../services/headerSearch";
 import { setLoading } from "../../store/slice/loading.slice";
-import { headerMenuItems } from "../../utils/constants";
 import { ISearchOption } from "../../utils/types";
-import useDebounce from "../../hooks";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { useNavigate } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
 
 export const HeaderSearch: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { categoryList } = useSelector((state: RootState) => ({
-    categoryList: state.categories,
-  }));
   const [inputValue, setInputValue] = useState("");
   const debouncedSearchTerm = useDebounce(inputValue, 500);
-  const [menuItems, setMenuItems] = useState<
-    { label: string; color: string; id: number }[]
-  >(categoryList.categories);
   const [options, setOptions] = useState<ISearchOption[]>([]);
   useEffect(() => {
-    // dispatch(setLoading({ key: "search", value: true }));
     if (debouncedSearchTerm)
       getheaderSearch(inputValue)
         .then((res) => {
@@ -50,7 +41,6 @@ export const HeaderSearch: React.FC = () => {
           }
         })
         .catch((err) => {
-          setMenuItems(headerMenuItems);
           const errorMessage =
             err?.response?.data?.message ||
             err?.response?.data ||

@@ -8,20 +8,18 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
-  Autocomplete,
-  InputAdornment,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Logo } from "../../assets";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { useNavigate } from "react-router-dom";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import { Logo } from "../../assets";
+import { RootState } from "../../store";
 import { CategoryResponse } from "../../utils/types";
 import { HeaderSearch } from "../HeaderSearch";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import { ConfirmLogoutModal } from "../ConfirmLogoutDialog";
 import { removeAuthToken } from "../../store/slice/auth.slice";
 import { removeLoggedInUser } from "../../store/slice/users.slice";
