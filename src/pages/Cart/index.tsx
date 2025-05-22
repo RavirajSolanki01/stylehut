@@ -70,7 +70,7 @@ export const ProductCart: React.FC = () => {
     const items: CartItems[] = response.data.data.items.map((item: any) => ({
       ...item,
       isSelected: false,
-      isAvailable: item.product?.quantity > 0,
+      isAvailable: item?.quantity > 0,
     }));
     setCartItems(items);
   };
@@ -423,11 +423,10 @@ const CartItemsList: React.FC<Props> = ({
 
   const refreshCart = async () => {
     const response = await getCartProducts({ page: 1, pageSize: 100 });
-
     const items: CartItems[] = response.data.data.items.map((item: any) => ({
       ...item,
       isSelected: false,
-      isAvailable: item.product?.quantity > 0,
+      isAvailable: item?.quantity > 0,
     }));
 
     setDefaultAddress(response.data.data.defaultAddress);
@@ -592,6 +591,7 @@ const CartItemsList: React.FC<Props> = ({
                     <div className="absolute top-4.5 sm:top-0.5 z-1 rounded">
                       <Checkbox
                         checked={item.isSelected}
+                        disabled={!item.isAvailable}
                         onChange={() => handleSelectItem(item.id)}
                         className="mr-4"
                         sx={{
