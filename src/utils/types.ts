@@ -165,3 +165,24 @@ export interface Brand {
   updated_at: string;
   is_deleted: boolean;
 }
+
+export interface SizeData {
+  id: number;
+  size: string;
+  name: string;
+  create_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+}
+export interface ProductStockItem {
+  id: number;
+  quantity: number;
+  product_id: string | null;
+  custom_product_id: string;
+  variant_id: string | null;
+  size_id: number;
+  create_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+  size_data: SizeData;
+}

@@ -7,10 +7,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
 import { ArrowRightAltSharp, Favorite } from "@mui/icons-material";
 
-import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 import { DeliveryIcon } from "../../../assets";
 import { getRatingColor } from "../../../utils/reusable-functions";
 import SizeChart from "../SizeChart";
+import { Product, ProductStockItem } from "../../../utils/types";
+import { clothingSizeOrder, volumeSizeRegex } from "../../../utils/constants";
 
 const ProductPrice = ({
   productName,
@@ -25,6 +26,9 @@ const ProductPrice = ({
   isWishlisted = false,
   isAddedToCart,
   images,
+  availableSize,
+  relatedProductVariants,
+  category
 }: {
   productName: string;
   brandName: string;
@@ -38,13 +42,50 @@ const ProductPrice = ({
   isWishlisted?: boolean;
   isAddedToCart?: boolean;
   images: string[];
+  availableSize: ProductStockItem[];
+  relatedProductVariants: Product[];
+  category: { id: number; name: string };
 }) => {
   const navigate = useNavigate();
 
-  const [isOpenSizeChart, setIsOpenSizeChart] = useState(false);
+  const [isOpenSizeChart, setIsOpenSizeChart] = useState<boolean>(false);
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [sizeError, setSizeError] = useState<string>("");
   const handleSizeChartClick = () => {
     setIsOpenSizeChart(!isOpenSizeChart);
   };
+
+  const handleGotoProduct = (product_id: number) => {
+    navigate(`/product-detail/${product_id}`);
+  };
+
+  const sortSizes = (sizes: string[]): string[] => {
+    return sizes.slice().sort((a, b) => {
+      if (clothingSizeOrder.includes(a) && clothingSizeOrder.includes(b)) {
+        return clothingSizeOrder.indexOf(a) - clothingSizeOrder.indexOf(b);
+      }
+
+      if (volumeSizeRegex.test(a) && volumeSizeRegex.test(b)) {
+        const getMlValue = (val: string): number => {
+          const match = val.match(volumeSizeRegex);
+          if (!match) return Infinity;
+          const num = parseFloat(match[1]);
+          const unit = match[2].toLowerCase();
+          return unit === "ltr" || unit === "l" ? num * 1000 : num;
+        };
+
+        return getMlValue(a) - getMlValue(b);
+      }
+
+      if (!isNaN(Number(a)) && !isNaN(Number(b))) {
+        return Number(a) - Number(b);
+      }
+      return a.localeCompare(b);
+    });
+  };
+
+  const isBeautyProducts = category.name.toLocaleLowerCase() === "beauty"
+
   return (
     <div className="flex flex-col items-start">
       {/* product info */}
@@ -96,16 +137,24 @@ const ProductPrice = ({
 
       {/* product color */}
       <div className="my-[12px]">
-        <div className="font-[700] text-[16px] m-[0px] text-start mb-[15px]">
-          MORE COLORS
-        </div>
-        <div className="flex gap-[15px] flex-wrap">
-          {PRODUCT_DETAIL_CONSTANTS.MORE_COLOR_PRODUCT_IMAGES.map(
-            (img, index) => (
-              <img alt="" src={img} key={index} className="h-[73px] w-[55px]" />
-            )
-          )}
-        </div>
+        {relatedProductVariants.length > 0 && (
+          <>
+            <div className="font-[700] text-[16px] m-[0px] text-start mb-[15px]">
+              MORE {isBeautyProducts ? "OPTIONS":"COLORS"}
+            </div>
+            <div className="flex gap-[15px] flex-wrap">
+              {relatedProductVariants?.map((variant, index) => (
+                <img
+                  onClick={() => handleGotoProduct(variant.id)}
+                  alt={variant.name}
+                  src={variant.image[0]}
+                  key={index}
+                  className="h-[73px] w-[55px] hover:cursor-pointer"
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
       {/* end product color */}
 
@@ -120,33 +169,55 @@ const ProductPrice = ({
           <NavigateNextIcon />
         </div>
       </div>
+
+
       <div className="flex gap-[10px] mb-[10px]">
-        {PRODUCT_DETAIL_CONSTANTS.PRODUCT_SIZE.map((sizeInfo) => (
-          <div className="relative w-[50px]" key={sizeInfo.id}>
-            <button
-              className={`${
-                sizeInfo.quantity === 0 ? "size-button-disabled" : ""
-              } size-button-default`}
-            >
-              {sizeInfo.size}
-            </button>
-            {sizeInfo.quantity <= 3 && sizeInfo.quantity !== 0 ? (
-              <span className="size-left-item leading-[15px]">2 left</span>
-            ) : (
-              <></>
-            )}
-            {sizeInfo.quantity === 0 ? (
-              <span className="size-strike-show"></span>
-            ) : (
-              <></>
-            )}
-          </div>
-        ))}
+        {sortSizes(
+          availableSize.map((sizeInfo) => sizeInfo.size_data.size)
+        ).map((size) => {
+          const sizeInfo = availableSize.find(
+            (item) => item.size_data.size === size
+          );
+          const isSelected = sizeInfo?.size_data?.size === selectedSize
+          
+          return (
+            <div className="relative w-[50px]" key={sizeInfo?.id}>
+              <button
+                onClick={() => {
+                  setSelectedSize(size);
+                  setSizeError("");
+                }}
+                className={`${
+                  sizeInfo?.quantity === 0 ? "size-button-disabled" : ""
+                } size-button-default ${
+                  isSelected ? "!border-2 !border-[#3880FF]" : ""
+                }`}
+              >
+                {size}
+              </button>
+              {Number(sizeInfo?.quantity) <= 3 && sizeInfo?.quantity !== 0 ? (
+                <span className="size-left-item leading-[15px]">
+                  {sizeInfo?.quantity} left
+                </span>
+              ) : (
+                <></>
+              )}
+              {Number(sizeInfo?.quantity) === 0 ? (
+                <span className="size-strike-show"></span>
+              ) : (
+                <></>
+              )}
+            </div>
+          );
+        })}
       </div>
+      {sizeError && (
+        <p className="text-red-400 text-sm mb-2">{sizeError}</p>
+      )}
       {/* product size */}
 
       {/* add bag and wishlist button */}
-      <div className="flex gap-[10px] h-[54px] w-full mb-[23px]  flex-wrap sm:flex-nowrap ">
+      <div className="flex gap-[10px] h-[54px] w-full mb-[23px] flex-wrap sm:flex-nowrap">
         {isAddedToCart ? (
           <button
             onClick={() => navigate("/cart")}
@@ -157,8 +228,14 @@ const ProductPrice = ({
           </button>
         ) : (
           <button
-            onClick={addToCart}
-            className="cursor-pointer bg-[#3880FF]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#3880FF] hover:border-transparent h-10"
+            onClick={() => {
+              if (!selectedSize) {
+                setSizeError("Please select a size");
+                return;
+              }
+              addToCart?.();
+            }}
+            className="cursor-pointer bg-[#3880FF] w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#3880FF] hover:border-transparent h-10"
           >
             <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
             <span>ADD TO BAG</span>

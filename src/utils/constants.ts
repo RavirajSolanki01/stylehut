@@ -53,7 +53,19 @@ export const colorMap: Record<string, string> = {
   GENZ: "#3880FF",
   Studio: "#f26a10",
 };
-
+export const clothingSizeOrder = [
+  "XXS",
+  "XS",
+  "S",
+  "M",
+  "L",
+  "XL",
+  "XXL",
+  "3XL",
+  "4XL",
+  "5XL",
+];
+export const volumeSizeRegex = /(\d+(?:\.\d+)?)\s*(ml|ltr|l|g|kg)/i;
 export const ShopByCategoryData = [
   {
     imageUrl: CasualWear,
