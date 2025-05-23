@@ -1,6 +1,7 @@
 import { Dialog, FormControl, CircularProgress } from "@mui/material";
 import React from "react";
 import { Control, Controller, FieldErrors } from "react-hook-form";
+
 import {
   CustomInput,
   CustomRadioGroup,
@@ -63,6 +64,12 @@ export const AddressDialog: React.FC<AddressDialogProps> = ({
                       helperText={errors.full_name?.message}
                       variant="outlined"
                       autoComplete="off"
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        if (inputValue.length <= 30) {
+                          field.onChange(inputValue);
+                        }
+                      }}
                     />
                   )}
                 />
@@ -141,6 +148,12 @@ export const AddressDialog: React.FC<AddressDialogProps> = ({
                       error={Boolean(errors.address_line1)}
                       helperText={errors.address_line1?.message}
                       variant="outlined"
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        if (inputValue.length <= 40) {
+                          field.onChange(inputValue);
+                        }
+                      }}
                     />
                   )}
                 />
@@ -157,6 +170,12 @@ export const AddressDialog: React.FC<AddressDialogProps> = ({
                       error={Boolean(errors.address_line2)}
                       helperText={errors.address_line2?.message}
                       variant="outlined"
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        if (inputValue.length <= 25) {
+                          field.onChange(inputValue);
+                        }
+                      }}
                     />
                   )}
                 />

@@ -20,10 +20,14 @@ import {
   Tooltip,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CloseIcon from "@mui/icons-material/Close";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { toast } from "react-toastify";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+
 import CODIcon from "../../../assets/Cart/SVGs/CODIcon";
 import UPIIcon from "../../../assets/Cart/SVGs/UPIIcon";
-import CloseIcon from "@mui/icons-material/Close";
 import GiftCardIcon from "../../../assets/Cart/SVGs/GiftCardIcon";
 import {
   all_banks_list_for_net_banking,
@@ -34,14 +38,10 @@ import {
 } from "../../../utils/constants";
 import { CustomRadioButton } from "../../../components/UserProfile/Addresses";
 import QRIcon from "../../../assets/Cart/SVGs/QRIcon";
-import { toast } from "react-toastify";
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 type Props = {
   totalPrice: string;
 };
-
 interface CardFormData {
   cardNumber: string;
   nameOnCard: string;
@@ -50,18 +50,19 @@ interface CardFormData {
 }
 
 const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
+
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState("Recommended");
-  const [selectedSubPaymentMethod, setSelectedSubPaymentMethod] = useState("");
-  const [upiId, setUpiId] = useState("");
-  const [upiError, setUpiError] = useState("");
+    useState<string>("Recommended");
+  const [selectedSubPaymentMethod, setSelectedSubPaymentMethod] = useState<string>("");
+  const [upiId, setUpiId] = useState<string>("");
+  const [upiError, setUpiError] = useState<string>("");
   const [selectedBankFromOther, setSelectedBankFromOther] =
-    useState("Other Banks");
-  const [isSelectingOtherBank, setIsSelectingOtherBank] = useState(false);
-  const [cardNumber, setCardNumber] = useState("");
-  const [cardPin, setCardPin] = useState("");
-  const [isGiftCardOpen, setIsGiftCardOpen] = useState(false);
-  const [showMore, setShowMore] = useState(false);
+    useState<string>("Other Banks");
+  const [isSelectingOtherBank, setIsSelectingOtherBank] = useState<boolean>(false);
+  const [cardNumber, setCardNumber] = useState<string>("");
+  const [cardPin, setCardPin] = useState<string>("");
+  const [isGiftCardOpen, setIsGiftCardOpen] = useState<boolean>(false);
+  const [showMore, setShowMore] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<CardFormData>({
     cardNumber: "",

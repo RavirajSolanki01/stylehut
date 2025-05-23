@@ -1,14 +1,14 @@
+import React from "react";
 import { Box, Typography, IconButton, Divider, Drawer } from "@mui/material";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
-import { formatPrice } from "../../../utils/reusable-functions";
-import { toast } from "react-toastify";
-import { postAddToCart } from "../../../services/cartService";
-import { useDispatch } from "react-redux";
-import { setLoading } from "../../../store/slice/loading.slice";
-import React from "react";
-import { SimilarProducts } from "../../../utils/constants";
 
+import { formatPrice } from "../../../utils/reusable-functions";
+import { postAddToCart } from "../../../services/cartService";
+import { setLoading } from "../../../store/slice/loading.slice";
+import { SimilarProducts } from "../../../utils/constants";
 interface ProductCardProps {
   product: any;
   onRemove: (product_id: number) => void;
@@ -26,14 +26,16 @@ const ProductCardBase = ({
   showOutOfStock = false,
   fetchWishlist,
 }: ProductCardProps) => {
-  const productData = product.products;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [open, setOpen] = React.useState<boolean>(false);
+
+  const productData = product.products;
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const getDiscountedPrice = (price: number, discountPercent: number): number =>
     Math.floor(price - (price * discountPercent) / 100);
@@ -69,6 +71,7 @@ const ProductCardBase = ({
       dispatch(setLoading({ key: "Add-to-cart", value: false }));
     }
   };
+
   return (
     <>
       <Box

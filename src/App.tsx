@@ -1,8 +1,10 @@
 import { Routes, Route } from "react-router-dom";
+import React from "react";
+import { useSelector } from "react-redux";
+
 import "./App.css";
 import { LoginPage } from "./pages/Login";
 import { VerifyOtpPage } from "./pages/VerifyOTP";
-import React from "react";
 import { PRIVATE_ROUTES, PUBLIC_ROUTES } from "./routes";
 import { HomePage } from "./pages/Home";
 import { Profile } from "./pages/Profile";
@@ -27,7 +29,6 @@ import { Header } from "./components/Header/index.tsx";
 import { Wishlist } from "./pages/Wishlist/index.tsx";
 import ProductDetailPage from "./pages/Product/index.tsx";
 import "./style.css";
-import { useSelector } from "react-redux";
 import { RootState } from "./store/index.ts";
 import { ProductCart } from "./pages/Cart/index.tsx";
 import { Reviews } from "./pages/Reviews/index.tsx";

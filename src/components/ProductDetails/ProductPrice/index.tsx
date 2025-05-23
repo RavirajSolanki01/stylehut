@@ -46,11 +46,13 @@ const ProductPrice = ({
   relatedProductVariants: Product[];
   category: { id: number; name: string };
 }) => {
+  
   const navigate = useNavigate();
 
   const [isOpenSizeChart, setIsOpenSizeChart] = useState<boolean>(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [sizeError, setSizeError] = useState<string>("");
+
   const handleSizeChartClick = () => {
     setIsOpenSizeChart(!isOpenSizeChart);
   };

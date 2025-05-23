@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { getPrivacyPolicy } from "../../../services/termsService";
 
 export const PrivacyPolicy = () => {

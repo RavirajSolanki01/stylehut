@@ -8,18 +8,19 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
-import { FormAddressData } from "../../../utils/types";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { AddressDialog } from "../../../components/AddressDialog";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
 import { useForm, useWatch } from "react-hook-form";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   CustomCheckbox,
   schema,
 } from "../../../components/UserProfile/Addresses";
 import { RootState } from "../../../store";
-import { toast } from "react-toastify";
 import {
   getAddresses,
   postAddress,
@@ -29,15 +30,16 @@ import {
 } from "../../../services/userAddresses";
 import { setLoading } from "../../../store/slice/loading.slice";
 import ConfirmDeleteDialog from "../../../components/AddressDialog/DeleteAddressDialog";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { AddressDialog } from "../../../components/AddressDialog";
+import { FormAddressData } from "../../../utils/types";
 
 interface ChangeAddressModalProps {
   openAddressDialog: boolean;
   handleCloseAddressDialog: () => void;
-  setDefaultAddress: React.Dispatch<React.SetStateAction<FormAddressData | null>>;
+  setDefaultAddress: React.Dispatch<
+    React.SetStateAction<FormAddressData | null>
+  >;
 }
-
 interface AddressCardProps {
   address: FormAddressData;
   isSelected: boolean;
@@ -52,18 +54,17 @@ export const ChangeAddressModal: React.FC<ChangeAddressModalProps> = ({
   setDefaultAddress,
   handleCloseAddressDialog,
 }) => {
+  const dispatch = useDispatch();
+
+  const isLoading = useSelector((state: RootState) => state.loading["address"]);
+
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
   const [addresses, setAddresses] = useState<FormAddressData[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     null
   );
-
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-
-  const [open, setOpen] = React.useState(false);
-  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-
-  const isLoading = useSelector((state: RootState) => state.loading["address"]);
-  const dispatch = useDispatch();
 
   const {
     handleSubmit,
@@ -156,7 +157,7 @@ export const ChangeAddressModal: React.FC<ChangeAddressModalProps> = ({
           items.find((a: FormAddressData) => a.is_default) || {};
         setAddresses(items);
         setSelectedAddressId(defaultAddress?.id);
-        setDefaultAddress(defaultAddress)
+        setDefaultAddress(defaultAddress);
       },
     });
 
@@ -266,6 +267,7 @@ export const ChangeAddressModal: React.FC<ChangeAddressModalProps> = ({
   useEffect(() => {
     fetchAddresses();
   }, []);
+
   return (
     <Dialog
       open={openAddressDialog}

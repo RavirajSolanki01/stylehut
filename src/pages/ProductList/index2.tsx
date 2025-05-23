@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -8,6 +8,7 @@ import {
   Paper,
   Divider,
 } from "@mui/material";
+
 import {
   listing_page_data,
   brandsData,
@@ -115,7 +116,7 @@ const ProductCard = ({ product }: { product: any }) => {
   );
 };
 
-export const ProductList = () => {
+export const ProductList: React.FC = () => {
   return (
     <Box p={3}>
       <Typography

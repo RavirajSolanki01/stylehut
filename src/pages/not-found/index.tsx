@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const fashionTags = [
@@ -27,7 +28,7 @@ const fashionTags = [
     path: '/product-list?category=KIDSrequestid3'
   }
 ];
-const NotFoundPage = () => {
+const NotFoundPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F9FF] bg-pattern px-4 py-12 text-center">

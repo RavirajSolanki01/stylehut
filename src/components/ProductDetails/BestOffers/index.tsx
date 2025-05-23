@@ -1,5 +1,6 @@
-import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
+
+import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 
 const BestOffers = () => {
   return (

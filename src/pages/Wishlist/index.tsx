@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+
 import { getWishlist, postWishlist } from "../../services/wishlistService";
 import { setLoading } from "../../store/slice/loading.slice";
-import { useDispatch } from "react-redux";
 import { LoaderOverlay } from "../../components/Loader";
 import ProductCardBase from "./components/ProductCard";
 import EmptyCart from "./empty.svg";
 
-export const Wishlist = () => {
+export const Wishlist: React.FC = () => {
   const dispatch = useDispatch();
+  
   const [wishlist_page_data, setWishlist_page_data] = useState<any>([]);
 
   const handleRemoveFromWishlist = (product_id: number) => {
