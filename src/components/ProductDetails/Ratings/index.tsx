@@ -1,6 +1,7 @@
 import HotelClassOutlinedIcon from "@mui/icons-material/HotelClassOutlined";
 import StarIcon from "@mui/icons-material/Star";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
+
 import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 
 const ProductRating = ({
@@ -12,6 +13,7 @@ const ProductRating = ({
   totalRating: number;
   distribution: { 1: number; 2: number; 3: number; 4: number; 5: number };
 }) => {
+  
   const productRating =
     distribution &&
     Object.entries(distribution).map(([key, value]) => ({

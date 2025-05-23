@@ -1,8 +1,8 @@
 import { Dialog, styled, IconButton } from "@mui/material";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 
+import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 interface QuantityModalProps {
   openQuantityDialog: boolean;
   selectedQuantity: number;

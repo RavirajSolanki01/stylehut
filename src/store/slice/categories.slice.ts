@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 import { CategoryResponse } from "../../utils/types";
 
 type Categories = { label: string; color: string; id: number };

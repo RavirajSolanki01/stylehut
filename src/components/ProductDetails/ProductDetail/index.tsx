@@ -1,9 +1,11 @@
 "use client";
-import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
-import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 import { useState } from "react";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+
+import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 
 const ProductDetail = ({ description }: { description: string }) => {
+  
   const [expanded, setExpanded] = useState(false);
   const VISIBLE_COUNT = 8;
 

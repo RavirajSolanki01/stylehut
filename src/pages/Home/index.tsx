@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Box } from "@mui/material";
+
 import {
   Coupon1,
   Coupon2,
@@ -13,12 +15,12 @@ import {
   Slide4,
   Slide5,
 } from "../../assets";
-import { Box } from "@mui/material";
 import { ShopByCategoryData } from "../../utils/constants";
 
 export const HomePage: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const images = [Slide1, Slide5, Slide2, Slide3, Slide4];
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) =>
@@ -28,6 +30,7 @@ export const HomePage: React.FC = () => {
 
     return () => clearInterval(timer);
   }, [images.length, 3000]);
+  
   return (
     <div>
       <div className="flex justify-center max-w-[1300px] w-full mx-auto items-center overflow-auto">

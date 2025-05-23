@@ -1,9 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 import { UserProfile } from "../../../assets";
 import { RootState } from "../../../store";
 import { useNavigate } from "react-router-dom";
 import { removeAuthToken } from "../../../store/slice/auth.slice";
-import React, { useState } from "react";
 import {
   accountSections,
   FooterSections,
@@ -12,18 +14,17 @@ import {
   ProfileSection,
 } from "../../../utils/constants";
 import { removeLoggedInUser } from "../../../store/slice/users.slice";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { ConfirmLogoutModal } from "../../ConfirmLogoutDialog";
 
 export const Overview: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { users } = useSelector((state: RootState) => ({
     users: state.users.user,
   }));
 
   const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleNavigate = (path: string) => {
     navigate(`/profile/${path}`);

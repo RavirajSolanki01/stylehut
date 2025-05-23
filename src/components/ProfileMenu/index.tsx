@@ -1,7 +1,7 @@
 import React from "react";
-import { ProfileDataItems, ProfileMenuItems } from "../../utils/constants";
 import { Popover } from "@mui/material";
 
+import { ProfileDataItems, ProfileMenuItems } from "../../utils/constants";
 interface ProfileMenuProps {
   id: string;
   open: boolean;

@@ -16,6 +16,7 @@ import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOu
 import { useNavigate } from "react-router-dom";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+
 import { Logo } from "../../assets";
 import { RootState } from "../../store";
 import { CategoryResponse } from "../../utils/types";

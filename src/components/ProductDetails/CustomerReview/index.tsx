@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { DislikeIcon, LikeIcon } from "../../../assets";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
-import { getRatingColor } from "../../../utils/reusable-functions";
 import moment from "moment";
+
+import { getRatingColor } from "../../../utils/reusable-functions";
+import { DislikeIcon, LikeIcon } from "../../../assets";
 
 const CustomerReview = ({
   reviewArr,

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { DeleteAccountImage } from "../../../assets";
 import { Checkbox, FormControlLabel } from "@mui/material";
+
+import { DeleteAccountImage } from "../../../assets";
 
 export const DeleteAccount: React.FC = () => {
   const [checked, setChecked] = useState<boolean>(false);
@@ -8,6 +9,7 @@ export const DeleteAccount: React.FC = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
+
   return (
     <div className="my-[15px] max-w-[810px] w-full border border-[#d2d2d2] p-[30px] delete-account">
       <div className="w-full mx-auto">
@@ -89,7 +91,7 @@ export const DeleteAccount: React.FC = () => {
             disabled:text-[#3880FF] disabled:border-[#3880FF] disabled:cursor-not-allowed
             focus:outline-none hover:outline-none hover:border-[#3880FF] delete-account-buttons"
           >
-           Delete Anyway
+            Delete Anyway
           </button>
           <button
             type="submit"

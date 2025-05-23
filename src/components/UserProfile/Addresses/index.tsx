@@ -14,7 +14,9 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, useWatch } from "react-hook-form";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
 import { pink } from "@mui/material/colors";
+
 import { AddressCardProps, FormAddressData } from "../../../utils/types";
 import {
   deleteAddress,
@@ -23,7 +25,6 @@ import {
   postAddress,
   updateAddress,
 } from "../../../services/userAddresses";
-import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../../store/slice/loading.slice";
 import { toast } from "react-toastify";
 import { JSX } from "react/jsx-runtime";
@@ -32,6 +33,11 @@ import { AddressDialog } from "../../AddressDialog";
 import ConfirmDeleteDialog from "../../AddressDialog/DeleteAddressDialog";
 
 export const Addresses: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const isLoading = useSelector((state: RootState) => state.loading["address"]);
+
+  const [open, setOpen] = React.useState(false);
   const [defaultIndex, setDefaultIndex] = useState<number>(0);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -40,10 +46,6 @@ export const Addresses: React.FC = () => {
   const [defaultAddress, setDefaultAddress] = useState<FormAddressData | null>(
     null
   );
-
-  const [open, setOpen] = React.useState(false);
-  const dispatch = useDispatch();
-  const isLoading = useSelector((state: RootState) => state.loading["address"]);
 
   const {
     handleSubmit,
@@ -128,24 +130,6 @@ export const Addresses: React.FC = () => {
   };
 
   const pincode = useWatch({ control, name: "postal_code" });
-
-  useEffect(() => {
-    const fetchLocationDetails = async () => {
-      if (pincode?.length === 6) {
-        const response = await fetch(
-          `https://api.postalpincode.in/pincode/${pincode}`
-        );
-        const data = await response.json();
-        const postOffice = data[0]?.PostOffice?.[0];
-
-        if (postOffice) {
-          setValue("state", postOffice.State);
-          setValue("city", postOffice.District);
-        }
-      }
-    };
-    fetchLocationDetails();
-  }, [pincode, setValue]);
 
   const getErrorMessage = (err: any) =>
     err?.response?.data?.message ||
@@ -238,6 +222,24 @@ export const Addresses: React.FC = () => {
     const updated = { ...addresses[id], is_default: true };
     handleUpdateAddress(updated);
   };
+
+  useEffect(() => {
+    const fetchLocationDetails = async () => {
+      if (pincode?.length === 6) {
+        const response = await fetch(
+          `https://api.postalpincode.in/pincode/${pincode}`
+        );
+        const data = await response.json();
+        const postOffice = data[0]?.PostOffice?.[0];
+
+        if (postOffice) {
+          setValue("state", postOffice.State);
+          setValue("city", postOffice.District);
+        }
+      }
+    };
+    fetchLocationDetails();
+  }, [pincode, setValue]);
 
   useEffect(() => {
     fetchAddresses();

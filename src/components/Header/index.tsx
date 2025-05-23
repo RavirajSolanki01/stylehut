@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
+
 import { RootState } from "../../store";
 import { colorMap, headerMenuItems } from "../../utils/constants";
 import { Logo } from "../../assets";
@@ -26,19 +27,19 @@ import { getCartProducts } from "../../services/cartService";
 import { HeaderSearch } from "../HeaderSearch";
 
 export const Header: React.FC = () => {
-  const { auth, categoryList } = useSelector((state: RootState) => ({
-    auth: state.auth,
-    categoryList: state.categories,
-  }));
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const buttonRef = useRef<HTMLDivElement | null>(null);
   const headerItemRefs = useRef<(HTMLLIElement | null)[]>([]);
 
-  const [cartItemsCount, setCartItemsCount] = useState<number | null>(0);
+  const { auth, categoryList } = useSelector((state: RootState) => ({
+    auth: state.auth,
+    categoryList: state.categories,
+  }));
 
+  const [cartItemsCount, setCartItemsCount] = useState<number | null>(0);
+  const [labelValue, setLabelValue] = useState("");
   const [activePopoverIndex, setActivePopoverIndex] = useState<number | null>(
     null
   );
@@ -51,8 +52,11 @@ export const Header: React.FC = () => {
   const [categories, setCategories] = useState<CategoryResponse[]>(
     categoryList.subCategories as CategoryResponse[]
   );
-  const [labelValue, setLabelValue] = useState("");
+
   const isUserLoggedIn = useMemo(() => !!auth?.token?.length, [auth.token]);
+
+  const open = Boolean(hoveredProfile);
+  const id = open ? "profile-popover" : undefined;
 
   const handlePopoverOpen = () => {
     if (window.innerWidth < 1380 && auth.token) {
@@ -63,8 +67,6 @@ export const Header: React.FC = () => {
   };
 
   const handlePopoverClose = () => setHoveredProfile(null);
-  const open = Boolean(hoveredProfile);
-  const id = open ? "profile-popover" : undefined;
 
   const handleNavigate = (path: string) => {
     if (labelValue?.length) {
@@ -87,7 +89,9 @@ export const Header: React.FC = () => {
 
   useEffect(() => {
     const hasFetched = sessionStorage.getItem("hasFetchedCategories");
-    withLoading(dispatch, "refresh-cart", refreshCart);
+    if (auth.token) {
+      withLoading(dispatch, "refresh-cart", refreshCart);
+    }
 
     if (!hasFetched || !categories.length || !menuItems.length) {
       dispatch(setLoading({ key: "category", value: true }));

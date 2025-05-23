@@ -186,3 +186,41 @@ export interface ProductStockItem {
   is_deleted: boolean;
   size_data: SizeData;
 }
+
+export interface ProductDetails {
+  id: number;
+  ratings?: {
+    description: string;
+    ratings: number;
+    images: string[];
+    reviewer?: string;
+    updated_at?: string;
+    likes?: number;
+    dislikes?: number;
+    users?: {
+      first_name: string;
+      last_name: string;
+      profile_url: string;
+    };
+  }[];
+  name: string;
+  category: { name: string; id: number };
+  sub_category: { name: string; id: number };
+  sub_category_type: { name: string; id: number };
+  brand: { name: string };
+  price?: number;
+  discount?: number;
+  description?: string;
+  image?: string[];
+  ratingStats?: {
+    averageRating?: number;
+    totalRatings?: number;
+    distribution?: {
+      1: number;
+      2: number;
+      3: number;
+      4: number;
+      5: number;
+    };
+  };
+}

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { ProfileDataItems, ProfileMenuItems } from "../../utils/constants";
 import { Popover } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { ProfileDataItems, ProfileMenuItems } from "../../utils/constants";
 import { removeAuthToken } from "../../store/slice/auth.slice";
 import { RootState } from "../../store";
-import { useNavigate } from "react-router-dom";
 import { removeLoggedInUser } from "../../store/slice/users.slice";
 import { ConfirmLogoutModal } from "../ConfirmLogoutDialog";
 
@@ -25,12 +26,16 @@ export const LoggedInUserProfileMenu: React.FC<LoggedInProfileMenuProps> = ({
   handlePopoverOpen,
   handleNavigate,
 }) => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
   const { users } = useSelector((state: RootState) => ({
     users: state.users.user,
   }));
+
   const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+
 
   const handleLogout = () => {
     handleNavigate("/login");

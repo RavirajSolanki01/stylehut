@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Header } from "../../components/Header";
-import { Verify_Otp } from "../../assets";
-import { OutlinedInput, styled, Typography } from "@mui/material";
-import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { OutlinedInput, styled, Typography } from "@mui/material";
+import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
+
 import { RootState } from "../../store";
 import { registerUser, verifyOtp } from "../../services/userService";
-import { toast } from "react-toastify";
 import { addAuthToken } from "../../store/slice/auth.slice";
-import { useNavigate } from "react-router-dom";
-import { setLoading } from "../../store/slice/loading.slice";
+import { setLoading } from "../../store/slice/loading.slice";import { Header } from "../../components/Header";
+import { Verify_Otp } from "../../assets";
 
 type FormData = {
   digit1: string;
@@ -19,13 +19,14 @@ type FormData = {
 };
 
 export const VerifyOtpPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
   const { users } = useSelector((state: RootState) => ({
     users: state.users.user,
   }));
-
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [timer, setTimer] = useState<number>(30);
   const [isResendDisabled, setIsResendDisabled] = useState<boolean>(true);

@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Logo } from "../../assets";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 import {
   getCartProducts,
   moveAllFromCartToWishlist,
@@ -10,12 +14,8 @@ import {
   removeFromCart,
 } from "../../services/cartService";
 import { CartItems, Coupon, FormAddressData, Product } from "../../utils/types";
-import { toast } from "react-toastify";
 import { postWishlist } from "../../services/wishlistService";
-import { useDispatch, useSelector } from "react-redux";
 import { LoaderOverlay } from "../../components/Loader";
-import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { CartAddresses } from "./CartAddress";
 import { SizeModal } from "./Dialogs/SizeModal";
 import { QuantityModal } from "./Dialogs/QuantityModal";
@@ -25,6 +25,7 @@ import { addAppliedCoupon } from "../../store/slice/cart.slice";
 import { RootState } from "../../store";
 import { ConfirmDeleteModal } from "./Dialogs/ConfirmDeleteModal";
 import { formatPrice, withLoading } from "../../utils/reusable-functions";
+import { Logo } from "../../assets";
 import EmptyCart from "./empty.svg";
 import CheckoutScreen from "./Checkout";
 
@@ -41,7 +42,9 @@ type Props = {
 export const ProductCart: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const steps = ["BAG", "ADDRESS", "PAYMENT"];
+
   const [cartItems, setCartItems] = useState<CartItems[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -170,17 +173,19 @@ const PriceSummary: React.FC<Props> = ({
   activeStep,
   disabled,
 }) => {
+  const dispatch = useDispatch();
+
   const { selectedCoupon, availableCoupons } = useSelector(
     (state: RootState) => ({
       selectedCoupon: state.cart.coupon,
       availableCoupons: state.cart.availableCoupons,
     })
   );
-  const [openCouponDialog, setOpenCouponDialog] = useState(false);
-  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(
-    selectedCoupon
+
+  const [openCouponDialog, setOpenCouponDialog] = useState<boolean>(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | undefined>(
+    selectedCoupon as Coupon
   );
-  const dispatch = useDispatch();
 
   const handleCloseCouponDialog = () => setOpenCouponDialog(false);
   const handleOpenCouponDialog = () => {
@@ -189,7 +194,7 @@ const PriceSummary: React.FC<Props> = ({
 
   const handleApplyCoupon = (coupon: typeof appliedCoupon) => {
     setAppliedCoupon(coupon);
-    dispatch(addAppliedCoupon(coupon));
+    dispatch(addAppliedCoupon(coupon as Coupon));
     handleCloseCouponDialog();
   };
 

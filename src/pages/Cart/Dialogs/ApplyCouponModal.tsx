@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, styled, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { toast } from "react-toastify";
-import { setLoading } from "../../../store/slice/loading.slice";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+
+import { setLoading } from "../../../store/slice/loading.slice";
 import { getCouponsForUser } from "../../../services/cartService";
 import { Coupon } from "../../../utils/types";
 import { RootState } from "../../../store";
@@ -13,7 +14,7 @@ interface ApplyCouponModalProps {
   openCouponDialog: boolean;
   totalAmount: number;
   handleCloseCouponDialog: () => void;
-  onApplyCoupon: (coupon: Coupon | null) => void;
+  onApplyCoupon: (coupon: Coupon | undefined) => void;
 }
 
 export const ApplyCouponModal: React.FC<ApplyCouponModalProps> = ({
@@ -22,15 +23,16 @@ export const ApplyCouponModal: React.FC<ApplyCouponModalProps> = ({
   onApplyCoupon,
   handleCloseCouponDialog,
 }) => {
+  const dispatch = useDispatch();
+
   const { appliedCoupon } = useSelector((state: RootState) => ({
     appliedCoupon: state.cart.coupon,
   }));
-  const [enteredCode, setEnteredCode] = useState("");
 
-  const [error, setError] = useState("");
+  const [enteredCode, setEnteredCode] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const [availableCoupons, setAvailableCoupons] = useState<Coupon[]>([]);
   const [selectedCode, setSelectedCode] = useState<string | null>("");
-  const dispatch = useDispatch();
 
   const handleCheck = () => {
     const matched = availableCoupons.find(
@@ -70,12 +72,12 @@ export const ApplyCouponModal: React.FC<ApplyCouponModalProps> = ({
       .then((res) => {
         if (res?.data) {
           setAvailableCoupons(res.data?.data?.couponForUser);
-          dispatch(setAvailableCouponsForUser(res.data?.data?.couponForUser))
+          dispatch(setAvailableCouponsForUser(res.data?.data?.couponForUser));
           const couponCode = res.data?.data?.couponForUser.find(
             (coupon: { code: string }) =>
               coupon.code.toLowerCase() === appliedCoupon?.code.toLowerCase()
           )?.code;
-          setSelectedCode(couponCode)
+          setSelectedCode(couponCode);
         }
       })
       .catch((err) => {
@@ -180,8 +182,7 @@ export const ApplyCouponModal: React.FC<ApplyCouponModalProps> = ({
         </div>
         <button
           className="bg-[#3880FF] text-white px-6 py-2 font-semibold disabled:opacity-50 max-w-[360px] w-full cursor-pointer"
-          disabled={!selectedCode}
-          onClick={() => onApplyCoupon(selectedCoupon ?? null)}
+          onClick={() => onApplyCoupon(selectedCoupon)}
         >
           APPLY
         </button>
