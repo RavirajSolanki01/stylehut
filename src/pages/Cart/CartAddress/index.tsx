@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { CheckboxProps, Chip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useDispatch, useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, useWatch } from "react-hook-form";
+import { toast } from "react-toastify";
+import { JSX } from "react/jsx-runtime";
+
 import { AddressCardProps, FormAddressData } from "../../../utils/types";
 import {
   deleteAddress,
@@ -11,10 +15,7 @@ import {
   postAddress,
   updateAddress,
 } from "../../../services/userAddresses";
-import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../../store/slice/loading.slice";
-import { toast } from "react-toastify";
-import { JSX } from "react/jsx-runtime";
 import { RootState } from "../../../store";
 import {
   CustomCheckbox,
@@ -33,18 +34,19 @@ export const CartAddresses: React.FC<Props> = ({
   selectedIndex,
   setSelectedIndex,
 }) => {
+  const dispatch = useDispatch();
+
+  const isLoading = useSelector(
+    (state: RootState) => state.loading["cart-address"]
+  );
+
+  const [open, setOpen] = React.useState<boolean>(false);
   const [defaultIndex, setDefaultIndex] = useState<number>(0);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [addresses, setAddresses] = useState<FormAddressData[]>([]);
   const [defaultAddress, setDefaultAddress] = useState<FormAddressData | null>(
     null
-  );
-
-  const [open, setOpen] = React.useState(false);
-  const dispatch = useDispatch();
-  const isLoading = useSelector(
-    (state: RootState) => state.loading["cart-address"]
   );
 
   const {
@@ -131,24 +133,6 @@ export const CartAddresses: React.FC<Props> = ({
 
   const pincode = useWatch({ control, name: "postal_code" });
 
-  useEffect(() => {
-    const fetchLocationDetails = async () => {
-      if (pincode?.length === 6) {
-        const response = await fetch(
-          `https://api.postalpincode.in/pincode/${pincode}`
-        );
-        const data = await response.json();
-        const postOffice = data[0]?.PostOffice?.[0];
-
-        if (postOffice) {
-          setValue("state", postOffice.State);
-          setValue("city", postOffice.District);
-        }
-      }
-    };
-    fetchLocationDetails();
-  }, [pincode, setValue]);
-
   const getErrorMessage = (err: any) =>
     err?.response?.data?.message ||
     err?.response?.data ||
@@ -234,6 +218,24 @@ export const CartAddresses: React.FC<Props> = ({
         if (res.status === 200) reset(res.data.data);
       },
     });
+
+  useEffect(() => {
+    const fetchLocationDetails = async () => {
+      if (pincode?.length === 6) {
+        const response = await fetch(
+          `https://api.postalpincode.in/pincode/${pincode}`
+        );
+        const data = await response.json();
+        const postOffice = data[0]?.PostOffice?.[0];
+
+        if (postOffice) {
+          setValue("state", postOffice.State);
+          setValue("city", postOffice.District);
+        }
+      }
+    };
+    fetchLocationDetails();
+  }, [pincode, setValue]);
 
   useEffect(() => {
     fetchAddresses();

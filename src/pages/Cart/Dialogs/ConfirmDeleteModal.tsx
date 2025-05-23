@@ -1,6 +1,7 @@
 import { Dialog, styled, IconButton } from "@mui/material";
-import { Product } from "../../../utils/types";
 import CloseIcon from "@mui/icons-material/Close";
+
+import { Product } from "../../../utils/types";
 
 interface ConfirmDeleteModalProps {
   openConfirmDialog: boolean;

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+
 import { getTerms } from "../../../services/termsService";
 
 
 
-export const TermsOfUse = () => {
+export const TermsOfUse:React.FC = () => {
   const [terms, setTerms] = useState<any>([]);
 
   useEffect(() => {

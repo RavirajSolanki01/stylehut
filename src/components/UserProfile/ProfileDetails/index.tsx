@@ -1,8 +1,4 @@
 import React, { useEffect } from "react";
-import {
-  getUserProfile,
-  updateUserProfile,
-} from "../../../services/userService";
 import { toast } from "react-toastify";
 import {
   styled,
@@ -16,6 +12,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
+
+import {
+  getUserProfile,
+  updateUserProfile,
+} from "../../../services/userService";
 import { addUserProfileData } from "../../../store/slice/users.slice";
 import { setLoading } from "../../../store/slice/loading.slice";
 
@@ -28,6 +29,8 @@ type FormInputData = {
 };
 
 export const ProfileDetails: React.FC = () => {
+  const dispatch = useDispatch();
+
   const {
     handleSubmit,
     reset,
@@ -46,7 +49,6 @@ export const ProfileDetails: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const dispatch = useDispatch();
 
   const onSubmit = (data: FormInputData) => {
     const [first_name, ...rest] = data.full_name.trim().split(" ");
@@ -137,6 +139,12 @@ export const ProfileDetails: React.FC = () => {
                 error={Boolean(errors.full_name)}
                 helperText={errors.full_name?.message}
                 variant="outlined"
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  if (inputValue.length <= 30) {
+                    field.onChange(inputValue);
+                  }
+                }}
               />
             )}
           />

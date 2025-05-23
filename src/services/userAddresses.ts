@@ -1,12 +1,6 @@
-import api from "./api";
 import "axios";
 
-declare module "axios" {
-  export interface AxiosRequestConfig {
-    withAuth?: boolean;
-  }
-}
-
+import api from "./api";
 import {
   POST_ADDRESS_API_ENDPOINT,
   GET_ADDRESS_API_ENDPOINT,
@@ -15,6 +9,11 @@ import {
   GET_ADDRESS_BY_ID_API_ENDPOINT,
 } from "./endpoints";
 import { FormAddressData } from "../utils/types";
+declare module "axios" {
+  export interface AxiosRequestConfig {
+    withAuth?: boolean;
+  }
+}
 
 export const getAddresses = (params: { page?: number; pageSize?: number }) => {
   return api.get(GET_ADDRESS_API_ENDPOINT, { params, withAuth: true });
@@ -28,7 +27,11 @@ export const updateAddress = (payload: {
   address_id: number;
   data: FormAddressData;
 }) => {
-  return api.put(`${UPDATE_ADDRESS_API_ENDPOINT}/${payload.address_id}`, payload.data, { withAuth: true });
+  return api.put(
+    `${UPDATE_ADDRESS_API_ENDPOINT}/${payload.address_id}`,
+    payload.data,
+    { withAuth: true }
+  );
 };
 
 export const deleteAddress = (payload: { address_id: number }) => {
@@ -42,4 +45,3 @@ export const getAddressById = (payload: { address_id: number }) => {
     withAuth: true,
   });
 };
-

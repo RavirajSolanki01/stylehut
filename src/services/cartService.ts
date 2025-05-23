@@ -1,12 +1,6 @@
-import api from "./api";
 import "axios";
 
-declare module "axios" {
-  export interface AxiosRequestConfig {
-    withAuth?: boolean;
-  }
-}
-
+import api from "./api";
 import {
   DELETE_FROM_CART_API_ENDPOINT,
   GET_CART_PRODUCTS_API_ENDPOINT,
@@ -15,6 +9,11 @@ import {
   POST_CART_API_ENDPOINT,
   REMOVE_All_FROM_CART_API_ENDPOINT,
 } from "./endpoints";
+declare module "axios" {
+  export interface AxiosRequestConfig {
+    withAuth?: boolean;
+  }
+}
 
 export const getCartProducts = (params: {
   page?: number;

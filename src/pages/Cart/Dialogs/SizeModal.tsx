@@ -1,9 +1,9 @@
 import { Dialog, styled, IconButton } from "@mui/material";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
+
 import { PRODUCT_DETAIL_CONSTANTS } from "../../../utils/constants";
 import { Product } from "../../../utils/types";
-
 interface SizeModalProps {
   openSizeDialog: boolean;
   selectedProduct: Product;

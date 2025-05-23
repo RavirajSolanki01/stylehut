@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Star, FavoriteBorder, Favorite } from "@mui/icons-material";
-
 interface ProductCardProps {
   imageUrl: string;
   brand: string;
@@ -28,13 +27,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   isWishlisted = false,
   totalReviews = 0,
 }) => {
+
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   // const [slideDirection, setSlideDirection] = useState<"left" | "right">(
   //   "left"
   // );
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
   const allImages = [imageUrl, imageUrl, ...additionalImages];
 
   useEffect(() => {
@@ -131,32 +131,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* Wishlist */}
         </button>
       </div>
-      {/* <div className="text-left text-[#535766] px-[10px] mb-[5px] group-hover:block hidden">
-        <button
-          onClick={(e) => {
-            e.stopPropagation(); // <-- This prevents the parent onClick
-            addToWishlist?.(); // <-- Call your wishlist function
-          }}
-          className={`cursor-pointer ${
-            isWishlisted ? "!bg-[#535766] text-[#fff]" : ""
-          } default !rounded-sm text-[#535766] text-[12px] w-full bg-white flex items-center justify-center gap-2 !border border-gray-300 hover:!border-black transition-colors py-1`}
-        >
-          {isWishlisted ? (
-            <Favorite
-              fill="bg-[#ff3e6c]"
-              className="text-[#ff3e6c] "
-              style={{ fontSize: "1rem" }}
-            />
-          ) : (
-            <FavoriteBorder
-              className="text-[#535766] "
-              style={{ fontSize: "1rem" }}
-            />
-          )}
-          Wishlist
-        </button>
-        <span>Sizes: L</span>
-      </div> */}
 
       <div className="text-left text-[16px] text-[#282c3f] font-semibold px-[10px] mt-[12px] mb-[6px] ">
         {name}

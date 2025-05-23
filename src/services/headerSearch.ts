@@ -1,5 +1,6 @@
-import api from "./api";
 import "axios";
+
+import api from "./api";
 import { GET_HEADER_SEARCH_API_ENDPOINT } from "./endpoints";
 
 declare module "axios" {

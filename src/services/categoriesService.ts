@@ -1,5 +1,6 @@
-import api from "./api";
 import "axios";
+
+import api from "./api";
 import { GET_CATEGORY_DATA } from "./endpoints";
 
 declare module "axios" {

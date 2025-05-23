@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Button,
   Dialog,
@@ -17,11 +18,11 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import TuneIcon from "@mui/icons-material/Tune";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-import { ErrorV2Icon, Product1, Product3 } from "../../../assets";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CircleIcon from "@mui/icons-material/Circle";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+
+import { ErrorV2Icon, Product1, Product3 } from "../../../assets";
 
 const orderReviews = [
   {
@@ -91,9 +92,11 @@ const timeOption = [
     label: "Last Year",
   },
 ];
-export const Orders = () => {
+
+export const Orders: React.FC = () => {
   const [value, setValue] = useState<number | null>(0);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+
   const handleFilterClick = () => {
     setIsFilterOpen(true);
   };

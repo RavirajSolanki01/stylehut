@@ -1,5 +1,4 @@
 import React from "react";
-import { Offers_Banner } from "../../assets";
 import {
   OutlinedInput,
   styled,
@@ -7,15 +6,17 @@ import {
   FormHelperText,
   CircularProgress,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { registerUser } from "../../services/userService";
 import { useDispatch, useSelector } from "react-redux";
+
+import { registerUser } from "../../services/userService";
 import { addLoggedInUser } from "../../store/slice/users.slice";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { setLoading } from "../../store/slice/loading.slice";
+import { Offers_Banner } from "../../assets";
 import { RootState } from "../../store";
 
 type FormData = {

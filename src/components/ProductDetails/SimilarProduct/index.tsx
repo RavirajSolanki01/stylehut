@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Navigation } from "swiper/modules";
-
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
 
 const SimilarProduct = ({
@@ -23,6 +22,7 @@ const SimilarProduct = ({
   sub_category_id: number;
   product_id: number;
 }) => {
+  
   const navigate = useNavigate();
 
   const sameCategoryProducts = similarProducts.filter(
