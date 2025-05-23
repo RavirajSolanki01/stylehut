@@ -1,13 +1,17 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
+
 import { Header } from "../Header";
 
 export const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = Boolean(localStorage.getItem("authToken"));
 
-  return isAuthenticated ? <Navigate to="/home" replace /> : <>
-  <Header/>
-  <div>{children}</div>
-
-  </>;
+  return isAuthenticated ? (
+    <Navigate to="/home" replace />
+  ) : (
+    <>
+      <Header />
+      <div>{children}</div>
+    </>
+  );
 };

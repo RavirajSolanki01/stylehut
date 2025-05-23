@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import SearchIcon from "@mui/icons-material/Search";
+
 import useDebounce from "../../hooks";
 import { getheaderSearch } from "../../services/headerSearch";
 import { setLoading } from "../../store/slice/loading.slice";
@@ -12,9 +13,12 @@ import { ISearchOption } from "../../utils/types";
 export const HeaderSearch: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [inputValue, setInputValue] = useState("");
-  const debouncedSearchTerm = useDebounce(inputValue, 500);
+
+  const [inputValue, setInputValue] = useState<string>("");
   const [options, setOptions] = useState<ISearchOption[]>([]);
+
+  const debouncedSearchTerm = useDebounce(inputValue, 500);
+
   useEffect(() => {
     if (debouncedSearchTerm)
       getheaderSearch(inputValue)
@@ -48,6 +52,7 @@ export const HeaderSearch: React.FC = () => {
         })
         .finally(() => dispatch(setLoading({ key: "search", value: false })));
   }, [debouncedSearchTerm]);
+
   return (
     <Autocomplete
       freeSolo

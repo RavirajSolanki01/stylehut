@@ -1,35 +1,55 @@
 import React, { useEffect, useState } from "react";
-import { sortByOptions } from "../../utils/constants";
-import { ProductCard } from "../../components/ProductCard";
+import { useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+
 import { getProductList } from "../../services/productService";
 import { getWishlist, postWishlist } from "../../services/wishlistService";
 import { SkeletonProduct } from "../../components/ProductCard/SkeletonPorduct";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { getBrandList } from "../../services/brandService";
 import EmptyCart from "./empty.svg";
-import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { sortByOptions } from "../../utils/constants";
+import { ProductCard } from "../../components/ProductCard";
 
 export const ProductList = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
 
+  const { users } = useSelector((state: RootState) => ({
+    users: state.users.user,
+  }));
+
+  const [sortBy, setSortBy] = useState<string>("Recommended");
+
   const queryParams = new URLSearchParams(search);
+
+  const [priceRange, setPriceRange] = useState<number[]>([0, 10000]);
+  const [productsList, setProducts] = useState([]);
+  const [wishlistIDs, setWishlistIDs] = useState<number[]>([]);
+  const [brandList, setBrandList] = useState<{ name: string; id: number }[]>(
+    []
+  );
+  const [selectedBrand, setSelectedBrand] = useState<number>(0);
+  const [{ ordering, sorting }, setOrderBy] = useState({
+    sorting: "create_at",
+    ordering: "desc",
+  });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [{ currentPage, totalPages }, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 0,
+  });
+
   const category = queryParams.get("category")?.split("requestid")[0];
   const subcategory = queryParams.get("subcategory")?.split("requestid")[0];
   const sub_category_type = queryParams
     .get("sub_category_type")
     ?.split("requestid")[0];
 
-  const { users } = useSelector((state: RootState) => ({
-    users: state.users.user,
-  }));
   const isAuthenticated: boolean = users.isAuthenticated;
-
-  const [sortBy, setSortBy] = useState("Recommended");
 
   const handleSortBy = (sortBy: string) => {
     switch (sortBy) {
@@ -102,23 +122,6 @@ export const ProductList = () => {
     fetchProducts(page);
   };
 
-  const [priceRange, setPriceRange] = useState([0, 10000]);
-  const [productsList, setProducts] = useState([]);
-  const [wishlistIDs, setWishlistIDs] = useState<number[]>([]);
-  const [brandList, setBrandList] = useState<{ name: string; id: number }[]>(
-    []
-  );
-  const [selectedBrand, setSelectedBrand] = useState<number>(0);
-  const [{ ordering, sorting }, setOrderBy] = useState({
-    sorting: "create_at",
-    ordering: "desc",
-  });
-  const [loading, setLoading] = useState(false);
-  const [{ currentPage, totalPages }, setPagination] = useState({
-    currentPage: 1,
-    totalPages: 0,
-  });
-
   const handleGotoProduct = (product_id: number) => {
     navigate(`/product-detail/${product_id}`);
   };
@@ -146,6 +149,7 @@ export const ProductList = () => {
       navigate("/login");
     }
   };
+
   const fetchWishlist = async () => {
     const wishlistResponse = await getWishlist({ page: 1, pageSize: 100 });
     setWishlistIDs((pre) => [
@@ -155,6 +159,7 @@ export const ProductList = () => {
       ),
     ]);
   };
+
   const fetchProducts = async (
     pageNo?: number,
     order?: string,
@@ -214,6 +219,7 @@ export const ProductList = () => {
       clearTimeout(handler);
     };
   }, [priceRange, category, subcategory, sub_category_type, selectedBrand]);
+
   return (
     <React.Fragment>
       <div>

@@ -1,16 +1,16 @@
-import api from "./api";
 import "axios";
+
+import {
+  GET_PRODUCT_DETAIL_API_ENDPOINT,
+  GET_PRODUCT_LIST_API_ENDPOINT,
+} from "./endpoints";
+import api from "./api";
 
 declare module "axios" {
   export interface AxiosRequestConfig {
     withAuth?: boolean;
   }
 }
-
-import {
-  GET_PRODUCT_DETAIL_API_ENDPOINT,
-  GET_PRODUCT_LIST_API_ENDPOINT,
-} from "./endpoints";
 
 export const getProductList = (params: {
   page?: number;
@@ -25,6 +25,7 @@ export const getProductList = (params: {
 }) => {
   return api.get(GET_PRODUCT_LIST_API_ENDPOINT, { params, withAuth: true });
 };
+
 export const getProductDetails = (id: number) => {
   return api.get(`${GET_PRODUCT_DETAIL_API_ENDPOINT}/${id}`, {
     withAuth: true,

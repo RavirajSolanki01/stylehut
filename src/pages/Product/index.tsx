@@ -1,4 +1,18 @@
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+
+import {
+  getProductDetails,
+  getProductList,
+} from "../../services/productService";
+import { postWishlist } from "../../services/wishlistService";
+import ProductDetailSkeleton from "./skeletonDetails";
+import { postAddToCart } from "../../services/cartService";
+import { RootState } from "../../store";
+import { Product, ProductDetails, ProductStockItem } from "../../utils/types";
 import ProductImage from "../../components/ProductDetails/ProductImage";
 import ProductDetail from "../../components/ProductDetails/ProductDetail";
 import BestOffers from "../../components/ProductDetails/BestOffers";
@@ -6,61 +20,17 @@ import ProductPrice from "../../components/ProductDetails/ProductPrice";
 import ProductRating from "../../components/ProductDetails/Ratings";
 import CustomerReview from "../../components/ProductDetails/CustomerReview";
 import SimilarProduct from "../../components/ProductDetails/SimilarProduct";
-import { useEffect, useRef, useState } from "react";
-import {
-  getProductDetails,
-  getProductList,
-} from "../../services/productService";
-import { useParams } from "react-router-dom";
-import { postWishlist } from "../../services/wishlistService";
-import ProductDetailSkeleton from "./skeletonDetails";
-import { toast } from "react-toastify";
-import { postAddToCart } from "../../services/cartService";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { Product, ProductStockItem } from "../../utils/types";
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const ratingRef = useRef<HTMLDivElement>(null);
-  const [productData, setProductData] = useState<{
-    id: number;
-    ratings?: {
-      description: string;
-      ratings: number;
-      images: string[];
-      reviewer?: string;
-      updated_at?: string;
-      likes?: number;
-      dislikes?: number;
-      users?: {
-        first_name: string;
-        last_name: string;
-        profile_url: string;
-      };
-    }[];
-    name: string;
-    category: { name: string; id: number };
-    sub_category: { name: string; id: number };
-    sub_category_type: { name: string; id: number };
-    brand: { name: string };
-    price?: number;
-    discount?: number;
-    description?: string;
-    image?: string[];
-    ratingStats?: {
-      averageRating?: number;
-      totalRatings?: number;
-      distribution?: {
-        1: number;
-        2: number;
-        3: number;
-        4: number;
-        5: number;
-      };
-    };
-  }>({
+
+  const { users } = useSelector((state: RootState) => ({
+    users: state.users.user,
+  }));
+
+  const [productData, setProductData] = useState<ProductDetails>({
     brand: { name: "" },
     sub_category_type: { name: "", id: 0 },
     sub_category: { name: "", id: 0 },
@@ -70,14 +40,12 @@ const ProductDetailPage: React.FC = () => {
   });
   const [productsList, setProducts] = useState([]);
   const [isWishlisted, setIsWishlist] = useState<boolean>(false);
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [productSizes, setProductSizes] = useState<ProductStockItem[]>([]);
   const [relatedProductVariants, setRelatedProductVariants] = useState<Product[]>([]);
 
-  const { users } = useSelector((state: RootState) => ({
-    users: state.users.user,
-  }));
+
   const isAuthenticated: boolean = users.isAuthenticated;
 
   const fetchProductDetail = async () => {

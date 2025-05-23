@@ -1,7 +1,8 @@
 import React from "react";
 import { Popover } from "@mui/material";
-import { CategoryResponse } from "../../utils/types";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
+import { CategoryResponse } from "../../utils/types";
 interface CategoriesPopoverProps {
   id: string;
   open: boolean;
