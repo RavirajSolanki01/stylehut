@@ -21,13 +21,13 @@ import { SizeModal } from "./Dialogs/SizeModal";
 import { QuantityModal } from "./Dialogs/QuantityModal";
 import { ApplyCouponModal } from "./Dialogs/ApplyCouponModal";
 import { ChangeAddressModal } from "./Dialogs/ChangeAddressModal";
-import PaymentScreen from "./PaymentScreen";
 import { addAppliedCoupon } from "../../store/slice/cart.slice";
 import { RootState } from "../../store";
 import { ConfirmDeleteModal } from "./Dialogs/ConfirmDeleteModal";
 import { formatPrice, withLoading } from "../../utils/reusable-functions";
 import { Logo } from "../../assets";
 import EmptyCart from "./empty.svg";
+import CheckoutScreen from "./Checkout";
 
 type Props = {
   setMaxAllowedStep: React.Dispatch<React.SetStateAction<number>>;
@@ -156,16 +156,8 @@ export const ProductCart: React.FC = () => {
         ) : (
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-[70%]">
-              <PaymentScreen totalPrice={totalPrice} />
+              <CheckoutScreen totalPrice={totalPrice} />
             </div>
-            <PriceSummary
-              setTotalPrice={setTotalPrice}
-              activeStep={activeStep}
-              setActiveStep={setActiveStep}
-              setMaxAllowedStep={setMaxAllowedStep}
-              setCartItems={setCartItems}
-              cartItems={cartItems}
-            />
           </div>
         )}
       </div>
@@ -326,6 +318,7 @@ const PriceSummary: React.FC<Props> = ({
             <div className="text-xs sm:text-sm flex justify-between font-normal my-1 text-[#282c3f]">
               <span>Coupon Discount</span>{" "}
               <span className="text-[#3880FF]">
+                -₹
                 {formatPrice(
                   Number(couponDiscount ? couponDiscount.toFixed(0) : 0)
                 )}
