@@ -13,6 +13,7 @@ import EmptyCart from "./empty.svg";
 import { RootState } from "../../store";
 import { sortByOptions } from "../../utils/constants";
 import { ProductCard } from "../../components/ProductCard";
+import { RangeSlider } from "../../components/RangeSlider";
 
 export const ProductList = () => {
   const navigate = useNavigate();
@@ -27,6 +28,33 @@ export const ProductList = () => {
   const queryParams = new URLSearchParams(search);
 
   const [priceRange, setPriceRange] = useState<number[]>([0, 10000]);
+  const [discountRange, setDiscountRange] = useState<number[]>([
+    parseInt(queryParams.get("minDiscount") || "0"),
+    parseInt(queryParams.get("maxDiscount") || "100"),
+  ]);
+
+  const handleChange = (_event: Event, newValue: number | number[]) => {
+    setDiscountRange(newValue as number[]);
+  };
+
+  const handlePriceRangeChange = (
+    _event: Event,
+    newValue: number | number[]
+  ) => {
+    setPriceRange(newValue as number[]);
+  };
+
+  useEffect(() => {
+    const minDiscount = queryParams.get("minDiscount");
+    const maxDiscount = queryParams.get("maxDiscount");
+    if (minDiscount !== null || maxDiscount !== null) {
+      setDiscountRange([
+        parseInt(minDiscount || "0"),
+        parseInt(maxDiscount || "100"),
+      ]);
+    }
+  }, [search]);
+
   const [productsList, setProducts] = useState([]);
   const [wishlistIDs, setWishlistIDs] = useState<number[]>([]);
   const [brandList, setBrandList] = useState<{ name: string; id: number }[]>(
@@ -166,6 +194,7 @@ export const ProductList = () => {
     sortingBy?: string
   ) => {
     setLoading(true);
+    setProducts([]);
     try {
       const response = await getProductList({
         page: pageNo || currentPage,
@@ -181,6 +210,8 @@ export const ProductList = () => {
           queryParams.get("sub_category_type")?.split("requestid")[1]
         ),
         brand_id: selectedBrand,
+        minDiscount: discountRange[0],
+        maxDiscount: discountRange[1],
       });
 
       setProducts(response.data.data.items);
@@ -218,7 +249,14 @@ export const ProductList = () => {
     return () => {
       clearTimeout(handler);
     };
-  }, [priceRange, category, subcategory, sub_category_type, selectedBrand]);
+  }, [
+    priceRange,
+    category,
+    subcategory,
+    sub_category_type,
+    selectedBrand,
+    discountRange,
+  ]);
 
   return (
     <React.Fragment>
@@ -474,56 +512,12 @@ export const ProductList = () => {
 
               {/* Range Slider */}
               <div className="relative w-full h-8">
-                {/* Fixed Left Thumb */}
-                <input
-                  type="range"
-                  min="100"
-                  max="10000"
-                  placeholder="d"
-                  value="100"
-                  disabled
-                  className="absolute top-1/2 left-0 w-full h-[2px] appearance-none bg-[#3880FF] rounded-lg pointer-events-none 
-      [&::-webkit-slider-thumb]:appearance-none 
-      [&::-webkit-slider-thumb]:h-3 
-      [&::-webkit-slider-thumb]:w-3 
-      [&::-webkit-slider-thumb]:rounded-full 
-      [&::-webkit-slider-thumb]:bg-[#fff]
-      [&::-webkit-slider-thumb]:border-4 
-      [&::-webkit-slider-thumb]:border-[#3880FF]
-      [&::-moz-range-thumb]:h-5 
-      [&::-moz-range-thumb]:w-5 
-      [&::-moz-range-thumb]:rounded-full 
-      [&::-moz-range-thumb]:bg-[#3880FF]
-      [&::-moz-range-thumb]:border-4 
-      [&::-moz-range-thumb]:border-white
-      "
-                />
-
-                {/* Movable Right Thumb */}
-                <input
-                  type="range"
-                  min="100"
-                  max="10000"
-                  value={priceRange[1]}
-                  placeholder="d"
-                  onChange={(e) =>
-                    setPriceRange([100, parseInt(e.target.value)])
-                  }
-                  className="absolute top-1/2 left-0 w-full h-[2px] appearance-none bg-transparent rounded-lg cursor-pointer 
-      [&::-webkit-slider-thumb]:appearance-none 
-      [&::-webkit-slider-thumb]:h-3 
-      [&::-webkit-slider-thumb]:w-3 
-      [&::-webkit-slider-thumb]:rounded-full 
-      [&::-webkit-slider-thumb]:bg-[#fff]
-      [&::-webkit-slider-thumb]:border-4 
-      [&::-webkit-slider-thumb]:border-[#3880FF]
-      [&::-moz-range-thumb]:h-5 
-      [&::-moz-range-thumb]:w-5 
-      [&::-moz-range-thumb]:rounded-full 
-      [&::-moz-range-thumb]:bg-[#3880FF]
-      [&::-moz-range-thumb]:border-4 
-      [&::-moz-range-thumb]:border-white
-      "
+                <RangeSlider
+                  value={priceRange}
+                  onChange={handlePriceRangeChange}
+                  min={0}
+                  max={10000}
+                  label="Price range"
                 />
               </div>
 
@@ -532,6 +526,30 @@ export const ProductList = () => {
                 <span>
                   ₹{priceRange[0]} - ₹{priceRange[1]}
                   {priceRange[1] == 10000 ? "+" : ""}
+                </span>
+              </div>
+            </div>
+
+            <div className="border-b border-[#e9e9ed] p-[20px]">
+              <div className="text-left text-[14px] uppercase font-bold mb-4">
+                Discount Range
+              </div>
+
+              {/* Range Slider */}
+              <div className="relative w-full h-8">
+                <RangeSlider
+                  value={discountRange}
+                  onChange={handleChange}
+                  min={0}
+                  max={100}
+                  label="Discount range"
+                />
+              </div>
+
+              {/* Selected Range Display */}
+              <div className="flex justify-between text-sm font-bold text-gray-800 mt-4">
+                <span>
+                  {discountRange[0]}% - {discountRange[1]}%
                 </span>
               </div>
             </div>
@@ -587,7 +605,7 @@ export const ProductList = () => {
                     </div>
                   )
                 )
-              ) : (
+              ) : loading ? null : (
                 <div className="w-full flex flex-col items-center justify-center my-12">
                   <img
                     src={EmptyCart}

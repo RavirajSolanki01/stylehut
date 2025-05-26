@@ -224,3 +224,37 @@ export interface ProductDetails {
     };
   };
 }
+
+export interface AdminSettingsCategory {
+  fontColor: string;
+  cardColor: string;
+}
+
+export interface LandingPageShopByCategory {
+  id: number;
+  name: string;
+  image: string;
+  user_id: number;
+  minDiscount: number;
+  maxDiscount: number;
+  sub_category_id: number;
+  create_at: string;
+  updated_at: string;
+  sub_category: {
+    id: number;
+    name: string;
+    description: string;
+    create_at: string;
+    updated_at: string;
+    is_deleted: boolean;
+    category_id: number;
+    category: {
+      id: number;
+      name: string;
+      description: string;
+      create_at: string;
+      updated_at: string;
+      is_deleted: boolean;
+    };
+  };
+}
