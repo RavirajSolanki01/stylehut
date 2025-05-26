@@ -9,17 +9,20 @@ import "./index.css";
 import store, { persistor } from "./store";
 import App from "./App.tsx";
 import theme from "./utils/theme.ts";
+import ScrollTop from "./utils/lib/scroll-top";
 
 createRoot(document.getElementById("root")!).render(
-    <ThemeProvider theme={theme}>
-      <ToastContainer position="top-center" />
-      <CssBaseline />
-      <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <BrowserRouter>
+  <ThemeProvider theme={theme}>
+    <ToastContainer position="top-center" />
+    <CssBaseline />
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <BrowserRouter>
+          <ScrollTop>
             <App />
-          </BrowserRouter>
-        </PersistGate>
-      </Provider>
-    </ThemeProvider>
+          </ScrollTop>
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
+  </ThemeProvider>
 );
