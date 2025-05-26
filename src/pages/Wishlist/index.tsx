@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -7,10 +7,14 @@ import { setLoading } from "../../store/slice/loading.slice";
 import { LoaderOverlay } from "../../components/Loader";
 import ProductCardBase from "./components/ProductCard";
 import EmptyCart from "./empty.svg";
+import { RootState } from "../../store";
 
 export const Wishlist: React.FC = () => {
   const dispatch = useDispatch();
-  
+  const { auth } = useSelector((state: RootState) => ({
+    auth: state.auth,
+  }));
+
   const [wishlist_page_data, setWishlist_page_data] = useState<any>([]);
 
   const handleRemoveFromWishlist = (product_id: number) => {
@@ -54,8 +58,12 @@ export const Wishlist: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!auth.token) {
+      toast.info("Please login to see your wishlist");
+      return;
+    }
     fetchWishlist();
-  }, []);
+  }, [auth.token]);
 
   return (
     <div className="max-w-[1640px] w-full mx-auto">
