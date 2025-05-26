@@ -16,7 +16,7 @@ const ShopByCategoryCard = ({
 
   const handleNavigate = () => {
     navigate(
-      `/product-list?category=${product.sub_category.category.name}requestid${product.sub_category.category.id}&subcategory=${product.sub_category.name}requestid${product.sub_category.id}?minDiscount=${product.minDiscount}&maxDiscount=${product.maxDiscount}`
+      `/product-list?category=${product.sub_category.category.name}requestid${product.sub_category.category.id}&subcategory=${product.sub_category.name}requestid${product.sub_category.id}&minDiscount=${product.minDiscount}&maxDiscount=${product.maxDiscount}`
     );
   };
   return (
