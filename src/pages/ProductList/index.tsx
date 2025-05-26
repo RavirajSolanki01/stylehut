@@ -33,12 +33,12 @@ export const ProductList = () => {
     parseInt(queryParams.get("maxDiscount") || "100"),
   ]);
 
-  const handleChange = (event: Event, newValue: number | number[]) => {
+  const handleChange = (_event: Event, newValue: number | number[]) => {
     setDiscountRange(newValue as number[]);
   };
 
   const handlePriceRangeChange = (
-    event: Event,
+    _event: Event,
     newValue: number | number[]
   ) => {
     setPriceRange(newValue as number[]);
