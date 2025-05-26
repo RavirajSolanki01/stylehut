@@ -312,8 +312,10 @@ export const CartAddresses: React.FC<Props> = ({
         </div>
       ) : (
         <div className="rounded text-center text-sm text-gray-500 p-10 shadow-sm transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] my-10">
-          You haven't added any addresses yet. Please add one to proceed with
-          orders.
+          <p className="text-gray-500 text-md font-semibold mb-2">
+            You haven't added any addresses yet. Please add one to proceed with
+            orders.
+          </p>
         </div>
       )}
       <AddressDialog
