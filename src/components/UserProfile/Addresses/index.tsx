@@ -166,7 +166,7 @@ export const Addresses: React.FC = () => {
       onSuccess: (res) => {
         const items = res?.data?.data?.items || [];
         const defaultAddress =
-          items.find((a: FormAddressData) => a.is_default) || {};
+          items.find((a: FormAddressData) => a.is_default) || items[0];
         setAddresses(items);
         setDefaultAddress(defaultAddress);
         setDefaultIndex(defaultAddress.id);
@@ -309,8 +309,10 @@ export const Addresses: React.FC = () => {
         </div>
       ) : (
         <div className="rounded text-center text-sm text-gray-500 p-10 shadow-sm transition-all hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] my-10">
-          You haven't added any addresses yet. Please add one to proceed with
-          orders.
+          <p className="text-gray-500 text-md font-semibold mb-2">
+            You haven't added any addresses yet. Please add one to proceed with
+            orders.
+          </p>
         </div>
       )}
       <AddressDialog
@@ -405,21 +407,32 @@ const AddressCard: React.FC<AddressCardProps> = ({
       {isSelected && (
         <>
           <Divider className="my-4 w-full" />
-          <div className="flex items-center text-sm font-semibold p-2">
-            <button
-              onClick={onEdit}
-              className="flex-1 text-[#3880FF] p-1 focus:outline-none"
-            >
-              EDIT
-            </button>
-            <div className="border-l border-gray-300 h-5 mx-2" />
-            <button
-              onClick={() => handleDeleteClick(id as number)}
-              className="flex-1 text-[#3880FF] p-1 focus:outline-none"
-            >
-              REMOVE
-            </button>
-          </div>
+          {isDefault ? (
+            <div className="flex items-center text-sm font-semibold p-2">
+              <button
+                onClick={onEdit}
+                className="flex-1 text-[#3880FF] p-1 focus:outline-none cursor-pointer"
+              >
+                EDIT
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center text-sm font-semibold p-2">
+              <button
+                onClick={onEdit}
+                className="flex-1 text-[#3880FF] p-1 focus:outline-none cursor-pointer"
+              >
+                EDIT
+              </button>
+              <div className="border-l border-gray-300 h-5 mx-2" />
+              <button
+                onClick={() => handleDeleteClick(id as number)}
+                className="flex-1 text-[#3880FF] p-1 focus:outline-none cursor-pointer"
+              >
+                REMOVE
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
