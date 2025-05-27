@@ -28,7 +28,7 @@ const ProductPrice = ({
   images,
   availableSize,
   relatedProductVariants,
-  category
+  category,
 }: {
   productName: string;
   brandName: string;
@@ -46,7 +46,6 @@ const ProductPrice = ({
   relatedProductVariants: Product[];
   category: { id: number; name: string };
 }) => {
-  
   const navigate = useNavigate();
 
   const [isOpenSizeChart, setIsOpenSizeChart] = useState<boolean>(false);
@@ -86,7 +85,7 @@ const ProductPrice = ({
     });
   };
 
-  const isBeautyProducts = category.name.toLocaleLowerCase() === "beauty"
+  const isBeautyProducts = category.name.toLocaleLowerCase() === "beauty";
 
   return (
     <div className="flex flex-col items-start">
@@ -142,7 +141,7 @@ const ProductPrice = ({
         {relatedProductVariants.length > 0 && (
           <>
             <div className="font-[700] text-[16px] m-[0px] text-start mb-[15px]">
-              MORE {isBeautyProducts ? "OPTIONS":"COLORS"}
+              MORE {isBeautyProducts ? "OPTIONS" : "COLORS"}
             </div>
             <div className="flex gap-[15px] flex-wrap">
               {relatedProductVariants?.map((variant, index) => (
@@ -172,50 +171,93 @@ const ProductPrice = ({
         </div>
       </div>
 
+      {category.name.toLowerCase() === "beauty" ? (
+        <div className="flex gap-[10px] mb-[10px]">
+          {sortSizes(
+            availableSize.map((sizeInfo) => sizeInfo.size_data.size)
+          ).map((size) => {
+            const sizeInfo = availableSize.find(
+              (item) => item.size_data.size === size
+            );
+            const isSelected = sizeInfo?.size_data?.size === selectedSize;
 
-      <div className="flex gap-[10px] mb-[10px]">
-        {sortSizes(
-          availableSize.map((sizeInfo) => sizeInfo.size_data.size)
-        ).map((size) => {
-          const sizeInfo = availableSize.find(
-            (item) => item.size_data.size === size
-          );
-          const isSelected = sizeInfo?.size_data?.size === selectedSize
-          
-          return (
-            <div className="relative w-[50px]" key={sizeInfo?.id}>
-              <button
-                onClick={() => {
-                  setSelectedSize(size);
-                  setSizeError("");
-                }}
-                className={`${
-                  sizeInfo?.quantity === 0 ? "size-button-disabled" : ""
-                } size-button-default ${
-                  isSelected ? "!border-2 !border-[#3880FF]" : ""
-                }`}
-              >
-                {size}
-              </button>
-              {Number(sizeInfo?.quantity) <= 3 && sizeInfo?.quantity !== 0 ? (
-                <span className="size-left-item leading-[15px]">
-                  {sizeInfo?.quantity} left
-                </span>
-              ) : (
-                <></>
-              )}
-              {Number(sizeInfo?.quantity) === 0 ? (
-                <span className="size-strike-show"></span>
-              ) : (
-                <></>
-              )}
-            </div>
-          );
-        })}
-      </div>
-      {sizeError && (
-        <p className="text-red-400 text-sm mb-2">{sizeError}</p>
+            return (
+              <div className="relative w-[85px]" key={sizeInfo?.id}>
+                <button
+                  onClick={() => {
+                    setSelectedSize(size);
+                    setSizeError("");
+                  }}
+                  className={`${
+                    sizeInfo?.quantity === 0 ? "size-button-disabled" : ""
+                  } size-button-beauty-products ${
+                    isSelected ? "!border-2 !border-[#3880FF]" : ""
+                  }`}
+                >
+                  <p className={`${Number(sizeInfo?.price) <= 0 ? "p-1.5" : ""}`}>{size}</p>
+                  {Number(sizeInfo?.price) > 0 && (
+                    <p className="font-normal">Rs.{sizeInfo?.price}</p>
+                  )}
+                </button>
+                {Number(sizeInfo?.quantity) <= 0 && sizeInfo?.quantity !== 0 ? (
+                  <span className="size-left-item leading-[15px]">
+                    {sizeInfo?.quantity} left
+                  </span>
+                ) : (
+                  <></>
+                )}
+                {Number(sizeInfo?.quantity) === 0 ? (
+                  <span className="size-strike-show"></span>
+                ) : (
+                  <></>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex gap-[10px] mb-[10px]">
+          {sortSizes(
+            availableSize.map((sizeInfo) => sizeInfo.size_data.size)
+          ).map((size) => {
+            const sizeInfo = availableSize.find(
+              (item) => item.size_data.size === size
+            );
+            const isSelected = sizeInfo?.size_data?.size === selectedSize;
+
+            return (
+              <div className="relative w-[50px]" key={sizeInfo?.id}>
+                <button
+                  onClick={() => {
+                    setSelectedSize(size);
+                    setSizeError("");
+                  }}
+                  className={`${
+                    sizeInfo?.quantity === 0 ? "size-button-disabled" : ""
+                  } size-button-default ${
+                    isSelected ? "!border-2 !border-[#3880FF]" : ""
+                  }`}
+                >
+                  {size}
+                </button>
+                {Number(sizeInfo?.quantity) <= 3 && sizeInfo?.quantity !== 0 ? (
+                  <span className="size-left-item leading-[15px]">
+                    {sizeInfo?.quantity} left
+                  </span>
+                ) : (
+                  <></>
+                )}
+                {Number(sizeInfo?.quantity) === 0 ? (
+                  <span className="size-strike-show"></span>
+                ) : (
+                  <></>
+                )}
+              </div>
+            );
+          })}
+        </div>
       )}
+      {sizeError && <p className="text-red-400 text-sm mb-2">{sizeError}</p>}
       {/* product size */}
 
       {/* add bag and wishlist button */}
