@@ -184,6 +184,7 @@ export interface ProductStockItem {
   create_at: string;
   updated_at: string;
   is_deleted: boolean;
+  price:number;
   size_data: SizeData;
 }
 
