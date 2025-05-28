@@ -44,22 +44,8 @@ function App() {
     <React.Fragment>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route
-            path={PUBLIC_ROUTES.DASHBOARD}
-            element={
-              <>
-                <HomePage />
-              </>
-            }
-          />
-          <Route
-            path={PUBLIC_ROUTES.HOME}
-            element={
-              <>
-                <HomePage />
-              </>
-            }
-          />
+          <Route path={PUBLIC_ROUTES.DASHBOARD} element={<HomePage />} />
+          <Route path={PUBLIC_ROUTES.HOME} element={<HomePage />} />
           <Route
             path={PUBLIC_ROUTES.LOGIN}
             element={
