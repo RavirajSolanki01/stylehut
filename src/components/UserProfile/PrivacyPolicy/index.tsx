@@ -8,12 +8,11 @@ export const PrivacyPolicy = () => {
   useEffect(() => {
     getPrivacyPolicy().then((res) => {
       setPrivacyPolicy(res.data.data);
-
     });
   }, []);
 
   return (
-    <div className="p-4">
+    <div className="pr-4 pt-0 sm:pt-4">
       <p className="text-2xl font-bold text-center">Privacy Policy</p>
       <div
         style={{ fontFamily: "inherit" }}

@@ -26,22 +26,21 @@ export const LoggedInUserProfileMenu: React.FC<LoggedInProfileMenuProps> = ({
   handlePopoverOpen,
   handleNavigate,
 }) => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const { users } = useSelector((state: RootState) => ({
     users: state.users.user,
   }));
 
   const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
 
-
   const handleLogout = () => {
     handleNavigate("/login");
     dispatch(removeAuthToken());
     dispatch(removeLoggedInUser());
     handlePopoverClose();
+    handleCloseConfirmLogoutDialog();
   };
 
   const handleCloseConfirmLogoutDialog = () => setOpenLogoutDialog(false);
@@ -53,6 +52,11 @@ export const LoggedInUserProfileMenu: React.FC<LoggedInProfileMenuProps> = ({
     } else {
       navigate(`/profile${path}`, { replace: true });
     }
+  };
+
+  const handleItemsClick = (path: string) => {
+    handleNavigation(path);
+    handlePopoverClose();
   };
 
   return (
@@ -96,7 +100,7 @@ export const LoggedInUserProfileMenu: React.FC<LoggedInProfileMenuProps> = ({
                 <li
                   key={index}
                   className="text-[#6c6c6c] mt-[3px] mb-[3px] font-[400] w-full justify-center hover:text-[#40414b] hover:font-[700]"
-                  onClick={() => handleNavigation(item.path)}
+                  onClick={() => handleItemsClick(item.path)}
                 >
                   {item.title}
                 </li>
@@ -108,7 +112,7 @@ export const LoggedInUserProfileMenu: React.FC<LoggedInProfileMenuProps> = ({
             {ProfileDataItems.map((item, index) => (
               <li
                 key={index}
-                onClick={() => handleNavigation(item.path)}
+                onClick={() => handleItemsClick(item.path)}
                 className="text-[#6c6c6c] mt-[3px] mb-[3px] font-[400] w-full justify-center hover:text-[#40414b] hover:font-[700]"
               >
                 {item.title}

@@ -47,6 +47,7 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
     handleNavigate("/login");
     dispatch(removeAuthToken());
     dispatch(removeLoggedInUser());
+    handleCloseConfirmLogoutDialog();
   };
 
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -84,8 +85,8 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
   }, [isOpen]);
 
   return (
-    <div className="fixed w-full top-[0px] left-[0px] pl-[28px] pr-[28px] z-50 max-w-[600px] mx-auto bg-white flex justify-between menuIcon">
-      <div className="flex justify-between w-full gap-[20px] sm:gap-[50px]">
+    <div className="sticky w-full top-[0px] left-[0px] pl-[28px] pr-[28px] z-50 bg-white flex justify-between menuIcon">
+      <div className="flex justify-between w-full gap-[20px] sm:gap-[50px] py-3">
         <div className="flex justify-between max-w-[20px] w-full items-center">
           <div ref={iconRef}>
             <MenuIcon
@@ -96,14 +97,14 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
           </div>
         </div>
         <HeaderSearch />
-        <div className="flex justify-between max-w-[105px] w-full items-center">
+        <div className="flex justify-between max-w-[30px] sm:max-w-[105px] w-full items-center">
           <img
             src={Logo}
             onClick={() => navigate("/home")}
             alt="logo"
             className="max-h-[30px] max-w-[30px] h-full w-full cursor-pointer"
           />
-          <p className="text-primary text-[20px]">Stylehut</p>
+          <p className="text-primary text-[20px] hidden sm:block">Stylehut</p>
         </div>
       </div>
 
@@ -367,5 +368,7 @@ const CustomBox = styled(
   "@media (max-width: 768px)": {
     minWidth: "250px",
   },
-  "@media (max-width: 460px)": {},
+  "@media (max-width: 460px)": {
+    minWidth: "180px",
+  },
 });

@@ -49,7 +49,6 @@ export const ProfileDetails: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-
   const onSubmit = (data: FormInputData) => {
     const [first_name, ...rest] = data.full_name.trim().split(" ");
     const last_name = rest.join(" ");
@@ -119,7 +118,7 @@ export const ProfileDetails: React.FC = () => {
   }, [reset]);
 
   return (
-    <div className="max-w-[810px] w-full h-fit border border-[#d2d2d2] p-[40px] custom-box-shadow">
+    <div className="max-w-[810px] w-full h-fit border border-[#d2d2d2] p-[40px] pt-0 sm:pt-[40px] mt-0 sm:mt-[20px] custom-box-shadow">
       <p className="flex justify-start text text-[20px] font-[700] text-[#282C3F] pb-[10px] ml-[20px]">
         Edit Details
       </p>

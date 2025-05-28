@@ -139,7 +139,7 @@ export const Header: React.FC = () => {
   }, []);
 
   return (
-    <div className="fixed w-full top-0 z-50 bg-white flex justify-between gap-x-5 shadow-md px-[30px] mx-auto responsive-header">
+    <div className="sticky w-full top-0 z-50 bg-white flex justify-between gap-x-5 shadow-md px-[30px] mx-auto responsive-header">
       <div className="menuIcon">
         <HeaderResponsive
           categories={categories}

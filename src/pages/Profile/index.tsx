@@ -15,7 +15,7 @@ export const Profile: React.FC = () => {
       <LoaderOverlay />
       <div className="relative">
         <div className="flex justify-center items-center h-full overflow-hidden">
-          <div className="pt-[25px] w-full max-w-[1050px] mx-auto responsive-profile-page mb-[40px]">
+          <div className="w-full max-w-[1050px] mx-auto responsive-profile-page mb-[40px]">
             <div className="flex flex-col items-start account-section">
               <p className="text text-[16px] font-[700] m-[0px]">Account</p>
               <p className="text text-xs text-[#363d42] font-[400] m-[0px]">

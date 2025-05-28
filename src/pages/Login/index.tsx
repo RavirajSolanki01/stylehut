@@ -63,69 +63,67 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <React.Fragment>
-      <div className="bg-gradient-to-br from-[#eff8ff] to-[#bbddf8] mt-[80px] min-h-[820px] flex justify-center items-center bottom-container">
-        <div className="flex flex-col dialog-container">
-          <img
-            src={Offers_Banner}
-            alt="offers_banner"
-            className=" h-full w-full max-h-[160px] max-w-[400px] offer-image-container"
-          />
-          <div className="h-full max-h-[350px] w-full max-w-[400px] px-[35px] bg-[#fff] login-container">
-            <CustomTypography className="text-[#282c3f] text-start font-bold font-assistant text-lg py-[20px]">
-              Login <span className="text-gray">or</span> Signup
-            </CustomTypography>
+    <div className="flex flex-col h-full justify-center items-center bottom-container">
+      <div className="flex flex-col dialog-container">
+        <img
+          src={Offers_Banner}
+          alt="offers_banner"
+          className=" h-full w-full max-h-[160px] max-w-[400px] offer-image-container"
+        />
+        <div className="h-full max-h-[350px] w-full max-w-[400px] px-[35px] bg-[#fff] login-container">
+          <CustomTypography className="text-[#282c3f] text-start font-bold font-assistant text-lg py-[20px]">
+            Login <span className="text-gray">or</span> Signup
+          </CustomTypography>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <CustomInput
-                placeholder="Email Address*"
-                {...register("email")}
-                error={Boolean(errors.email)}
-              />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CustomInput
+              placeholder="Email Address*"
+              {...register("email")}
+              error={Boolean(errors.email)}
+            />
 
-              {errors.email && (
-                <FormHelperText error>{errors.email.message}</FormHelperText>
-              )}
+            {errors.email && (
+              <FormHelperText error>{errors.email.message}</FormHelperText>
+            )}
 
-              <p className="py-[10px] text-start text-xs text-[#424553]">
-                By continuing, I agree to the{" "}
-                <a
-                  href="/termsofuse"
-                  className="text-[#3880FF] font-[700] text-xs hover:text-[#3880FF] cursor-pointer"
-                >
-                  Terms of Use
-                </a>{" "}
-                &{" "}
-                <a
-                  href="/privacypolicy"
-                  className="text-[#3880FF] font-[700] text-xs hover:text-[#3880FF] cursor-pointer"
-                >
-                  Privacy Policy
-                </a>
-              </p>
-
-              <button
-                type="submit"
-                className="cursor-pointer bg-[#3880FF] text-center px-[12px] w-[345px] py-[12px] text-[#fff] text-[14px] font-[700] rounded-none uppercase continue-login-button"
+            <p className="py-[10px] text-start text-xs text-[#424553]">
+              By continuing, I agree to the{" "}
+              <a
+                href="/termsofuse"
+                className="text-[#3880FF] font-[700] text-xs hover:text-[#3880FF] cursor-pointer"
               >
-                {isLoading ? (
-                  <CircularProgress size={20} style={{ color: "#fff" }} />
-                ) : (
-                  "Continue"
-                )}
-              </button>
-            </form>
-
-            <p className="py-[15px] text-start text-xs text-[#424553]">
-              Have trouble logging in?{" "}
-              <span className="text-[#3880FF] font-[700] text-xs cursor-pointer">
-                Get help
-              </span>
+                Terms of Use
+              </a>{" "}
+              &{" "}
+              <a
+                href="/privacypolicy"
+                className="text-[#3880FF] font-[700] text-xs hover:text-[#3880FF] cursor-pointer"
+              >
+                Privacy Policy
+              </a>
             </p>
-          </div>
+
+            <button
+              type="submit"
+              className="cursor-pointer bg-[#3880FF] text-center px-[12px] w-[345px] py-[12px] text-[#fff] text-[14px] font-[700] rounded-none uppercase continue-login-button"
+            >
+              {isLoading ? (
+                <CircularProgress size={20} style={{ color: "#fff" }} />
+              ) : (
+                "Continue"
+              )}
+            </button>
+          </form>
+
+          <p className="py-[15px] text-start text-xs text-[#424553]">
+            Have trouble logging in?{" "}
+            <span className="text-[#3880FF] font-[700] text-xs cursor-pointer">
+              Get help
+            </span>
+          </p>
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

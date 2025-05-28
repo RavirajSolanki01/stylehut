@@ -1,7 +1,6 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
 
-import { Header } from "../Header";
 
 export const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = Boolean(localStorage.getItem("authToken"));
@@ -10,7 +9,6 @@ export const PublicRoute = ({ children }: { children: React.ReactNode }) => {
     <Navigate to="/home" replace />
   ) : (
     <>
-      <Header />
       <div>{children}</div>
     </>
   );

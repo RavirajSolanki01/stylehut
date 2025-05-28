@@ -60,7 +60,7 @@ export const HomePage: React.FC = () => {
   return (
     <div>
       <div className="flex justify-center max-w-[1300px] w-full mx-auto items-center overflow-auto">
-        <div className="pt-[100px] w-full px-8 responsive-home-page">
+        <div className="w-full px-8 responsive-home-page">
           <div className="flex flex-col gap-3 mb-5">
             <img
               src={FashionCarnivalImage}

@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 
 import { getTerms } from "../../../services/termsService";
 
-
-
-export const TermsOfUse:React.FC = () => {
+export const TermsOfUse: React.FC = () => {
   const [terms, setTerms] = useState<any>([]);
 
   useEffect(() => {
@@ -14,7 +12,7 @@ export const TermsOfUse:React.FC = () => {
   }, []);
 
   return (
-    <div className="p-4">
+    <div className="pr-4 pt-0 sm:pt-4">
       <p className="text-2xl font-bold text-center">Terms Of Use</p>
       <div
         style={{ fontFamily: "inherit" }}
