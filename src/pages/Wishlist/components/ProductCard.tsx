@@ -63,7 +63,7 @@ const ProductCardBase = ({
           : "";
 
       if (errorMessage.startsWith("Unauthorized")) {
-        toast.error("Please login to add to cart");
+        toast.error("Please login to add product in cart");
       } else {
         toast.error("Unexpected error occurred. Please try again later!");
       }
