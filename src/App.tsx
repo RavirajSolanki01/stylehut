@@ -44,8 +44,7 @@ function App() {
     <React.Fragment>
       <Routes>
         <Route path="/" element={<Layout />}>
-          {/* Public Routes */}
-          <Route index element={<HomePage />} />
+          <Route path={PUBLIC_ROUTES.DASHBOARD} element={<HomePage />} />
           <Route path={PUBLIC_ROUTES.HOME} element={<HomePage />} />
           <Route
             path={PUBLIC_ROUTES.LOGIN}
@@ -64,15 +63,6 @@ function App() {
             }
           />
           <Route
-            path={PUBLIC_ROUTES.PRODUCT_DETAIL}
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <ProductDetailPage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
             path={PUBLIC_ROUTES.DASHBOARD}
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
@@ -83,8 +73,16 @@ function App() {
           <Route
             path={PRIVATE_ROUTES.PRODUCT_LIST}
             element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <ProtectedRoute isAuthenticated={true}>
                 <ProductList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={PUBLIC_ROUTES.PRODUCT_DETAIL}
+            element={
+              <ProtectedRoute isAuthenticated={true}>
+                <ProductDetailPage />
               </ProtectedRoute>
             }
           />
@@ -99,7 +97,7 @@ function App() {
           <Route
             path={PRIVATE_ROUTES.CART}
             element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <ProtectedRoute isAuthenticated={isAuthenticated} path="cart">
                 <ProductCart />
               </ProtectedRoute>
             }
@@ -111,7 +109,7 @@ function App() {
                 <Reviews />
               </ProtectedRoute>
             }
-          />
+          ></Route>
           <Route
             path={PRIVATE_ROUTES.PROFILE}
             element={

@@ -60,7 +60,6 @@ export const Wishlist: React.FC = () => {
 
   useEffect(() => {
     if (!auth.token) {
-      toast.info("Please login to see your wishlist");
       return;
     }
     fetchWishlist();

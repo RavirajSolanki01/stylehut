@@ -19,8 +19,9 @@ export const ProductList = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
 
-  const { users } = useSelector((state: RootState) => ({
+  const { users, auth } = useSelector((state: RootState) => ({
     users: state.users.user,
+    auth: state.auth
   }));
 
   const [sortBy, setSortBy] = useState<string>("Recommended");
@@ -170,11 +171,9 @@ export const ProductList = () => {
       } catch (error) {
         toast.error("Please login to add product to wishlist");
         console.error("Failed to add to wishlist", error);
-        navigate("/login");
       }
     } else {
       toast.error("Sign in to add product in wishlist");
-      navigate("/login");
     }
   };
 
@@ -237,9 +236,15 @@ export const ProductList = () => {
   };
 
   useEffect(() => {
-    fetchWishlist();
     fetchBrandList();
   }, []);
+
+  useEffect(() => {
+    if (!auth.token) {
+      return;
+    }
+    fetchWishlist();
+  }, [auth.token]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
