@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { RootState } from "../../store";
 import { registerUser, verifyOtp } from "../../services/userService";
 import { addAuthToken } from "../../store/slice/auth.slice";
-import { setLoading } from "../../store/slice/loading.slice";import { Header } from "../../components/Header";
+import { setLoading } from "../../store/slice/loading.slice";
 import { Verify_Otp } from "../../assets";
 
 type FormData = {
@@ -153,9 +153,8 @@ export const VerifyOtpPage: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Header />
-      <div className="bg-gradient-to-br from-[#eff8ff] to-[#bbddf8] mt-[80px] min-h-[820px] flex justify-center items-center bottom-container">
-        <div className="flex flex-col m-[30px] h-full max-h-[497px] mx-auto w-full max-w-[400px] p-[60px] bg-[#fff] responsive-verify-otp-component">
+      <div className="flex flex-col h-full justify-center items-center bottom-container">
+        <div className="flex flex-col m-[30px] max-h-[497px] w-full max-w-[400px] p-[40px] bg-white overflow-y-auto">
           <div className="flex flex-col justify-start ">
             <img
               src={Verify_Otp}

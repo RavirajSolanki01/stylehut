@@ -19,6 +19,12 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({
   handlePopoverOpen,
   handleNavigate,
 }) => {
+  
+  const handleClickItem = (path: string) => {
+    handleNavigate(path);
+    handlePopoverClose();
+  };
+
   return (
     <Popover
       id={id}
@@ -50,7 +56,10 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({
           To access account and manage oders
         </p>
         <button
-          onClick={() => handleNavigate("login")}
+          onClick={() => {
+            handleNavigate("login");
+            handlePopoverClose();
+          }}
           className="cursor-pointer bg-transparent border border-[#d2d2d2] text-primary text-center 
               px-[10px] w-[145px] py-[10px] my-[15px] text-[14px] font-[700] rounded-none uppercase 
              hover:font-[700] transition-colors duration-300
@@ -65,7 +74,7 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({
               <li
                 key={index}
                 className="text-[#6c6c6c] mt-[3px] mb-[3px] font-[400] w-full justify-center hover:text-[#40414b] hover:font-[700]"
-                onClick={() => handleNavigate(item.path)}
+                onClick={() => handleClickItem(item.path)}
               >
                 {item.title}
               </li>

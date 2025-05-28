@@ -106,7 +106,7 @@ export const Orders: React.FC = () => {
   };
 
   return (
-    <div className="p-4 w-full">
+    <div className="pr-4 pt-0 sm:pt-4 w-full">
       <div className="h-[64px] flex justify-between w-full">
         <div className="flex flex-col">
           <div className="text-[18px] font-500 text-[#282c3f] leading-[21px]">

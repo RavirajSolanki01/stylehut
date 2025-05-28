@@ -1,3 +1,3 @@
 export const SavedUPI = () => (
-    <div className="p-4">This is the Saved UPI section</div>
-  );
+  <div className="pr-4 pt-0 sm:pt-4">This is the Saved UPI section</div>
+);

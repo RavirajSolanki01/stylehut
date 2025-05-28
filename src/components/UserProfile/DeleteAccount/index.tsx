@@ -11,7 +11,7 @@ export const DeleteAccount: React.FC = () => {
   };
 
   return (
-    <div className="my-[15px] max-w-[810px] w-full border border-[#d2d2d2] p-[30px] delete-account">
+    <div className="mb-[15px] mt-0 sm:mt-[20px] max-w-[810px] w-full border border-[#d2d2d2] p-[30px] delete-account">
       <div className="w-full mx-auto">
         <p className="text text-[16px] font-[700] m-[0px]">Delete Account</p>
         <hr className="border-t-[0px] w-full border-[#d2d2d2] mt-[15px] mb-[0px]" />

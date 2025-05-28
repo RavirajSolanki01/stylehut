@@ -246,7 +246,7 @@ export const Addresses: React.FC = () => {
   }, []);
 
   return (
-    <div className="py-2 pr-3 max-w-[810px] w-full responsive-address-page">
+    <div className="pb-2 pt-0 sm:pt-4 pr-3 max-w-[810px] w-full responsive-address-page">
       <div className="flex justify-between items-center">
         <p className="text-[16px] font-bold">Saved Addresses</p>
         <button

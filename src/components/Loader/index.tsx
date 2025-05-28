@@ -7,7 +7,6 @@ import { RootState } from "../../store";
 export const LoaderOverlay: React.FC = () => {
   const isLoading = useSelector((state: RootState) =>
     [
-      "cart",
       "profile",
       "address",
       "cart-address",

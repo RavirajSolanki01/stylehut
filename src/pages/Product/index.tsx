@@ -43,8 +43,9 @@ const ProductDetailPage: React.FC = () => {
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [productSizes, setProductSizes] = useState<ProductStockItem[]>([]);
-  const [relatedProductVariants, setRelatedProductVariants] = useState<Product[]>([]);
-
+  const [relatedProductVariants, setRelatedProductVariants] = useState<
+    Product[]
+  >([]);
 
   const isAuthenticated: boolean = users.isAuthenticated;
 
@@ -53,10 +54,10 @@ const ProductDetailPage: React.FC = () => {
     try {
       if (!!id) {
         const productData = await getProductDetails(Number(id));
-        const productVariants = productData?.data?.data?.relatedProducts
-        setRelatedProductVariants(productVariants)
+        const productVariants = productData?.data?.data?.relatedProducts;
+        setRelatedProductVariants(productVariants);
         setProductData(productData.data.data);
-        setProductSizes(productData.data.data.size_quantities)
+        setProductSizes(productData.data.data.size_quantities);
         setIsLoading(false);
       }
     } catch (error) {
@@ -129,7 +130,7 @@ const ProductDetailPage: React.FC = () => {
   return (
     <div>
       {!isLoading ? (
-        <div className="w-full max-w-[1600px] mx-auto p-[28px]">
+        <div className="w-full max-w-[1600px] mx-auto p-[28px] pt-0">
           {/* breadcrumbs container */}
           <div className="flex gap-[7px] w-full pb-[22px]">
             {productData?.name && (

@@ -34,6 +34,7 @@ export const Overview: React.FC = () => {
     handleNavigate("/login");
     dispatch(removeAuthToken());
     dispatch(removeLoggedInUser());
+    handleCloseConfirmLogoutDialog()
   };
 
   const handleCloseConfirmLogoutDialog = () => setOpenLogoutDialog(false);
@@ -41,7 +42,7 @@ export const Overview: React.FC = () => {
 
   return (
     <div className="profile-section justify-center">
-      <div className="my-[20px] max-w-[810px] w-full h-full mb-[50px] overview-container">
+      <div className="max-w-[810px] w-full h-full mb-[50px] overview-container">
         <div className="flex justify-between min-w-[545px] w-full px-[20px] bg-[#F5F5F6] h-full max-h-[150px]">
           <div className="flex items-center">
             <img
