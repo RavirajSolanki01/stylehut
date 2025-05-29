@@ -15,6 +15,7 @@ export const DELETE_ADDRESS_API_ENDPOINT = "/api/address";
 export const GET_ADDRESS_BY_ID_API_ENDPOINT = "/api/address";
 export const REVIEWS_ENDPOINT = "/api/rating";
 export const POST_CART_API_ENDPOINT = "/api/cart";
+export const GET_BRAND_LIST_RELATED_SUB_CATEGORY_API_ENDPOINT = "/api/sub-category/brand";
 export const GET_BRAND_LIST_API_ENDPOINT = "/api/brand";
 export const GET_CART_PRODUCTS_API_ENDPOINT = "api/cart/user";
 export const DELETE_FROM_CART_API_ENDPOINT = "/api/cart";
@@ -24,5 +25,4 @@ export const GET_COUPONS_API_ENDPOINT = "api/coupon/offer";
 
 export const GET_TERMS_API_ENDPOINT = "/api/terms";
 export const GET_PRIVACY_POLICY_API_ENDPOINT = "/api/policy";
-export const GET_LANDING_PAGE_SHOP_BY_CATEGORY_API_ENDPOINT =
-  "/api/landing/shop-by-category";
+export const GET_LANDING_PAGE_SHOP_BY_CATEGORY_API_ENDPOINT = "/api/landing/shop-by-category";
