@@ -66,7 +66,14 @@ export const VerifyOtpPage: React.FC = () => {
             err?.response?.data ||
             "Something went wrong.";
 
-          toast.error(`Login Failed: ${errorMessage}`);
+          toast.error(`${errorMessage}`);
+          if (
+            err?.response?.data?.message &&
+            err?.response?.data?.data?.resend_opt_limit &&
+            err?.response.status === 429
+          ) {
+            navigate("/login");
+          }
         });
 
       setOtpAttempts((prev) => prev + 1);
