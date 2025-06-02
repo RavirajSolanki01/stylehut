@@ -12,7 +12,7 @@ import { ProtectedRoute } from "./components/ProtectedRoutes";
 import { SavedCards } from "./components/UserProfile/SavedCards";
 import { ProfileDetails } from "./components/UserProfile/ProfileDetails";
 import { Overview } from "./components/UserProfile/Overview";
-import { Orders } from "./components/UserProfile/Oders";
+import { Orders } from "./components/UserProfile/Orders/index.tsx";
 import { Coupons } from "./components/UserProfile/Coupons";
 import { MyntraCredits } from "./components/UserProfile/Credits";
 import { Myncash } from "./components/UserProfile/Myncash";

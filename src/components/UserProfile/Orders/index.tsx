@@ -20,9 +20,9 @@ import TuneIcon from "@mui/icons-material/Tune";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CircleIcon from "@mui/icons-material/Circle";
 import CloseIcon from "@mui/icons-material/Close";
-
-import { ErrorV2Icon, Product1, Product3 } from "../../../assets";
 import { useDispatch, useSelector } from "react-redux";
+
+import { ErrorV2Icon } from "../../../assets";
 import { setLoading } from "../../../store/slice/loading.slice";
 import { getOrders } from "../../../services/ordersService";
 import { toast } from "react-toastify";
@@ -80,7 +80,7 @@ const timeOption = [
 
 export const Orders: React.FC = () => {
   const dispatch = useDispatch();
-  const { auth, loading } = useSelector((state: RootState) => ({
+  const { auth } = useSelector((state: RootState) => ({
     auth: state.auth,
     loading: state.loading["get-orders"],
   }));
