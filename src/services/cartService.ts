@@ -25,6 +25,8 @@ export const getCartProducts = (params: {
 export const postAddToCart = (payload: {
   product_id?: number;
   quantity?: number;
+  size_quantity_id?: number;
+  color?: string;
 }) => {
   return api.post(POST_CART_API_ENDPOINT, payload, { withAuth: true });
 };

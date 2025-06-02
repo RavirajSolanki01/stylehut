@@ -9,6 +9,7 @@ import { formatPrice } from "../../../utils/reusable-functions";
 import { postAddToCart } from "../../../services/cartService";
 import { setLoading } from "../../../store/slice/loading.slice";
 import { SimilarProducts } from "../../../utils/constants";
+import { WishlistItem } from "../../../utils/types";
 interface ProductCardProps {
   product: any;
   onRemove: (product_id: number) => void;
@@ -44,12 +45,14 @@ const ProductCardBase = ({
     navigate(`/product-detail/${product_id}`);
   };
 
-  const handleAddToCard = async (id: Number) => {
+  const handleAddToCard = async (product: WishlistItem) => {
     try {
       dispatch(setLoading({ key: "Add-to-cart", value: true }));
       await postAddToCart({
-        product_id: Number(id),
+        product_id: Number(product.product_id),
         quantity: 1,
+        // size_quantity_id: 0,
+        // color: "black",
       });
       toast.success("Product added to cart");
       fetchWishlist();
@@ -184,7 +187,7 @@ const ProductCardBase = ({
             className="text-center font-bold text-sm text-[#3880FF] cursor-pointer"
             onClick={() => {
               if (bottomLabel !== "Show Similar") {
-                handleAddToCard(product.product_id);
+                handleAddToCard(product);
               } else {
                 toggleDrawer(true)();
               }
