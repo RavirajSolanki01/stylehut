@@ -41,6 +41,8 @@ const ShopByCategoryCard = ({
             sx={{
               width: "100%",
               objectFit: "cover",
+              minHeight:"225px",
+              height:"100%"
             }}
           />
 

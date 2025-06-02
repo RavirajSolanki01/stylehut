@@ -184,7 +184,7 @@ export interface ProductStockItem {
   create_at: string;
   updated_at: string;
   is_deleted: boolean;
-  price:number;
+  price: number;
   size_data: SizeData;
 }
 
@@ -258,4 +258,97 @@ export interface LandingPageShopByCategory {
       is_deleted: boolean;
     };
   };
+}
+
+export interface Order {
+  id: number;
+  user_id: number;
+  order_number: string;
+  total_amount: string;
+  discount_amount: string;
+  shipping_charge: string;
+  final_amount: string;
+  payment_method: string;
+  payment_status: string;
+  order_status: string;
+  tracking_number: string | null;
+  shipping_address_id: number;
+  billing_address_id: number;
+  expected_delivery: string | null;
+  delivered_at: string | null;
+  cancelled_at: string | null;
+  cancellation_reason: string | null;
+  created_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+  items: OrderItem[];
+  shipping_address: Address;
+  billing_address: Address;
+  timeline: OrderTimeline[];
+  return_request: any; // or `null` | ReturnRequest if details are available
+}
+
+export interface OrderTimeline {
+  id: number;
+  order_id: number;
+  status: string;
+  comment: string;
+  created_at: string;
+  updated_at: string;
+}
+export interface OrderItem {
+  id: number;
+  order_id: number;
+  product_id: number;
+  quantity: number;
+  size_quantity_id: number;
+  color: string;
+  price: string;
+  discount: number;
+  final_price: string;
+  created_at: string;
+  updated_at: string;
+  product: Product;
+  size_quantity: ProductStockItem;
+}
+
+export interface Address {
+  id: number;
+  user_id: number;
+  full_name: string;
+  phone: string;
+  address_line1: string;
+  address_line2: string | null;
+  city: string;
+  state: string;
+  postal_code: string;
+  is_default: boolean;
+  address_type: string;
+  is_open_saturday: boolean;
+  is_open_sunday: boolean;
+  created_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+}
+
+export interface WishlistItem {
+  id: number;
+  user_id: number;
+  product_id: number;
+  created_at: string;
+  is_deleted: boolean;
+  products: ProductData;
+}
+
+interface ProductData {
+  id: number;
+  name: string;
+  description: string;
+  image: string[];
+  price: string;
+  discount: number;
+  category: Category;
+  sub_category: SubCategory;
+  sub_category_type: SubCategoryType;
+  brand: Brand;
 }

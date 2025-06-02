@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -17,39 +17,24 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import TuneIcon from "@mui/icons-material/Tune";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CircleIcon from "@mui/icons-material/Circle";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { ErrorV2Icon, Product1, Product3 } from "../../../assets";
-
-const orderReviews = [
-  {
-    status: "Delivered",
-    deliveryDate: "Wed, 8 Nov 2023",
-    imgUrl: Product1,
-    product: {
-      brand: "Pepe Jeans",
-      name: "Women Straight Fit High-Rise Jeans",
-      size: "24",
-    },
-    returnWindowClosed: "Wed, 22 Nov 2023",
-    rating: 2,
-  },
-  {
-    status: "Delivered",
-    deliveryDate: "Wed, 8 Nov 2023",
-    imgUrl: Product3,
-    product: {
-      brand: "Pepe Jeans",
-      name: "Women Straight Fit High-Rise Jeans",
-      size: "24",
-    },
-    returnWindowClosed: "Wed, 22 Nov 2023",
-    rating: 0,
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../../../store/slice/loading.slice";
+import { getOrders } from "../../../services/ordersService";
+import { toast } from "react-toastify";
+import { RootState } from "../../../store";
+import { Order } from "../../../utils/types";
+import {
+  BoxIcon,
+  OutForDeliveryIcon,
+  PendingIcon,
+  ShippedIcon,
+  TickMarkIcon,
+} from "../../../utils/icons";
 
 const statusOption = [
   {
@@ -94,8 +79,15 @@ const timeOption = [
 ];
 
 export const Orders: React.FC = () => {
+  const dispatch = useDispatch();
+  const { auth, loading } = useSelector((state: RootState) => ({
+    auth: state.auth,
+    loading: state.loading["get-orders"],
+  }));
+
   const [value, setValue] = useState<number | null>(0);
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   const handleFilterClick = () => {
     setIsFilterOpen(true);
@@ -104,6 +96,41 @@ export const Orders: React.FC = () => {
   const handleFilterClose = () => {
     setIsFilterOpen(false);
   };
+
+  const fetchOrders = () => {
+    dispatch(setLoading({ key: "get-orders", value: true }));
+    getOrders({ page: 1, pageSize: 100 })
+      .then((res) => {
+        const ordersList = res?.data?.data?.items;
+        if (ordersList) {
+          setOrders(ordersList);
+        }
+      })
+      .catch((err) => {
+        const errorMessage =
+          err?.response?.data?.message ||
+          err?.response?.data ||
+          "Something went wrong.";
+        toast.error(`Fetch wishlist data Failed: ${errorMessage}`);
+      })
+      .finally(() =>
+        dispatch(setLoading({ key: "get-wishlist", value: false }))
+      );
+  };
+
+  useEffect(() => {
+    if (!auth.token) {
+      return;
+    }
+    fetchOrders();
+  }, [auth.token]);
+
+  const singleItemOrders = orders.flatMap((order) =>
+    order.items.map((item) => ({
+      ...order,
+      items: [item],
+    }))
+  );
 
   return (
     <div className="pr-4 pt-0 sm:pt-4 w-full">
@@ -135,67 +162,101 @@ export const Orders: React.FC = () => {
           </FilterButton>
         </div>
       </div>
-      <div className="bg-[#f5f5f5] p-[10px]">
-        {orderReviews.map((review) => {
+
+      {singleItemOrders.length > 0 ? (
+        singleItemOrders.map((order) => {
           return (
-            <div className="px-[21px] mt-[12px] pb-[5px] bg-[#ffffff]">
-              <div className="flex gap-[12px] pt-[16px]">
-                <div className="h-[32px] w-[32px] rounded-[50%] bg-[#696e79] flex justify-center items-center">
-                  <KeyboardReturnIcon />
-                </div>
-                <div>
-                  <p className="text-[#1f845a] font-[700] text-[14px]">
-                    {review.status}
-                  </p>
-                  <p className="text-[#686b77] font-[500] text-[14px]">
-                    {review.deliveryDate}
-                  </p>
-                </div>
-              </div>
-              <div className="bg-[#f5f5f5] p-[12px] mt-[12px] flex justify-between items-center hover:bg-[#ebebeb]">
-                <div className="flex gap-[26px]">
-                  <img
-                    src={review.imgUrl}
-                    className="h-[70px] r w-[53px] rounded-[8px]"
-                  />
+            <div className="bg-[#f5f5f5] p-[10px]">
+              <div className="px-[21px] mt-[12px] pb-[5px] bg-[#ffffff]">
+                <div className="flex gap-[12px] pt-[16px]">
+                  <div className="h-[32px] w-[32px] rounded-[50%] bg-[#696e79] flex justify-center items-center relative">
+                    <BoxIcon />
+                    {order?.timeline[0]?.status === "DELIVERED" && (
+                      <div className="absolute -bottom-1 -right-1 h-[16px] w-[16px] rounded-[50%] bg-[#1f845a] flex justify-center items-center">
+                        <TickMarkIcon />
+                      </div>
+                    )}
+                    {order?.timeline[0]?.status === "PENDING" && (
+                      <div className="absolute -bottom-1 -right-1 h-[16px] w-[16px] rounded-[50%] bg-[#ff9f00] flex justify-center items-center">
+                        <PendingIcon />
+                      </div>
+                    )}
+                    {order?.timeline[0]?.status === "SHIPPED" && (
+                      <div className="absolute -bottom-1 -right-1 h-[16px] w-[16px] rounded-[50%] bg-[#2874f0] flex justify-center items-center">
+                        <ShippedIcon />
+                      </div>
+                    )}
+                    {order?.timeline[0]?.status === "OUT_FOR_DELIVERY" && (
+                      <div className="absolute -bottom-1 -right-1 h-[16px] w-[16px] rounded-[50%] bg-[#ff9f00] flex justify-center items-center">
+                        <OutForDeliveryIcon />
+                      </div>
+                    )}
+                  </div>
                   <div>
-                    <p className="text-[#282c3f] font-[700] text-[14px] mt-[2px]">
-                      {review.product.brand}
+                    <p className="text-[#1f845a] font-[700] text-[14px] capitalize">
+                      {order?.timeline[0]?.status?.toLowerCase()}
                     </p>
-                    <p className="text-[#282c3f] font-[500] text-[12px] mt-[2px]">
-                      {review.product.name}
-                    </p>
-                    <p className="text-[#282c3f] font-[500] text-[12px] mt-[2px]">
-                      Size: {review.product.size}
+                    <p className="text-[#686b77] font-[500] text-[14px]">
+                      {order?.expected_delivery}
                     </p>
                   </div>
                 </div>
-                <StyledArrowForwardIosIcon />
-              </div>
-              <div className="bg-[#f5f5f5] px-[20px] py-[14px] flex items-center mt-[2px] gap-[11px] hover:bg-[#ebebeb]">
-                <StyledCircleIcon />
-                <p className="text-[#696e79] text-[14px] font-[400]">
-                  Exchange/Return window closed on {review.returnWindowClosed}
-                </p>
-              </div>
-              <div className="bg-[#f5f5f5] px-[20px] py-[14px] mt-[2px]">
-                <StyledRating
-                  name="simple-controlled"
-                  value={review.rating || value}
-                  onChange={(_, newValue) => {
-                    setValue(newValue);
-                  }}
-                />
-                <p className="text-[#282c3f] font-[400] text-[14px] leading-[20px]">
-                  Rate & Review to{" "}
-                  <span className="font-[700]">earn Myntra Credit</span>
-                </p>
+                {order?.items?.map((item) => (
+                  <>
+                    <div className="bg-[#f5f5f5] p-[12px] mt-[12px] flex justify-between items-center hover:bg-[#ebebeb]">
+                      <div className="flex gap-[26px]">
+                        <img
+                          src={item?.product?.image[0]}
+                          className="h-[70px] r w-[53px] rounded-[8px]"
+                        />
+                        <div>
+                          <p className="text-[#282c3f] font-[700] text-[14px] mt-[2px]">
+                            {item?.product?.brand?.name}
+                          </p>
+                          <p className="text-[#282c3f] font-[500] text-[12px] mt-[2px]">
+                            {item?.product?.name}
+                          </p>
+                          <p className="text-[#282c3f] font-[500] text-[12px] mt-[2px]">
+                            Size: {item?.size_quantity?.size_data?.size}
+                          </p>
+                        </div>
+                      </div>
+                      <StyledArrowForwardIosIcon />
+                    </div>
+
+                    {order.timeline[0].status === "DELIVERED" && (
+                      <>
+                        <div className="bg-[#f5f5f5] px-[20px] py-[14px] flex items-center mt-[2px] gap-[11px] hover:bg-[#ebebeb]">
+                          <StyledCircleIcon />
+                          <p className="text-[#696e79] text-[14px] font-[400]">
+                            Exchange/Return window closed on{" "}
+                            {order?.expected_delivery}
+                          </p>
+                        </div>
+                        <div className="bg-[#f5f5f5] px-[20px] py-[14px] mt-[2px]">
+                          <StyledRating
+                            name="simple-controlled"
+                            // value={order.rating || value}
+                            onChange={(_, newValue) => {
+                              setValue(newValue);
+                            }}
+                          />
+                          <p className="text-[#282c3f] font-[400] text-[14px] leading-[20px]">
+                            Rate & Review to{" "}
+                            <span className="font-[700]">
+                              earn Myntra Credit
+                            </span>
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </>
+                ))}
               </div>
             </div>
           );
-        })}
-      </div>
-      {orderReviews.length === 0 && (
+        })
+      ) : (
         <div className="flex justify-center flex-col items-center h-[100%]">
           <img src={ErrorV2Icon} className="mb-[20px]" />
           <p className="text-[#282c3f] text-[20px] font-[700] leading-[28px]">
