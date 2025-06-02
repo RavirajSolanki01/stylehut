@@ -14,10 +14,12 @@ const SimilarProduct = ({
     brand: { name: string };
     price: number;
     discount: number;
-    category: { id: number; name: string };
     image: string[];
-    sub_category: { id: number; name: string };
-    sub_category_type: { id: number; name: string };
+    sub_category_type: { id: number; name: string } & {
+      sub_category: { id: number; name: string } & {
+        category: { id: number; name: string };
+      };
+    };
   }[];
   sub_category_id: number;
   product_id: number;
@@ -25,7 +27,9 @@ const SimilarProduct = ({
   const navigate = useNavigate();
 
   const sameCategoryProducts = similarProducts.filter(
-    (item) => item.sub_category.id === sub_category_id && item.id !== product_id
+    (item) =>
+      item.sub_category_type.sub_category.id === sub_category_id &&
+      item.id !== product_id
   );
 
   const handleGotoProduct = (product_id: number) => {

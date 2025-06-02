@@ -205,9 +205,11 @@ export interface ProductDetails {
     };
   }[];
   name: string;
-  category: { name: string; id: number };
-  sub_category: { name: string; id: number };
-  sub_category_type: { name: string; id: number };
+  sub_category_type: { name: string; id: number } & {
+    sub_category: { name: string; id: number } & {
+      category: { name: string; id: number };
+    };
+  };
   brand: { name: string };
   price?: number;
   discount?: number;
