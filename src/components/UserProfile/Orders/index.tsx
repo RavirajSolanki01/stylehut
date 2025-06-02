@@ -85,7 +85,6 @@ export const Orders: React.FC = () => {
     loading: state.loading["get-orders"],
   }));
 
-  const [value, setValue] = useState<number | null>(0);
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
   const [orders, setOrders] = useState<Order[]>([]);
 
@@ -237,9 +236,9 @@ export const Orders: React.FC = () => {
                           <StyledRating
                             name="simple-controlled"
                             // value={order.rating || value}
-                            onChange={(_, newValue) => {
-                              setValue(newValue);
-                            }}
+                            // onChange={(_, newValue) => {
+                            //   setValue(newValue);
+                            // }}
                           />
                           <p className="text-[#282c3f] font-[400] text-[14px] leading-[20px]">
                             Rate & Review to{" "}
