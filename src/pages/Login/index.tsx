@@ -55,7 +55,7 @@ export const LoginPage: React.FC = () => {
           err?.response?.data ||
           "Something went wrong.";
 
-        toast.error(`Login Failed: ${errorMessage}`);
+        toast.error(`${errorMessage}`);
       })
       .finally(() => {
         dispatch(setLoading({ key: "login", value: false }));
