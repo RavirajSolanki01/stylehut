@@ -20,6 +20,7 @@ const SimilarProduct = ({
         category: { id: number; name: string };
       };
     };
+    sub_category: { id: number; name: string }
   }[];
   sub_category_id: number;
   product_id: number;
@@ -28,7 +29,7 @@ const SimilarProduct = ({
 
   const sameCategoryProducts = similarProducts.filter(
     (item) =>
-      item.sub_category_type.sub_category.id === sub_category_id &&
+      item.sub_category.id === sub_category_id &&
       item.id !== product_id
   );
 

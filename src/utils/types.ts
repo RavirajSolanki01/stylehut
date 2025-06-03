@@ -210,6 +210,8 @@ export interface ProductDetails {
       category: { name: string; id: number };
     };
   };
+  sub_category: { id: number; name: string };
+  category: { id: number; name: string };
   brand: { name: string };
   price?: number;
   discount?: number;

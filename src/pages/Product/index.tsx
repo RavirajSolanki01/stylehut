@@ -37,6 +37,8 @@ const ProductDetailPage: React.FC = () => {
       id: 0,
       sub_category: { name: "", id: 0, category: { name: "", id: 0 } },
     },
+    sub_category: { name: "", id: 0 },
+    category: { name: "", id: 0 },
     name: "",
     id: 0,
   });
@@ -143,21 +145,21 @@ const ProductDetailPage: React.FC = () => {
                 {" / "}
                 <Link
                   className="text-gray-400 capitalize"
-                  to={`/product-list?category=${productData.sub_category_type.sub_category.category.name}requestid${productData.sub_category_type.sub_category.category.id}`}
+                  to={`/product-list?category=${productData.category.name}requestid${productData.category.id}`}
                 >
-                  {productData.sub_category_type.sub_category.category.name.toLocaleLowerCase()}
+                  {productData.category.name.toLocaleLowerCase()}
                 </Link>
                 {" / "}
                 <Link
                   className="text-gray-400 capitalize"
-                  to={`/product-list?category=${productData.sub_category_type.sub_category.category.name}requestid${productData.sub_category_type.sub_category.category.id}&subcategory=${productData.sub_category_type.sub_category.name}requestid${productData.sub_category_type.sub_category.id}`}
+                  to={`/product-list?category=${productData.category.name}requestid${productData.category.id}&subcategory=${productData.sub_category.name}requestid${productData.sub_category.id}`}
                 >
-                  {productData.sub_category_type.sub_category.name.toLocaleLowerCase()}
+                  {productData.sub_category.name.toLocaleLowerCase()}
                 </Link>
                 {" / "}
                 <Link
                   className="text-gray-400 capitalize"
-                  to={`/product-list?category=${productData.sub_category_type.sub_category.category.name}requestid${productData.sub_category_type.sub_category.category.id}&subcategory=${productData.sub_category_type.sub_category.name}requestid${productData.sub_category_type.sub_category.id}&sub_category_type=${productData.sub_category_type.name}requestid${productData.sub_category_type.id}`}
+                  to={`/product-list?category=${productData.category.name}requestid${productData.category.id}&subcategory=${productData.sub_category.name}requestid${productData.sub_category.id}&sub_category_type=${productData.sub_category_type.name}requestid${productData.sub_category_type.id}`}
                 >
                   {productData.sub_category_type.name}
                 </Link>{" "}
@@ -177,7 +179,7 @@ const ProductDetailPage: React.FC = () => {
             <div className="col-span-12 md:col-span-2 ">
               <ProductPrice
                 productName={productData.name}
-                category={productData.sub_category_type.sub_category.category}
+                category={productData.category}
                 availableSize={productSizes}
                 relatedProductVariants={relatedProductVariants}
                 brandName={productData?.brand?.name}
@@ -221,7 +223,7 @@ const ProductDetailPage: React.FC = () => {
           {/* similar product */}
           <SimilarProduct
             similarProducts={productsList}
-            sub_category_id={productData?.sub_category_type?.sub_category?.id}
+            sub_category_id={productData?.sub_category?.id}
             product_id={Number(id)}
           />
           {/* end similar product */}
