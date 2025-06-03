@@ -85,7 +85,7 @@ const ProductPrice = ({
     });
   };
 
-  const isBeautyProducts = category.name.toLocaleLowerCase() === "beauty";
+  const isBeautyProducts = category?.name?.toLocaleLowerCase() === "beauty";
 
   return (
     <div className="flex flex-col items-start">
@@ -171,7 +171,7 @@ const ProductPrice = ({
         </div>
       </div>
 
-      {category.name.toLowerCase() === "beauty" ? (
+      {category?.name?.toLowerCase() === "beauty" ? (
         <div className="flex gap-[10px] mb-[10px]">
           {sortSizes(
             availableSize.map((sizeInfo) => sizeInfo.size_data.size)
@@ -194,7 +194,11 @@ const ProductPrice = ({
                     isSelected ? "!border-2 !border-[#3880FF]" : ""
                   }`}
                 >
-                  <p className={`${Number(sizeInfo?.price) <= 0 ? "p-1.5" : ""}`}>{size}</p>
+                  <p
+                    className={`${Number(sizeInfo?.price) <= 0 ? "p-1.5" : ""}`}
+                  >
+                    {size}
+                  </p>
                   {Number(sizeInfo?.price) > 0 && (
                     <p className="font-normal">Rs.{sizeInfo?.price}</p>
                   )}
