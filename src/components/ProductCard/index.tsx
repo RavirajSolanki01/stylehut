@@ -27,7 +27,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   isWishlisted = false,
   totalReviews = 0,
 }) => {
-
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -61,7 +60,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <div
-      className="relative max-w-[210px] mx-[10px] mb-[20px] w-auto hover:shadow-lg cursor-pointer group h-full"
+      className="relative max-w-[210px] mx-0 mb-0 sm:mx-[10px] sm:mb-[20px] w-auto hover:shadow-lg cursor-pointer group h-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
