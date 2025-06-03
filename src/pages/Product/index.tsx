@@ -4,10 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 
-import {
-  getProductDetails,
-  getProductList,
-} from "../../services/productService";
+import { getProductDetails, getProductList } from "../../services/productService";
 import { postWishlist } from "../../services/wishlistService";
 import ProductDetailSkeleton from "./skeletonDetails";
 import { postAddToCart } from "../../services/cartService";
@@ -45,9 +42,7 @@ const ProductDetailPage: React.FC = () => {
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [productSizes, setProductSizes] = useState<ProductStockItem[]>([]);
-  const [relatedProductVariants, setRelatedProductVariants] = useState<
-    Product[]
-  >([]);
+  const [relatedProductVariants, setRelatedProductVariants] = useState<Product[]>([]);
 
   const isAuthenticated: boolean = users.isAuthenticated;
 
@@ -109,10 +104,7 @@ const ProductDetailPage: React.FC = () => {
       setIsAddedToCart(true);
     } catch (error: unknown) {
       const errorMessage =
-        typeof error === "object" &&
-        error !== null &&
-        "response" in error &&
-        typeof (error as any).response?.data?.message === "string"
+        typeof error === "object" && error !== null && "response" in error && typeof (error as any).response?.data?.message === "string"
           ? (error as any).response.data.message
           : "";
 
@@ -183,9 +175,7 @@ const ProductDetailPage: React.FC = () => {
                 brandName={productData?.brand?.name}
                 price={productData?.price as number}
                 discount={productData?.discount as number}
-                averageRating={
-                  productData?.ratingStats?.averageRating as number
-                }
+                averageRating={productData?.ratingStats?.averageRating as number}
                 totalRatings={productData?.ratingStats?.totalRatings as number}
                 productRatingClick={() =>
                   ratingRef?.current?.scrollIntoView({
@@ -205,9 +195,7 @@ const ProductDetailPage: React.FC = () => {
               <hr className="border-t-[0px] w-full border-[#d2d2d2] mt-[0px]" />
               <div ref={ratingRef}>
                 <ProductRating
-                  averageRating={
-                    productData.ratingStats?.averageRating as number
-                  }
+                  averageRating={productData.ratingStats?.averageRating as number}
                   totalRating={productData.ratingStats?.totalRatings as number}
                   distribution={productData.ratingStats?.distribution!}
                 />
@@ -219,11 +207,7 @@ const ProductDetailPage: React.FC = () => {
           </div>
           {/* product details container */}
           {/* similar product */}
-          <SimilarProduct
-            similarProducts={productsList}
-            sub_category_id={productData?.sub_category_type?.sub_category?.id}
-            product_id={Number(id)}
-          />
+          <SimilarProduct similarProducts={productsList} sub_category_id={productData?.sub_category_type?.sub_category?.id} product_id={Number(id)} />
           {/* end similar product */}
         </div>
       ) : (
