@@ -5,422 +5,14 @@ import { IconButton } from "@mui/material";
 import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
-
+import { ProductStockItem } from "../../../utils/types";
 interface ISizeChartProps {
   images: string[];
   handleSizeChartClick: () => void;
+  sizesData: ProductStockItem[];
+  selectedSize: string;
+  setSelectedSize:(size: string) => void
 }
-
-const sizes = [
-  {
-    skuId: 106389451,
-    styleId: 32996331,
-    action: "/product/32996331/related/XS?co=1",
-    label: "XS",
-    available: true,
-    sizeType: null,
-    originalStyle: true,
-    measurements: [
-      {
-        type: "Garment Measurement",
-        name: "Chest",
-        value: "32.3",
-        minValue: "32.2",
-        maxValue: "32.2",
-        unit: "Inches",
-        displayText: "32.25in",
-      },
-      {
-        type: "Garment Measurement",
-        name: "Waist",
-        value: "28.3",
-        minValue: "28.3",
-        maxValue: "28.3",
-        unit: "Inches",
-        displayText: "28.25in",
-      },
-    ],
-    allSizesList: [
-      {
-        scaleCode: "myntra_size",
-        sizeValue: "XS",
-        size: "Size",
-        order: 1,
-        prefix: "",
-      },
-    ],
-    sizeSellerData: [
-      {
-        mrp: 1199,
-        sellerPartnerId: 6771,
-        availableCount: 26,
-        sellableInventoryCount: 26,
-        warehouses: ["910", "27870"],
-        supplyType: "ON_HAND",
-        discountId: "",
-        discountedPrice: 1199,
-        countryOfOrigin: ["Bangladesh"],
-        manufacturerInfo:
-          "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-        importerInfo:
-          "H&M Hennes & Mauritz Retail Pvt. Ltd. A-wing, D-3, 2nd Floor District Centre Saket New Delhi -110017 India",
-        packerInfo:
-          "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-        procurementTimeInDays: 0,
-        expiryDate: "0",
-        frgListLink:
-          "/free-gift-list?baseStyleId=32996331&sellerPartnerId=6771&skuId=106389451&src=pdp",
-        perUnitAmount: null,
-      },
-    ],
-    kidsSizeMeasurements: null,
-    mrpPerUnitData: null,
-    netQuantity: null,
-    selectedSeller: {
-      sellerPartnerId: 6771,
-      discountedPrice: 1199,
-      availableCount: 26,
-      sellableInventoryCount: 26,
-      manufacturerInfo:
-        "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-      importerInfo:
-        "H&M Hennes & Mauritz Retail Pvt. Ltd. A-wing, D-3, 2nd Floor District Centre Saket New Delhi -110017 India",
-      packerInfo:
-        "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-      expiryDate: "0",
-      mrpPerUnitData: null,
-    },
-  },
-  {
-    skuId: 106389452,
-    styleId: 32996331,
-    action: "/product/32996331/related/S?co=1",
-    label: "S",
-    available: false,
-    sizeType: null,
-    originalStyle: true,
-    measurements: [
-      {
-        type: "Garment Measurement",
-        name: "Chest",
-        value: "34.5",
-        minValue: "34.5",
-        maxValue: "34.5",
-        unit: "Inches",
-        displayText: "34.5in",
-      },
-      {
-        type: "Garment Measurement",
-        name: "Waist",
-        value: "31.5",
-        minValue: "31.5",
-        maxValue: "31.5",
-        unit: "Inches",
-        displayText: "31.5in",
-      },
-    ],
-    allSizesList: [
-      {
-        scaleCode: "myntra_size",
-        sizeValue: "S",
-        size: "Size",
-        order: 1,
-        prefix: "",
-      },
-    ],
-    sizeSellerData: [],
-    kidsSizeMeasurements: null,
-    mrpPerUnitData: null,
-    netQuantity: null,
-    selectedSeller: {
-      discountedPrice: 1199,
-      mrpPerUnitData: null,
-    },
-  },
-  {
-    skuId: 106389453,
-    styleId: 32996331,
-    action: "/product/32996331/related/M?co=1",
-    label: "M",
-    available: true,
-    sizeType: null,
-    originalStyle: true,
-    measurements: [
-      {
-        type: "Garment Measurement",
-        name: "Chest",
-        value: "37.6",
-        minValue: "37.6",
-        maxValue: "37.6",
-        unit: "Inches",
-        displayText: "37.63in",
-      },
-      {
-        type: "Garment Measurement",
-        name: "Waist",
-        value: "34.5",
-        minValue: "34.5",
-        maxValue: "34.5",
-        unit: "Inches",
-        displayText: "34.5in",
-      },
-    ],
-    allSizesList: [
-      {
-        scaleCode: "myntra_size",
-        sizeValue: "M",
-        size: "Size",
-        order: 1,
-        prefix: "",
-      },
-    ],
-    sizeSellerData: [
-      {
-        mrp: 1199,
-        sellerPartnerId: 6771,
-        availableCount: 72,
-        sellableInventoryCount: 72,
-        warehouses: ["910", "27870"],
-        supplyType: "ON_HAND",
-        discountId: "",
-        discountedPrice: 1199,
-        countryOfOrigin: ["Bangladesh"],
-        manufacturerInfo:
-          "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-        importerInfo:
-          "H&M Hennes & Mauritz Retail Pvt. Ltd. A-wing, D-3, 2nd Floor District Centre Saket New Delhi -110017 India",
-        packerInfo:
-          "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-        procurementTimeInDays: 0,
-        expiryDate: "0",
-        frgListLink:
-          "/free-gift-list?baseStyleId=32996331&sellerPartnerId=6771&skuId=106389453&src=pdp",
-        perUnitAmount: null,
-      },
-    ],
-    kidsSizeMeasurements: null,
-    mrpPerUnitData: null,
-    netQuantity: null,
-    selectedSeller: {
-      sellerPartnerId: 6771,
-      discountedPrice: 1199,
-      availableCount: 72,
-      sellableInventoryCount: 72,
-      manufacturerInfo:
-        "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-      importerInfo:
-        "H&M Hennes & Mauritz Retail Pvt. Ltd. A-wing, D-3, 2nd Floor District Centre Saket New Delhi -110017 India",
-      packerInfo:
-        "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-      expiryDate: "0",
-      mrpPerUnitData: null,
-    },
-  },
-  {
-    skuId: 106389454,
-    styleId: 32996331,
-    action: "/product/32996331/related/L?co=1",
-    label: "L",
-    available: true,
-    sizeType: null,
-    originalStyle: true,
-    measurements: [
-      {
-        type: "Garment Measurement",
-        name: "Chest",
-        value: "40.8",
-        minValue: "40.7",
-        maxValue: "40.7",
-        unit: "Inches",
-        displayText: "40.75in",
-      },
-      {
-        type: "Garment Measurement",
-        name: "Waist",
-        value: "37.8",
-        minValue: "37.8",
-        maxValue: "37.8",
-        unit: "Inches",
-        displayText: "37.75in",
-      },
-    ],
-    allSizesList: [
-      {
-        scaleCode: "myntra_size",
-        sizeValue: "L",
-        size: "Size",
-        order: 1,
-        prefix: "",
-      },
-    ],
-    sizeSellerData: [
-      {
-        mrp: 1199,
-        sellerPartnerId: 6771,
-        availableCount: 82,
-        sellableInventoryCount: 82,
-        warehouses: ["910", "27870"],
-        supplyType: "ON_HAND",
-        discountId: "",
-        discountedPrice: 1199,
-        countryOfOrigin: ["Bangladesh"],
-        manufacturerInfo:
-          "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-        importerInfo:
-          "H&M Hennes & Mauritz Retail Pvt. Ltd. A-wing, D-3, 2nd Floor District Centre Saket New Delhi -110017 India",
-        packerInfo:
-          "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-        procurementTimeInDays: 0,
-        expiryDate: "0",
-        frgListLink:
-          "/free-gift-list?baseStyleId=32996331&sellerPartnerId=6771&skuId=106389454&src=pdp",
-        perUnitAmount: null,
-      },
-    ],
-    kidsSizeMeasurements: null,
-    mrpPerUnitData: null,
-    netQuantity: null,
-    selectedSeller: {
-      sellerPartnerId: 6771,
-      discountedPrice: 1199,
-      availableCount: 82,
-      sellableInventoryCount: 82,
-      manufacturerInfo:
-        "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-      importerInfo:
-        "H&M Hennes & Mauritz Retail Pvt. Ltd. A-wing, D-3, 2nd Floor District Centre Saket New Delhi -110017 India",
-      packerInfo:
-        "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-      expiryDate: "0",
-      mrpPerUnitData: null,
-    },
-  },
-  {
-    skuId: 106389455,
-    styleId: 32996331,
-    action: "/product/32996331/related/XL?co=1",
-    label: "XL",
-    available: true,
-    sizeType: null,
-    originalStyle: true,
-    measurements: [
-      {
-        type: "Garment Measurement",
-        name: "Chest",
-        value: "43.8",
-        minValue: "43.7",
-        maxValue: "43.7",
-        unit: "Inches",
-        displayText: "43.75in",
-      },
-      {
-        type: "Garment Measurement",
-        name: "Waist",
-        value: "41.0",
-        minValue: "41.0",
-        maxValue: "41.0",
-        unit: "Inches",
-        displayText: "41.0in",
-      },
-    ],
-    allSizesList: [
-      {
-        scaleCode: "myntra_size",
-        sizeValue: "XL",
-        size: "Size",
-        order: 1,
-        prefix: "",
-      },
-    ],
-    sizeSellerData: [
-      {
-        mrp: 1199,
-        sellerPartnerId: 6771,
-        availableCount: 19,
-        sellableInventoryCount: 19,
-        warehouses: ["910", "27870"],
-        supplyType: "ON_HAND",
-        discountId: "",
-        discountedPrice: 1199,
-        countryOfOrigin: ["Bangladesh"],
-        manufacturerInfo:
-          "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-        importerInfo:
-          "H&M Hennes & Mauritz Retail Pvt. Ltd. A-wing, D-3, 2nd Floor District Centre Saket New Delhi -110017 India",
-        packerInfo:
-          "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-        procurementTimeInDays: 0,
-        expiryDate: "0",
-        frgListLink:
-          "/free-gift-list?baseStyleId=32996331&sellerPartnerId=6771&skuId=106389455&src=pdp",
-        perUnitAmount: null,
-      },
-    ],
-    kidsSizeMeasurements: null,
-    mrpPerUnitData: null,
-    netQuantity: null,
-    selectedSeller: {
-      sellerPartnerId: 6771,
-      discountedPrice: 1199,
-      availableCount: 19,
-      sellableInventoryCount: 19,
-      manufacturerInfo:
-        "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-      importerInfo:
-        "H&M Hennes & Mauritz Retail Pvt. Ltd. A-wing, D-3, 2nd Floor District Centre Saket New Delhi -110017 India",
-      packerInfo:
-        "IMPRESS-NEWTEX COMPOSITE TEXTILES  LTD., Gorai Industrial Area,,Mirzapur,1942,Tangail | Arvind Smart Textiles Limited, Ring-Road,Vill-Malti,Rampur,,834010,Ranchi",
-      expiryDate: "0",
-      mrpPerUnitData: null,
-    },
-  },
-  {
-    skuId: 106389456,
-    styleId: 32996331,
-    action: "/product/32996331/related/XXL?co=1",
-    label: "XXL",
-    available: false,
-    sizeType: null,
-    originalStyle: true,
-    measurements: [
-      {
-        type: "Garment Measurement",
-        name: "Chest",
-        value: "47.1",
-        minValue: "47.1",
-        maxValue: "47.1",
-        unit: "Inches",
-        displayText: "47.13in",
-      },
-      {
-        type: "Garment Measurement",
-        name: "Waist",
-        value: "44.0",
-        minValue: "44.0",
-        maxValue: "44.0",
-        unit: "Inches",
-        displayText: "44.0in",
-      },
-    ],
-    allSizesList: [
-      {
-        scaleCode: "myntra_size",
-        sizeValue: "XXL",
-        size: "Size",
-        order: 1,
-        prefix: "",
-      },
-    ],
-    sizeSellerData: [],
-    kidsSizeMeasurements: null,
-    mrpPerUnitData: null,
-    netQuantity: null,
-    selectedSeller: {
-      discountedPrice: 1199,
-      mrpPerUnitData: null,
-    },
-  },
-];
 
 const sizeChart = {
   sizeChartUrl: null,
@@ -437,11 +29,36 @@ type TabType = (typeof tabs)[number]["id"];
 
 const SizeChart: React.FC<ISizeChartProps> = ({
   images,
+  selectedSize,
+  setSelectedSize,
+  sizesData,
   handleSizeChartClick,
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>("size");
-  const allSizesList = sizes[0]?.allSizesList;
-  const measurements = sizes[0]?.measurements;
+
+  const sizes = sizesData.map(
+    (item) => ({
+      skuId: item.id,
+      label: item.size_data?.size,
+      available: item.quantity > 0,
+      measurements:
+        item.size_data?.size_chart_data?.map(
+          (chart: { size_field_name: any; size_field_value: string }) => ({
+            name: chart.size_field_name,
+            minValue: parseFloat(chart.size_field_value),
+          })
+        ) || [],
+    })
+  );
+
+  const measurements =
+    sizesData[0]?.size_data?.size_chart_data?.map(
+      (m: { size_field_name: any }) => ({
+        name: m.size_field_name,
+        unit: !sizesData[0]?.size_data?.is_cm ? "Inches" : "Cm",
+      })
+    ) || [];
+
   const [measurementUnit, setMeasurementUnit] = useState<string>(
     measurements[0]?.unit ?? "Inches"
   );
@@ -449,12 +66,13 @@ const SizeChart: React.FC<ISizeChartProps> = ({
   const wishlistOpen = false;
 
   const inchesToCentimeters = (unit: string, amount: number) => {
-    if (unit === "Inches") {
-      return amount.toFixed(1);
-    } else {
-      return (amount * 2.54).toFixed(1);
-    }
+    return unit === "Inches" ? amount.toFixed(1) : (amount * 2.54).toFixed(1);
   };
+
+  const handleSizeSelect = (sizeId: string) => {
+    setSelectedSize(String(sizeId) === String(selectedSize) ? "" : sizeId);
+  };
+
 
   return (
     <div className="fixed inset-0 bg-black/60 z-50 flex justify-end">
@@ -533,18 +151,13 @@ const SizeChart: React.FC<ISizeChartProps> = ({
             <thead>
               <tr className="border border-[#eaeaec]">
                 <th className="sizeChartWeb-newCell"></th>
-                {allSizesList.map((size) => (
+                <th className="sizeChartWeb-newCell text-base font-[400]">
+                  Size
+                </th>
+                {measurements.map((measurement: { name: any }) => (
                   <th
                     className="sizeChartWeb-newCell text-base font-[400]"
-                    key={size.sizeValue}
-                  >
-                    {size.sizeValue}
-                  </th>
-                ))}
-                {measurements.map((measurement) => (
-                  <th
-                    className="sizeChartWeb-newCell text-base font-[400]"
-                    key={measurement.name}
+                    key={String(measurement.name)}
                   >
                     {measurement.name} ({measurementUnit.slice(0, 2)})
                   </th>
@@ -552,7 +165,7 @@ const SizeChart: React.FC<ISizeChartProps> = ({
               </tr>
             </thead>
             <tbody>
-              {sizes.map((size) => (
+              {sizes.map((size: any) => (
                 <tr
                   className={`border border-[#eaeaec] ${
                     size.available ? "" : "opacity-40 pointer-events-none"
@@ -563,9 +176,9 @@ const SizeChart: React.FC<ISizeChartProps> = ({
                     <label className="common-customRadio common-newCustomRadio">
                       <input
                         type="radio"
-                        className=""
-                        id="106389451"
-                        // value="on"
+                        name="size"
+                        checked={selectedSize === size.label}
+                        onChange={() => handleSizeSelect(size.label)}
                         disabled={!size.available}
                       />
                       <div className="common-radioIndicator sizeChartWeb-radioIndicator common-radioIndicatorNew sizeChartWeb-radioIndicatorNew"></div>
@@ -579,19 +192,21 @@ const SizeChart: React.FC<ISizeChartProps> = ({
                   >
                     {size.label}
                   </td>
-                  {size.measurements.map((measurement, index) => (
-                    <td
-                      className={`sizeChartWeb-newCell text-base ${
-                        size.available ? "" : "line-through"
-                      }`}
-                      key={index}
-                    >
-                      {inchesToCentimeters(
-                        measurementUnit,
-                        Number(measurement.minValue)
-                      )}
-                    </td>
-                  ))}
+                  {size.measurements.map(
+                    (measurement: { minValue: any }, index: React.Key) => (
+                      <td
+                        className={`sizeChartWeb-newCell text-base ${
+                          size.available ? "" : "line-through"
+                        }`}
+                        key={index}
+                      >
+                        {inchesToCentimeters(
+                          measurementUnit,
+                          Number(measurement.minValue)
+                        )}
+                      </td>
+                    )
+                  )}
                 </tr>
               ))}
             </tbody>
@@ -614,8 +229,12 @@ const SizeChart: React.FC<ISizeChartProps> = ({
           </div>
           <div className="p-4 flex items-center gap-3 sticky bottom-0 bg-white  shadow-[0_0px_24px_[#eaeaec]] z-[1]">
             <button
-              // onClick={addToCart}
-              className="cursor-pointer bg-[#3880FF]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#3880FF] hover:border-transparent h-10"
+              disabled={!selectedSize}
+              className={`cursor-pointer ${
+                selectedSize
+                  ? "bg-[#3880FF] hover:bg-[#3880FF]"
+                  : "bg-gray-300 cursor-not-allowed"
+              } w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:border-transparent h-10`}
             >
               <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
               <span>ADD TO BAG</span>
