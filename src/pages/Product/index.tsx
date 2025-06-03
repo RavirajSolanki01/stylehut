@@ -128,7 +128,7 @@ const ProductDetailPage: React.FC = () => {
     fetchProductDetail();
     fetchProducts();
   }, [id]);
-
+console.log(productData)
   return (
     <div>
       {!isLoading ? (
