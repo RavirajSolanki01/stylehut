@@ -199,7 +199,10 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
         <div>
           <div className="flex flex-col justify-between w-full items-center mb-[100px]">
             <div
-              onClick={() => navigate("/profile/overview")}
+              onClick={() => {
+                navigate("/profile/overview");
+                setIsOpen(false);
+              }}
               className="flex pl-[25px] border-b py-[12px] border-[#3880FF] w-full text-[#282c3f] cursor-pointer items-center"
             >
               <PersonOutlineIcon />
@@ -210,7 +213,10 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
             {isUserLoggedIn && (
               <div className="w-full">
                 <div
-                  onClick={() => navigate("/wishlist")}
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/wishlist");
+                  }}
                   className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center"
                 >
                   <FavoriteBorderOutlinedIcon />
@@ -220,7 +226,10 @@ export const HeaderResponsive: React.FC<HeaderResponsiveProps> = ({
                 </div>
 
                 <div
-                  onClick={() => navigate("/cart")}
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/cart");
+                  }}
                   className="flex pl-[25px] border-b border-[#3880FF] py-[12px] w-full text-[#282c3f] cursor-pointer items-center"
                 >
                   <ShoppingBagOutlinedIcon />

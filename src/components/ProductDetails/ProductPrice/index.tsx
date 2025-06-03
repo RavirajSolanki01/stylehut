@@ -52,6 +52,10 @@ const ProductPrice = ({
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [sizeError, setSizeError] = useState<string>("");
 
+  const has_size_chart =
+    availableSize.length > 0 &&
+    availableSize.every((size) => size.size_data.has_size_chart === true);
+
   const handleSizeChartClick = () => {
     setIsOpenSizeChart(!isOpenSizeChart);
   };
@@ -162,13 +166,15 @@ const ProductPrice = ({
       {/* product size */}
       <div className="flex gap-[30px] items-center my-[12px]">
         <div className="font-[700] text-[16px] m-[0px]">SELECT SIZE</div>
-        <div
-          className="font-[700] text-[14px] cursor-pointer text-[#3880FF] leading-[16px] m-[0px] flex items-center"
-          onClick={handleSizeChartClick}
-        >
-          SIZE CHART
-          <NavigateNextIcon />
-        </div>
+        {has_size_chart && (
+          <div
+            className="font-[700] text-[14px] cursor-pointer text-[#3880FF] leading-[16px] m-[0px] flex items-center"
+            onClick={handleSizeChartClick}
+          >
+            SIZE CHART
+            <NavigateNextIcon />
+          </div>
+        )}
       </div>
 
       {category.name.toLowerCase() === "beauty" ? (
@@ -194,7 +200,11 @@ const ProductPrice = ({
                     isSelected ? "!border-2 !border-[#3880FF]" : ""
                   }`}
                 >
-                  <p className={`${Number(sizeInfo?.price) <= 0 ? "p-1.5" : ""}`}>{size}</p>
+                  <p
+                    className={`${Number(sizeInfo?.price) <= 0 ? "p-1.5" : ""}`}
+                  >
+                    {size}
+                  </p>
                   {Number(sizeInfo?.price) > 0 && (
                     <p className="font-normal">Rs.{sizeInfo?.price}</p>
                   )}
@@ -273,7 +283,7 @@ const ProductPrice = ({
         ) : (
           <button
             onClick={() => {
-              if (!selectedSize) {
+              if (availableSize.length > 0 && !selectedSize) {
                 setSizeError("Please select a size");
                 return;
               }
@@ -350,6 +360,9 @@ const ProductPrice = ({
       {isOpenSizeChart && (
         <SizeChart
           images={images}
+          sizesData={availableSize}
+          selectedSize={selectedSize}
+          setSelectedSize={setSelectedSize}
           handleSizeChartClick={handleSizeChartClick}
         />
       )}

@@ -105,12 +105,8 @@ export const Orders: React.FC = () => {
           setOrders(ordersList);
         }
       })
-      .catch((err) => {
-        const errorMessage =
-          err?.response?.data?.message ||
-          err?.response?.data ||
-          "Something went wrong.";
-        toast.error(`Fetch wishlist data Failed: ${errorMessage}`);
+      .catch(() => {
+        toast.error(`Something went wrong.Failed to fetch orders data`);
       })
       .finally(() =>
         dispatch(setLoading({ key: "get-wishlist", value: false }))
@@ -132,7 +128,7 @@ export const Orders: React.FC = () => {
   );
 
   return (
-    <div className="pr-4 pt-0 sm:pt-4 w-full">
+    <div className="p-4 pt-0 sm:pt-4 w-full">
       <div className="h-[64px] flex justify-between w-full">
         <div className="flex flex-col">
           <div className="text-[18px] font-500 text-[#282c3f] leading-[21px]">
@@ -153,11 +149,12 @@ export const Orders: React.FC = () => {
             }
           />
           <FilterButton
+            style={{ marginRight: 0 }}
             variant="outlined"
             startIcon={<TuneIcon />}
             onClick={handleFilterClick}
           >
-            Filter
+            <div className="hidden sm:block">Filter</div>
           </FilterButton>
         </div>
       </div>
@@ -243,7 +240,7 @@ export const Orders: React.FC = () => {
                           <p className="text-[#282c3f] font-[400] text-[14px] leading-[20px]">
                             Rate & Review to{" "}
                             <span className="font-[700]">
-                              earn Myntra Credit
+                              earn Stylehut Credit
                             </span>
                           </p>
                         </div>
@@ -258,10 +255,10 @@ export const Orders: React.FC = () => {
       ) : (
         <div className="flex justify-center flex-col items-center h-[100%]">
           <img src={ErrorV2Icon} className="mb-[20px]" />
-          <p className="text-[#282c3f] text-[20px] font-[700] leading-[28px]">
+          <p className="text-[#282c3f] text-[20px] font-[700] leading-[28px] text-center">
             You haven't placed any order yet!
           </p>
-          <p className="text-[#686b77] text-[14px] font-[400] leading-[18px] my-[12px]">
+          <p className="text-[#686b77] text-[14px] font-[400] leading-[18px] my-[12px] text-center">
             Order section is empty. After placing order, You can track them from
             here!
           </p>
@@ -402,6 +399,10 @@ const FilterButton = styled(Button)({
   color: "#000",
   width: "100%",
   maxWidth: "85px",
+  "& > span": {
+    marginLeft: "0px",
+    marginRight: "0px"
+  }
 });
 
 const StyledRating = styled(Rating)({

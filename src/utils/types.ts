@@ -166,13 +166,21 @@ export interface Brand {
   is_deleted: boolean;
 }
 
+interface SizeChartData {
+  size_field_name: string;
+  size_field_value: string;
+}
+
 export interface SizeData {
+  size_chart_data?: SizeChartData[];
   id: number;
   size: string;
   name: string;
   create_at: string;
   updated_at: string;
   is_deleted: boolean;
+  is_cm?: boolean;
+  has_size_chart?: boolean;
 }
 export interface ProductStockItem {
   id: number;

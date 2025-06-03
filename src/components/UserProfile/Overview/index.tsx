@@ -27,6 +27,11 @@ export const Overview: React.FC = () => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
 
   const handleNavigate = (path: string) => {
+    console.log(path)
+    if (path === "wishlist") {
+      navigate(`/${path}`);
+      return;
+    }
     navigate(`/profile/${path}`);
   };
 
@@ -34,7 +39,7 @@ export const Overview: React.FC = () => {
     handleNavigate("/login");
     dispatch(removeAuthToken());
     dispatch(removeLoggedInUser());
-    handleCloseConfirmLogoutDialog()
+    handleCloseConfirmLogoutDialog();
   };
 
   const handleCloseConfirmLogoutDialog = () => setOpenLogoutDialog(false);
