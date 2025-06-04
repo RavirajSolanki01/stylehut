@@ -29,6 +29,7 @@ const ProductPrice = ({
   availableSize,
   relatedProductVariants,
   category,
+  subCategory
 }: {
   productName: string;
   brandName: string;
@@ -45,6 +46,7 @@ const ProductPrice = ({
   availableSize: ProductStockItem[];
   relatedProductVariants: Product[];
   category: { id: number; name: string };
+  subCategory: { id: number; name: string };
 }) => {
   const navigate = useNavigate();
 
@@ -177,8 +179,8 @@ const ProductPrice = ({
         )}
       </div>
 
-      {category?.name?.toLowerCase() === "beauty" ? (
-        <div className="flex gap-[10px] mb-[10px]">
+      {availableSize.every((size) => size.price > 0) ? (
+        <div className="flex flex-wrap gap-[10px] mb-[10px]">
           {sortSizes(
             availableSize.map((sizeInfo) => sizeInfo.size_data.size)
           ).map((size) => {
@@ -188,7 +190,7 @@ const ProductPrice = ({
             const isSelected = sizeInfo?.size_data?.size === selectedSize;
 
             return (
-              <div className="relative w-[85px]" key={sizeInfo?.id}>
+              <div className="relative" key={sizeInfo?.id}>
                 <button
                   onClick={() => {
                     setSelectedSize(size);
@@ -226,7 +228,7 @@ const ProductPrice = ({
           })}
         </div>
       ) : (
-        <div className="flex gap-[10px] mb-[10px]">
+        <div className="flex flex-wrap gap-[10px] mb-[10px]">
           {sortSizes(
             availableSize.map((sizeInfo) => sizeInfo.size_data.size)
           ).map((size) => {
@@ -368,6 +370,7 @@ const ProductPrice = ({
           discount={discount}
           price={price}
           productName={productName}
+          subCategory={subCategory}
         />
       )}
     </div>

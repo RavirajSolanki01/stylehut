@@ -130,7 +130,7 @@ const ProductDetailPage: React.FC = () => {
     fetchProductDetail();
     fetchProducts();
   }, [id]);
-console.log(productData)
+
   return (
     <div>
       {!isLoading ? (
@@ -200,6 +200,7 @@ console.log(productData)
                 addToCart={handleAddToCard}
                 isAddedToCart={isAddedToCart}
                 images={productData.image as []}
+                subCategory={productData.sub_category}
               />
               <BestOffers />
               <hr className="border-t-[0px] w-full border-[#d2d2d2] mt-[0px]" />
