@@ -8,6 +8,10 @@ import Favorite from "@mui/icons-material/Favorite";
 import { ProductStockItem } from "../../../utils/types";
 interface ISizeChartProps {
   images: string[];
+  productName: string;
+  brandName: string;
+  price: number;
+  discount: number;
   handleSizeChartClick: () => void;
   sizesData: ProductStockItem[];
   selectedSize: string;
@@ -33,6 +37,10 @@ const SizeChart: React.FC<ISizeChartProps> = ({
   setSelectedSize,
   sizesData,
   handleSizeChartClick,
+  brandName,
+  discount,
+  price,
+  productName
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>("size");
 
@@ -73,7 +81,10 @@ const SizeChart: React.FC<ISizeChartProps> = ({
     setSelectedSize(String(sizeId) === String(selectedSize) ? "" : sizeId);
   };
 
-
+  const discountedPrice = Math.round(
+    Number(price.toString().replace(/[^\d]/g, "")) *
+      (1 - discount / 100)
+  );
   return (
     <div className="fixed inset-0 bg-black/60 z-50 flex justify-end">
       <aside className="w-full max-w-[700px] bg-white shadow-lg overflow-y-auto">
@@ -90,18 +101,18 @@ const SizeChart: React.FC<ISizeChartProps> = ({
             className="w-40 h-50 object-cover"
           />
           <div>
-            <h2 className="text-xl font-semibold">Red Tape</h2>
+            <h2 className="text-xl font-semibold">{brandName}</h2>
             <p className="text-lg text-[#282c3f] mt-1 mb-1">
-              Red Tape Men Colourblocked Lace-Ups Round Toe Sneakers
+              {productName}
             </p>
             <p className="mt-1 text-base font-semibold text-[#282c3f]">
-              ₹1259{" "}
-              <span className="line-through text-[#94969f] opacity-80 text-base">
-                ₹6999
+              ₹{discountedPrice}{" "}
+              <span className="line-through text-[#94969f] opacity-80 text-base mx-1">
+                ₹{price}
               </span>
               <span className="text-[#ff905a] font-semibold text-base">
                 {" "}
-                (82% OFF)
+                ({discount}% OFF)
               </span>
             </p>
           </div>

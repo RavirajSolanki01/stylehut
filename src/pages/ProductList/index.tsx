@@ -202,6 +202,7 @@ export const ProductList = () => {
         pageSize: 10,
         sortBy: sortingBy || sorting,
         order: order || ordering,
+        minPrice: priceRange[0] || 0,
         maxPrice: priceRange[1] < 10000 ? priceRange[1] : 100000,
         category_id: Number(queryParams.get("category")?.split("requestid")[1]),
         sub_category_id: Number(
