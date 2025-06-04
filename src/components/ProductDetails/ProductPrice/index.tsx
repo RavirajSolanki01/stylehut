@@ -376,10 +376,6 @@ const ProductPrice = ({
           }
           addToWishlist={addToWishlist}
           handleSizeChartClick={handleSizeChartClick}
-          brandName={brandName}
-          discount={discount}
-          price={price}
-          productName={productName}
           subCategory={subCategory}
         />
       )}
