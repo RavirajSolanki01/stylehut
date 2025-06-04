@@ -6,10 +6,16 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
 import { RootState } from "../../store";
-import { registerUser, verifyOtp } from "../../services/userService";
+import {
+  getOtpExpiryLimit,
+  resendOtp,
+  resendOtpWithPayload,
+  verifyOtp,
+} from "../../services/userService";
 import { addAuthToken } from "../../store/slice/auth.slice";
 import { setLoading } from "../../store/slice/loading.slice";
 import { Verify_Otp } from "../../assets";
+import OtpTimer from "../../components/OtpTimer";
 
 type FormData = {
   digit1: string;
@@ -28,57 +34,67 @@ export const VerifyOtpPage: React.FC = () => {
     users: state.users.user,
   }));
 
-  const [timer, setTimer] = useState<number>(30);
-  const [isResendDisabled, setIsResendDisabled] = useState<boolean>(true);
-  const [otpAttempts, setOtpAttempts] = useState<number>(0);
+  const [otpLimitExpiry, setOtpLimitExpiry] = useState("");
+  const [otpLimitCountdown, setOtpLimitCountdown] = useState("");
+  const [otpLimitExpiryErr, setOtpLimitExpiryErr] = useState("");
+  const [resendOtpLimitExpiry, setResendOtpLimitExpiry] = useState("");
 
-  useEffect(() => {
-    let countdown: number | null = null;
-
-    if (isResendDisabled && timer > 0) {
-      countdown = window.setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      setIsResendDisabled(false);
+  const handleResendOtp = async () => {
+    try {
+      const res = await resendOtpWithPayload({ email: users.email });
+      if (res.status === 200) {
+        toast.success(res.data.message);
+      }
+    } catch (err: any) {
+      if (!err) return;
+      const errorMessage =
+        err?.response?.data?.message ||
+        err?.response?.data ||
+        "Something went wrong.";
+      toast.error(errorMessage);
     }
+  };
 
-    return () => {
-      if (countdown) window.clearInterval(countdown);
-    };
-  }, [timer, isResendDisabled]);
+  const fetchResendOtpExpiryLimit = async () => {
+    try {
+      const res = await resendOtp({ email: users.email });
+      if (res.status === 200) {
+        setResendOtpLimitExpiry(res.data.data.resend_otp_limit_expires_at);
+      }
+    } catch (err: any) {
+      if (!err) return;
+      const errorMessage =
+        err?.response?.data?.message ||
+        err?.response?.data ||
+        "Something went wrong.";
+      toast.error(errorMessage);
+    }
+  };
 
-  const handleResendOtp = () => {
-    if (otpAttempts >= 3) {
-      toast.error("You have exceeded the maximum number of OTP attempts.");
-      return;
-    } else {
-      registerUser({ email: users.email })
-        .then((res) => {
-          if (res.status === 200 && res.data.message === "OTP sent to email.") {
-            toast.success(res.data.message);
-            navigate("/verify-otp");
-          }
-        })
-        .catch((err) => {
-          const errorMessage =
-            err?.response?.data?.message ||
-            err?.response?.data ||
-            "Something went wrong.";
+  const fetchOtpExpiryLimit = async () => {
+    try {
+      const res = await getOtpExpiryLimit({ email: users.email });
+      if (res.status === 200) {
+        const { otp_limit_expires_at } = res.data.data;
+        setOtpLimitExpiry(otp_limit_expires_at);
+        setOtpLimitExpiryErr(
+          `You've reached the maximum number of OTP verification attempts. Please try again after ${otpLimitCountdown} minute.`
+        );
+      }
+    } catch (err: any) {
+      const errorMessage =
+        err?.response?.data?.message ||
+        err?.response?.data ||
+        "Something went wrong.";
 
-          toast.error(`${errorMessage}`);
-          if (
-            err?.response?.data?.message &&
-            err?.response?.data?.data?.resend_opt_limit &&
-            err?.response.status === 429
-          ) {
-            navigate("/login");
-          }
-        });
+      toast.error(errorMessage);
 
-      setOtpAttempts((prev) => prev + 1);
-      setTimer(30);
-      setIsResendDisabled(true);
+      if (
+        err?.response?.status === 429 &&
+        err?.response?.data?.data?.resend_opt_limit
+      ) {
+        navigate("/login");
+      }
     }
   };
 
@@ -158,6 +174,34 @@ export const VerifyOtpPage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (otpLimitExpiry) {
+      interval = setInterval(() => {
+        const now = Date.now();
+        const expiryTime = new Date(otpLimitExpiry).getTime();
+        const remainingTime = expiryTime - now;
+
+        if (remainingTime <= 0) {
+          setOtpLimitExpiry("");
+          setOtpLimitCountdown("");
+          clearInterval(interval);
+        } else {
+          const seconds = Math.floor((remainingTime / 1000) % 60);
+          setOtpLimitCountdown(seconds.toString());
+        }
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [otpLimitExpiry]);
+
+  useEffect(() => {
+    fetchOtpExpiryLimit();
+    fetchResendOtpExpiryLimit();
+  }, []);
+
   return (
     <React.Fragment>
       <div className="flex flex-col h-full justify-center items-center bottom-container">
@@ -192,21 +236,21 @@ export const VerifyOtpPage: React.FC = () => {
                   />
                 ))}
               </div>
-              {!isResendDisabled ? (
-                <p
-                  onClick={handleResendOtp}
-                  className="text-[#3880FF] text-justify font-[700] text-xs hover:text-[#3880FF] cursor-pointer uppercase"
-                >
-                  Resend OTP
-                </p>
+              {resendOtpLimitExpiry !== "" &&
+              new Date(resendOtpLimitExpiry) > new Date() ? (
+                <div className="mt-[25px]">
+                  <OtpTimer otpLimitExpiry={resendOtpLimitExpiry} />
+                </div>
               ) : (
-                <p
-                  className={`text-[#787878] text-justify font-[500] text-xs cursor-pointer opacity-70`}
-                  onClick={!isResendDisabled ? handleResendOtp : undefined}
-                >
-                  {`Resend OTP in 00:${timer.toString().padStart(2, "0")}`}
-                </p>
+                <></>
               )}
+              <p
+                onClick={handleResendOtp}
+                className="text-[#3880FF] text-justify font-[700] text-xs hover:text-[#3880FF] cursor-pointer uppercase"
+              >
+                Resend OTP
+              </p>
+
               <p className="py-[5px] text-start text-xs text-[#424553] font-normal">
                 Having trouble logging in? {""}
                 <span className="text-[#3880FF] text-justify font-[700] text-xs hover:text-[#3880FF] cursor-pointer">
