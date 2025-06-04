@@ -6,12 +6,22 @@ import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
 import { ProductStockItem } from "../../../utils/types";
+import { ArrowRightAltSharp } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 interface ISizeChartProps {
   images: string[];
+  productName: string;
+  brandName: string;
+  price: number;
+  discount: number;
+  isAddedToCart?: boolean;
+  isWishlisted?: boolean;
   handleSizeChartClick: () => void;
   sizesData: ProductStockItem[];
-  selectedSize: string;
-  setSelectedSize:(size: string) => void
+  selectedSize: number | undefined;
+  addToCart?: (id: number | undefined) => void;
+  addToWishlist?: () => void;
+  setSelectedSize: (size: number | undefined) => void;
 }
 
 const sizeChart = {
@@ -30,26 +40,33 @@ type TabType = (typeof tabs)[number]["id"];
 const SizeChart: React.FC<ISizeChartProps> = ({
   images,
   selectedSize,
+  price,
+  discount,
+  isAddedToCart,
+  isWishlisted = false,
+  productName,
+  brandName,
   setSelectedSize,
   sizesData,
   handleSizeChartClick,
+  addToCart,
+  addToWishlist,
 }) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>("size");
 
-  const sizes = sizesData.map(
-    (item) => ({
-      skuId: item.id,
-      label: item.size_data?.size,
-      available: item.quantity > 0,
-      measurements:
-        item.size_data?.size_chart_data?.map(
-          (chart: { size_field_name: any; size_field_value: string }) => ({
-            name: chart.size_field_name,
-            minValue: parseFloat(chart.size_field_value),
-          })
-        ) || [],
-    })
-  );
+  const sizes = sizesData.map((item) => ({
+    skuId: item.id,
+    label: item.size_data?.size,
+    available: item.quantity > 0,
+    measurements:
+      item.size_data?.size_chart_data?.map(
+        (chart: { size_field_name: any; size_field_value: string }) => ({
+          name: chart.size_field_name,
+          minValue: parseFloat(chart.size_field_value),
+        })
+      ) || [],
+  }));
 
   const measurements =
     sizesData[0]?.size_data?.size_chart_data?.map(
@@ -63,16 +80,13 @@ const SizeChart: React.FC<ISizeChartProps> = ({
     measurements[0]?.unit ?? "Inches"
   );
 
-  const wishlistOpen = false;
-
   const inchesToCentimeters = (unit: string, amount: number) => {
     return unit === "Inches" ? amount.toFixed(1) : (amount * 2.54).toFixed(1);
   };
 
-  const handleSizeSelect = (sizeId: string) => {
-    setSelectedSize(String(sizeId) === String(selectedSize) ? "" : sizeId);
+  const handleSizeSelect = (sizeId: number) => {
+    setSelectedSize(sizeId === selectedSize ? 0 : sizeId);
   };
-
 
   return (
     <div className="fixed inset-0 bg-black/60 z-50 flex justify-end">
@@ -90,18 +104,16 @@ const SizeChart: React.FC<ISizeChartProps> = ({
             className="w-40 h-50 object-cover"
           />
           <div>
-            <h2 className="text-xl font-semibold">Red Tape</h2>
-            <p className="text-lg text-[#282c3f] mt-1 mb-1">
-              Red Tape Men Colourblocked Lace-Ups Round Toe Sneakers
-            </p>
+            <h2 className="text-xl font-semibold">{brandName}</h2>
+            <p className="text-lg text-[#282c3f] mt-1 mb-1">{productName}</p>
             <p className="mt-1 text-base font-semibold text-[#282c3f]">
-              ₹1259{" "}
+              ₹{(price - price * (discount / 100)).toFixed(0)}{" "}
               <span className="line-through text-[#94969f] opacity-80 text-base">
-                ₹6999
+                MRP ₹{price}
               </span>
               <span className="text-[#ff905a] font-semibold text-base">
                 {" "}
-                (82% OFF)
+                ({discount}% OFF)
               </span>
             </p>
           </div>
@@ -177,8 +189,8 @@ const SizeChart: React.FC<ISizeChartProps> = ({
                       <input
                         type="radio"
                         name="size"
-                        checked={selectedSize === size.label}
-                        onChange={() => handleSizeSelect(size.label)}
+                        checked={selectedSize === size.skuId}
+                        onChange={() => handleSizeSelect(size.skuId)}
                         disabled={!size.available}
                       />
                       <div className="common-radioIndicator sizeChartWeb-radioIndicator common-radioIndicatorNew sizeChartWeb-radioIndicatorNew"></div>
@@ -228,25 +240,36 @@ const SizeChart: React.FC<ISizeChartProps> = ({
             </div>
           </div>
           <div className="p-4 flex items-center gap-3 sticky bottom-0 bg-white  shadow-[0_0px_24px_[#eaeaec]] z-[1]">
-            <button
-              disabled={!selectedSize}
-              className={`cursor-pointer ${
-                selectedSize
-                  ? "bg-[#3880FF] hover:bg-[#3880FF]"
-                  : "bg-gray-300 cursor-not-allowed"
-              } w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:border-transparent h-10`}
-            >
-              <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
-              <span>ADD TO BAG</span>
-            </button>
+            {isAddedToCart ? (
+              <button
+                onClick={() => navigate("/cart")}
+                className="cursor-pointer bg-[#3880FF]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#3880FF] hover:border-transparent h-10"
+              >
+                <span>GO TO BAG</span>
+                <ArrowRightAltSharp className="!w-[20px] !h-[20px]" />
+              </button>
+            ) : (
+              <button
+                disabled={!selectedSize}
+                onClick={() => addToCart?.(selectedSize)}
+                className={`cursor-pointer ${
+                  selectedSize
+                    ? "bg-[#3880FF] hover:bg-[#3880FF]"
+                    : "bg-gray-300 cursor-not-allowed"
+                } w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:border-transparent h-10`}
+              >
+                <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
+                <span>ADD TO BAG</span>
+              </button>
+            )}
 
             <button
-              // onClick={addToWishlist}
+              onClick={addToWishlist}
               className={`h-10  ${
-                wishlistOpen ? "!bg-[#535766] text-[#fff]" : ""
+                isWishlisted ? "!bg-[#535766] text-[#fff]" : ""
               } cursor-pointer border border-[#d4d5d9] text-[#282c3f] bg-[#fff] font-bold text-[14px]  rounded-[4px] flex items-center justify-center gap-[6px] hover:border-[#535766] w-full`}
             >
-              {wishlistOpen ? (
+              {isWishlisted ? (
                 <Favorite
                   fill="bg-[#3880FF]"
                   className="text-[#3880FF] "

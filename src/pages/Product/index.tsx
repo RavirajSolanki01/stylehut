@@ -101,11 +101,12 @@ const ProductDetailPage: React.FC = () => {
     }
   };
 
-  const handleAddToCard = async () => {
+  const handleAddToCard = async (selectedSize: number | undefined) => {
     try {
       await postAddToCart({
         product_id: Number(id),
         quantity: 1,
+        size_quantity_id: selectedSize,
       });
       toast.success("Product added to cart");
       setIsAddedToCart(true);
@@ -130,7 +131,7 @@ const ProductDetailPage: React.FC = () => {
     fetchProductDetail();
     fetchProducts();
   }, [id]);
-console.log(productData)
+  console.log(productData);
   return (
     <div>
       {!isLoading ? (

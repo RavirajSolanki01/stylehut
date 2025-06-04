@@ -6,12 +6,12 @@ import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-
 import {
   getCartProducts,
   moveAllFromCartToWishlist,
   removeAllFromCart,
   removeFromCart,
+  placeOrderApiCall,
 } from "../../services/cartService";
 import { CartItems, Coupon, FormAddressData, Product } from "../../utils/types";
 import { postWishlist } from "../../services/wishlistService";
@@ -54,6 +54,19 @@ export const ProductCart: React.FC = () => {
   const handleStepClick = (index: number) => {
     if (index <= maxAllowedStep) {
       setActiveStep(index);
+    }
+  };
+
+  const placeOrder = async (method: string) => {
+    const response = await placeOrderApiCall({
+      shipping_address_id: selectedIndex,
+      billing_address_id: selectedIndex,
+      payment_method: method,
+    });
+
+    if (response?.data && response?.status === 200) {
+      toast.success("Order place successfully.");
+      navigate("/home");
     }
   };
 
@@ -155,8 +168,17 @@ export const ProductCart: React.FC = () => {
         ) : (
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-[70%]">
-              <CheckoutScreen totalPrice={totalPrice} />
+              <CheckoutScreen totalPrice={totalPrice} placeOrder={placeOrder} />
             </div>
+            <PriceSummary
+              setTotalPrice={setTotalPrice}
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              setMaxAllowedStep={setMaxAllowedStep}
+              setCartItems={setCartItems}
+              cartItems={cartItems}
+              disabled={!selectedIndex}
+            />
           </div>
         )}
       </div>
