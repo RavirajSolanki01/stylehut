@@ -27,5 +27,5 @@ export const withLoading = async (
 };
 
 export const formatPrice = (price: number): string => {
-  return new Intl.NumberFormat("en-IN").format(price);
+  return new Intl.NumberFormat("en-IN").format(Math.round(price));
 };
