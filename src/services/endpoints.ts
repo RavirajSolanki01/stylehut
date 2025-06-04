@@ -21,6 +21,7 @@ export const DELETE_FROM_CART_API_ENDPOINT = "/api/cart";
 export const REMOVE_All_FROM_CART_API_ENDPOINT = "/api/cart/clear";
 export const MOVE_All_FROM_CART_TO_WISHLIST_API_ENDPOINT = "/api/cart/wishlist";
 export const GET_COUPONS_API_ENDPOINT = "api/coupon/offer";
+export const PLACE_ORDER_API_ENDPOINT = "api/orders";
 
 export const GET_TERMS_API_ENDPOINT = "/api/terms";
 export const GET_PRIVACY_POLICY_API_ENDPOINT = "/api/policy";

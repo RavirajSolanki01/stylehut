@@ -6,6 +6,8 @@ import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
 import { ProductStockItem } from "../../../utils/types";
+import { ArrowRightAltSharp } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 import {
   BottomWearSizeChart,
   FootWearSizeChart,
@@ -17,10 +19,14 @@ interface ISizeChartProps {
   brandName: string;
   price: number;
   discount: number;
+  isAddedToCart?: boolean;
+  isWishlisted?: boolean;
   handleSizeChartClick: () => void;
   sizesData: ProductStockItem[];
-  selectedSize: string;
-  setSelectedSize: (size: string) => void;
+  selectedSize: number | undefined;
+  addToCart?: (id: number | undefined) => void;
+  addToWishlist?: () => void;
+  setSelectedSize: (size: number | undefined) => void;
   subCategory: { id: number; name: string };
 }
 
@@ -34,15 +40,20 @@ type TabType = (typeof tabs)[number]["id"];
 const SizeChart: React.FC<ISizeChartProps> = ({
   images,
   selectedSize,
+  price,
+  discount,
+  isAddedToCart,
+  isWishlisted = false,
+  productName,
+  brandName,
   setSelectedSize,
   sizesData,
   handleSizeChartClick,
-  brandName,
-  discount,
-  price,
-  productName,
+  addToCart,
+  addToWishlist,
   subCategory,
 }) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>("size");
 
   const sizes = sizesData.map((item) => ({
@@ -70,14 +81,12 @@ const SizeChart: React.FC<ISizeChartProps> = ({
     measurements[0]?.unit ?? "Inches"
   );
 
-  const wishlistOpen = false;
-
   const inchesToCentimeters = (unit: string, amount: number) => {
     return unit === "Inches" ? amount.toFixed(1) : (amount * 2.54).toFixed(1);
   };
 
-  const handleSizeSelect = (sizeId: string) => {
-    setSelectedSize(String(sizeId) === String(selectedSize) ? "" : sizeId);
+  const handleSizeSelect = (sizeId: number) => {
+    setSelectedSize(sizeId === selectedSize ? 0 : sizeId);
   };
 
   const discountedPrice = Math.round(
@@ -93,7 +102,7 @@ const SizeChart: React.FC<ISizeChartProps> = ({
       case "Footwear":
         return FootWearSizeChart;
       default:
-        return TopWearSizeChart; 
+        return TopWearSizeChart;
     }
   };
   return (
@@ -250,25 +259,36 @@ const SizeChart: React.FC<ISizeChartProps> = ({
                 </div>
               </div>
               <div className="p-4 flex items-center gap-3 sticky bottom-0 bg-white  shadow-[0_0px_24px_[#eaeaec]] z-[1]">
-                <button
-                  disabled={!selectedSize}
-                  className={`cursor-pointer ${
-                    selectedSize
-                      ? "bg-[#3880FF] hover:bg-[#3880FF]"
-                      : "bg-gray-300 cursor-not-allowed"
-                  } w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:border-transparent h-10`}
-                >
-                  <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
-                  <span>ADD TO BAG</span>
-                </button>
+                {isAddedToCart ? (
+                  <button
+                    onClick={() => navigate("/cart")}
+                    className="cursor-pointer bg-[#3880FF]  w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#3880FF] hover:border-transparent h-10"
+                  >
+                    <span>GO TO BAG</span>
+                    <ArrowRightAltSharp className="!w-[20px] !h-[20px]" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToCart?.(selectedSize)}
+                    disabled={!selectedSize}
+                    className={`cursor-pointer ${
+                      selectedSize
+                        ? "bg-[#3880FF] hover:bg-[#3880FF]"
+                        : "bg-gray-300 cursor-not-allowed"
+                    } w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:border-transparent h-10`}
+                  >
+                    <ShoppingBagOutlined className="!w-[20px] !h-[20px]" />
+                    <span>ADD TO BAG</span>
+                  </button>
+                )}
 
                 <button
-                  // onClick={addToWishlist}
+                  onClick={addToWishlist}
                   className={`h-10  ${
-                    wishlistOpen ? "!bg-[#535766] text-[#fff]" : ""
+                    isWishlisted ? "!bg-[#535766] text-[#fff]" : ""
                   } cursor-pointer border border-[#d4d5d9] text-[#282c3f] bg-[#fff] font-bold text-[14px]  rounded-[4px] flex items-center justify-center gap-[6px] hover:border-[#535766] w-full`}
                 >
-                  {wishlistOpen ? (
+                  {isWishlisted ? (
                     <Favorite
                       fill="bg-[#3880FF]"
                       className="text-[#3880FF] "

@@ -39,7 +39,7 @@ const ProductPrice = ({
   totalRatings: number;
   productRatingClick?: () => void;
   addToWishlist?: () => void;
-  addToCart?: () => void;
+  addToCart?: (id: number | undefined) => void;
   isWishlisted?: boolean;
   isAddedToCart?: boolean;
   images: string[];
@@ -51,7 +51,7 @@ const ProductPrice = ({
   const navigate = useNavigate();
 
   const [isOpenSizeChart, setIsOpenSizeChart] = useState<boolean>(false);
-  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<number | undefined>(0);
   const [sizeError, setSizeError] = useState<string>("");
 
   const has_size_chart =
@@ -187,13 +187,13 @@ const ProductPrice = ({
             const sizeInfo = availableSize.find(
               (item) => item.size_data.size === size
             );
-            const isSelected = sizeInfo?.size_data?.size === selectedSize;
+            const isSelected = sizeInfo?.id === selectedSize;
 
             return (
               <div className="relative" key={sizeInfo?.id}>
                 <button
                   onClick={() => {
-                    setSelectedSize(size);
+                    setSelectedSize(sizeInfo?.id);
                     setSizeError("");
                   }}
                   className={`${
@@ -235,13 +235,13 @@ const ProductPrice = ({
             const sizeInfo = availableSize.find(
               (item) => item.size_data.size === size
             );
-            const isSelected = sizeInfo?.size_data?.size === selectedSize;
+            const isSelected = sizeInfo?.id === selectedSize;
 
             return (
               <div className="relative w-[50px]" key={sizeInfo?.id}>
                 <button
                   onClick={() => {
-                    setSelectedSize(size);
+                    setSelectedSize(sizeInfo?.id);
                     setSizeError("");
                   }}
                   className={`${
@@ -289,7 +289,7 @@ const ProductPrice = ({
                 setSizeError("Please select a size");
                 return;
               }
-              addToCart?.();
+              addToCart?.(selectedSize);
             }}
             className="cursor-pointer bg-[#3880FF] w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#3880FF] hover:border-transparent h-10"
           >
@@ -361,15 +361,21 @@ const ProductPrice = ({
       {/* Size chart */}
       {isOpenSizeChart && (
         <SizeChart
+          price={price}
           images={images}
+          discount={discount}
+          brandName={brandName}
+          productName={productName}
+          isWishlisted={isWishlisted}
+          isAddedToCart={isAddedToCart}
           sizesData={availableSize}
           selectedSize={selectedSize}
           setSelectedSize={setSelectedSize}
+          addToCart={(selectedSize: number | undefined) =>
+            addToCart?.(selectedSize)
+          }
+          addToWishlist={addToWishlist}
           handleSizeChartClick={handleSizeChartClick}
-          brandName={brandName}
-          discount={discount}
-          price={price}
-          productName={productName}
           subCategory={subCategory}
         />
       )}
