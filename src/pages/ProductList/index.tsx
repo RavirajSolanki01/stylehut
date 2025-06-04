@@ -202,6 +202,7 @@ export const ProductList = () => {
         pageSize: 10,
         sortBy: sortingBy || sorting,
         order: order || ordering,
+        minPrice: priceRange[0] || 0,
         maxPrice: priceRange[1] < 10000 ? priceRange[1] : 100000,
         category_id: Number(queryParams.get("category")?.split("requestid")[1]),
         sub_category_id: Number(
@@ -581,15 +582,15 @@ export const ProductList = () => {
           </div>
         </div>
 
-        <div className="w-full p-[0px] sm:p-[20px] flex flex-col">
-          <div className="flex flex-wrap justify-center sm:justify-start items-stretch">
-            {loading && (
-              <div className="flex flex-wrap">
-                {[...Array(10)].map(() => (
-                  <SkeletonProduct />
-                ))}
-              </div>
-            )}
+        <div className="w-full sm:w-[80%] p-[0px] sm:p-[20px] flex flex-col">
+          {loading && (
+            <div className="px-3 flex flex-wrap">
+              {[...Array(10)].map(() => (
+                <SkeletonProduct />
+              ))}
+            </div>
+          )}
+          <div className="px-3 pt-4 sm:pt-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {productsList.length > 0 ? (
               productsList.map(
                 (product: {
@@ -606,7 +607,7 @@ export const ProductList = () => {
                 }) => (
                   <div
                     key={product.id}
-                    className="w-1/2 max-w-[210px] sm:w-auto p-1 box-border"
+                    className="w-full flex justify-center sm:block sm:justify-normal"
                     onClick={() => handleGotoProduct(product.id)}
                   >
                     <ProductCard

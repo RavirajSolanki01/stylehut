@@ -27,7 +27,6 @@ export const Overview: React.FC = () => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
 
   const handleNavigate = (path: string) => {
-    console.log(path)
     if (path === "wishlist") {
       navigate(`/${path}`);
       return;
