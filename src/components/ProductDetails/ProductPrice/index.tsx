@@ -364,6 +364,10 @@ const ProductPrice = ({
           selectedSize={selectedSize}
           setSelectedSize={setSelectedSize}
           handleSizeChartClick={handleSizeChartClick}
+          brandName={brandName}
+          discount={discount}
+          price={price}
+          productName={productName}
         />
       )}
     </div>

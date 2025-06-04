@@ -85,42 +85,44 @@ export const ProductCart: React.FC = () => {
   return (
     <>
       <div className="fixed w-full top-0 z-50 bg-white flex justify-between items-center shadow-md px-[20px] py-[10px] flex-col  gap-3 sm:flex-row sm:px-[30px]">
-        <div className="flex items-center">
-          <img
-            onClick={() => navigate("/home")}
-            src={Logo}
-            alt="myntra_logo"
-            className="max-h-[60px] max-w-[60px] h-full w-full cursor-pointer"
-          />
-        </div>
+        <div className="flex w-full justify-center sm:justify-between ">
+          <div className="flex items-center">
+            <img
+              onClick={() => navigate("/home")}
+              src={Logo}
+              alt="myntra_logo"
+              className="max-h-[50px] max-w-[50px] h-full w-full cursor-pointer mr-5"
+            />
+          </div>
 
-        <ol className="flex items-center font-semibold tracking-[3px] sm:flex-row gap-5 text-[12px] md:text-[14px]">
-          {steps.map((step, index) => (
-            <React.Fragment key={step}>
-              <li
-                onClick={() => handleStepClick(index)}
-                className={`${getStepStyle(
-                  index
-                )} transition duration-200 text-[12px] md:text-[14px]`}
-              >
-                {step}
-              </li>
-              {index < steps.length - 1 && (
-                <li className="mx-2 text-[#d3d3d3] select-none hidden sm:block">
-                  ---------
+          <ol className="flex items-center font-semibold tracking-[3px] sm:flex-row gap-5 text-[12px] md:text-[14px]">
+            {steps.map((step, index) => (
+              <React.Fragment key={step}>
+                <li
+                  onClick={() => handleStepClick(index)}
+                  className={`${getStepStyle(
+                    index
+                  )} transition duration-200 text-[12px] md:text-[14px]`}
+                >
+                  {step}
                 </li>
-              )}
-            </React.Fragment>
-          ))}
-        </ol>
+                {index < steps.length - 1 && (
+                  <li className="mx-2 text-[#d3d3d3] select-none hidden sm:block">
+                    ---------
+                  </li>
+                )}
+              </React.Fragment>
+            ))}
+          </ol>
 
-        <div className="hidden items-center sm:flex">
-          <img
-            src="https://constant.myntassets.com/checkout/assets/img/sprite-secure.png"
-            alt="secure_icon"
-            className="max-h-[28px] max-w-[26px] h-full w-full cursor-pointer mr-3"
-          />
-          <p className="text-[#535766] text-xs tracking-[3px]">100% SECURE</p>
+          <div className="hidden items-center sm:flex">
+            <img
+              src="https://constant.myntassets.com/checkout/assets/img/sprite-secure.png"
+              alt="secure_icon"
+              className="max-h-[28px] max-w-[26px] h-full w-full cursor-pointer mr-3"
+            />
+            <p className="text-[#535766] text-xs tracking-[3px]">100% SECURE</p>
+          </div>
         </div>
       </div>
 
