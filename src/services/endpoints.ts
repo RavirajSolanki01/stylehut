@@ -29,3 +29,6 @@ export const GET_LANDING_PAGE_SHOP_BY_CATEGORY_API_ENDPOINT =
   "/api/landing/shop-by-category";
 
 export const GET_ORDERS_API_ENDPOINT = "/api/orders";
+export const RESEND_OTP_API_ENDPOINT = "/api/resend-otp";
+export const FETCH_OTP_EXPIRY_LIMIT = "/api/time-limit-otp"
+
