@@ -172,7 +172,9 @@ export const CartAddresses: React.FC<Props> = ({
         setAddresses(items);
         setDefaultAddress(defaultAddress);
         setDefaultIndex(defaultAddress.id);
-        setSelectedIndex(defaultAddress.id || items?.[0].id);
+        if (!selectedIndex) {
+          setSelectedIndex(defaultAddress.id || items?.[0].id);
+        }
       },
     });
 
@@ -180,9 +182,10 @@ export const CartAddresses: React.FC<Props> = ({
     executeRequest(() => postAddress(data), {
       errorPrefix: "Add address failed",
       openOnError: true,
-      onSuccess: () => {
+      onSuccess: (res: any) => {
         toast.success("Address added successfully.");
         fetchAddresses();
+        setSelectedIndex(res?.data?.data?.id as number);
       },
     });
 
@@ -349,10 +352,8 @@ const AddressCard: React.FC<AddressCardProps> = ({
   isSelected,
   onClick,
   onEdit,
-  handleDeleteClick,
 }) => {
   const {
-    id,
     full_name,
     address_line1: addressLine,
     address_line2,
@@ -418,18 +419,12 @@ const AddressCard: React.FC<AddressCardProps> = ({
       </div>
       {isSelected && (
         <>
-          <div className="flex items-center text-sm font-semibold p-2 w-1/3 justify-around">
+          <div className="flex items-center text-sm font-semibold p-2 w-1/3 justify-start">
             <button
               onClick={onEdit}
               className="cursor-pointer rounded-[5px] border border-[#282c3f] text-[#282c3f] p-2 w-2/5 focus:outline-none"
             >
               EDIT
-            </button>
-            <button
-              onClick={() => handleDeleteClick(id as number)}
-              className="cursor-pointer rounded-[5px] border border-[#282c3f] text-[#282c3f] p-2 w-2/5 focus:outline-none"
-            >
-              REMOVE
             </button>
           </div>
         </>

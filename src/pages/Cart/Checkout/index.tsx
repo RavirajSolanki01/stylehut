@@ -17,6 +17,7 @@ type Props = {
 const CheckoutScreen: React.FC<Props> = ({ totalPrice, placeOrder }) => {
   const [paymentMethod, setPaymentMethod] =
     useState<string>("CASH_ON_DELIVERY");
+  const [loader, setLoader] = useState<boolean>(false);
 
   const getMethodOptions = () => {
     return {
@@ -56,8 +57,7 @@ const CheckoutScreen: React.FC<Props> = ({ totalPrice, placeOrder }) => {
         email: "",
         contact: "",
       },
-      handler: (_response: any) => {
-        console.log(_response);
+      handler: () => {
         placeOrder("ONLINE");
       },
       theme: { color: "#3880ff" },
@@ -70,7 +70,9 @@ const CheckoutScreen: React.FC<Props> = ({ totalPrice, placeOrder }) => {
 
   const handleSubmit = () => {
     if (paymentMethod === "CASH_ON_DELIVERY") {
+      setLoader(true);
       placeOrder("CASH_ON_DELIVERY");
+      setLoader(false);
     } else {
       handleRazorpayPayment();
     }
@@ -151,6 +153,7 @@ const CheckoutScreen: React.FC<Props> = ({ totalPrice, placeOrder }) => {
             </Box>
           </Box>
           <button
+            disabled={loader}
             onClick={handleSubmit}
             className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]"
           >
