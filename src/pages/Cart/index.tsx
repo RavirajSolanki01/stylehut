@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Checkbox } from "@mui/material";
+import { Checkbox, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
 import { toast } from "react-toastify";
@@ -50,6 +50,7 @@ export const ProductCart: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [maxAllowedStep, setMaxAllowedStep] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<string>("");
+  const [orderSuccess, setOrderSuccess] = useState<boolean>(false);
 
   const handleStepClick = (index: number) => {
     if (index <= maxAllowedStep) {
@@ -65,8 +66,11 @@ export const ProductCart: React.FC = () => {
     });
 
     if (response?.data && response?.status === 200) {
-      toast.success("Order place successfully.");
-      navigate("/home");
+      setOrderSuccess(true);
+      setTimeout(() => {
+        setOrderSuccess(false);
+        navigate("/profile/orders");
+      }, 4000);
     }
   };
 
@@ -94,6 +98,41 @@ export const ProductCart: React.FC = () => {
   useEffect(() => {
     withLoading(dispatch, "refresh-cart", refreshCart);
   }, []);
+
+  if (orderSuccess) {
+    return (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-r from-blue-100 to-blue-200">
+        <div className="bg-white shadow-lg rounded-xl p-8 max-w-md text-center animate-fade-in">
+          <div className="flex justify-center mb-4">
+            <div className="w-20 h-20 rounded-full bg-[#8bb2f741] flex items-center justify-center">
+              <svg
+                className="w-10 h-10 text-[#3880ff] animate-bounce"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+          </div>
+          <Typography
+            variant="h5"
+            className="!text-[#3880ff] font-semibold mb-2"
+          >
+            Order Successful!
+          </Typography>
+          <Typography className="text-sm text-gray-600 mb-4">
+            Thank you for placing order.
+          </Typography>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -301,7 +340,9 @@ const PriceSummary: React.FC<Props> = ({
                 </p>
                 <p className="font-normal text-[#28a02e] text-[12px] ml-4">
                   You saved ₹{" "}
-                  {formatPrice(Number(appliedCoupon.max_savings_amount))}{" "}
+                  {formatPrice(
+                    Number(couponDiscount ? couponDiscount.toFixed(0) : 0)
+                  )}
                 </p>
               </div>
             </>
@@ -599,7 +640,7 @@ const CartItemsList: React.FC<Props> = ({
               )}
             </div>
             {cartItems.length > 0 ? (
-              cartItems.map((item) => (
+              cartItems.map((item: { [key: string]: any }) => (
                 <div
                   key={item.id}
                   className="border border-[#eaeaec] rounded-md p-4 mb-2"
@@ -647,9 +688,11 @@ const CartItemsList: React.FC<Props> = ({
                         <div className="flex items-center my-4 justify-center sm:justify-start">
                           <div
                             onClick={() => handleOpenSizeDialog(item.product)}
-                            className="max-w-[70px] w-full bg-[#f5f5f6] px-2 py-1 flex items-center justify-between text-xs sm:text-sm cursor-pointer"
+                            className="max-w-[80px] w-full bg-[#f5f5f6] px-2 py-1 flex items-center justify-between text-xs sm:text-sm cursor-pointer"
                           >
-                            <span>Size: {selectedSize || "S"}</span>
+                            <span>
+                              Size: {item.size_quantity.size_data.size || "S"}
+                            </span>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 10 6"
