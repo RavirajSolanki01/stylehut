@@ -480,48 +480,42 @@ export const ProductList = () => {
             </div>
           )}
           {productsList.length > 0 ? (
-            <div className="px-3 pt-4 sm:pt-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-              {productsList.map(
-                (product: {
-                  id: number;
-                  image: string[];
-                  brand: { name: string };
-                  name: string;
-                  discount: number;
-                  price: number;
-                  ratingStats: {
-                    totalRatings: number;
-                    averageRating: number;
-                  };
-                }) => (
-                  <div
-                    key={product.id}
-                    className="w-full flex justify-center sm:block sm:justify-normal"
-                    onClick={() => handleGotoProduct(product.id)}
-                  >
-                    <ProductCard
-                      imageUrl={product.image[0]}
-                      isWishlisted={wishlistIDs.includes(product.id)}
-                      brand={product.brand.name}
-                      name={product.name}
-                      price={product.discount === null ? product.price : product.price - (product.price * product.discount) / 100}
-                      originalPrice={product.price}
-                      discount={product.discount || 0}
-                      totalReviews={product.ratingStats.totalRatings}
-                      rating={product.ratingStats.averageRating}
-                      additionalImages={product.image}
-                      addToWishlist={() => handleAddToWishlist(product.id)}
-                    />
-                  </div>
-                )
-              )}
-            </div>
-          ) : loading ? null : (
-            <div>
-              <div className="w-full flex flex-col items-center justify-center my-12">
-                <img src={EmptyCart} alt="empty-cart" className="w-44 h-44 mb-6" />
-                <p className="text-gray-500 text-lg font-semibold mb-2">No Products Found</p>
-                <p className="text-gray-400 text-sm">We couldn't find any products matching your search criteria.</p>
+            <>
+              <div className="px-3 pt-4 sm:pt-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                {productsList.map(
+                  (product: {
+                    id: number;
+                    image: string[];
+                    brand: { name: string };
+                    name: string;
+                    discount: number;
+                    price: number;
+                    ratingStats: {
+                      totalRatings: number;
+                      averageRating: number;
+                    };
+                  }) => (
+                    <div
+                      key={product.id}
+                      className="w-full flex justify-center sm:block sm:justify-normal"
+                      onClick={() => handleGotoProduct(product.id)}
+                    >
+                      <ProductCard
+                        imageUrl={product.image[0]}
+                        isWishlisted={wishlistIDs.includes(product.id)}
+                        brand={product.brand.name}
+                        name={product.name}
+                        price={product.discount === null ? product.price : product.price - (product.price * product.discount) / 100}
+                        originalPrice={product.price}
+                        discount={product.discount || 0}
+                        totalReviews={product.ratingStats.totalRatings}
+                        rating={product.ratingStats.averageRating}
+                        additionalImages={product.image}
+                        addToWishlist={() => handleAddToWishlist(product.id)}
+                      />
+                    </div>
+                  )
+                )}
               </div>
               {productsList.length !== 0 && (
                 <div className="flex justify-center items-center gap-2 mt-8">
@@ -560,6 +554,12 @@ export const ProductList = () => {
                   </button>
                 </div>
               )}
+            </>
+          ) : loading ? null : (
+            <div className="w-full flex flex-col items-center justify-center my-12">
+              <img src={EmptyCart} alt="empty-cart" className="w-44 h-44 mb-6" />
+              <p className="text-gray-500 text-lg font-semibold mb-2">No Products Found</p>
+              <p className="text-gray-400 text-sm">We couldn't find any products matching your search criteria.</p>
             </div>
           )}
         </div>
