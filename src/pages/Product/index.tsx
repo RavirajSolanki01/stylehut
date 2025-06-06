@@ -132,7 +132,7 @@ const ProductDetailPage: React.FC = () => {
     fetchProducts();
   }, [id]);
   return (
-    <div>
+    <div className="px-4 sm:px-0 md:px-4 max-w-[1440px] w-full mx-auto items-center overflow-auto">
       {!isLoading ? (
         <div className="w-full max-w-[1600px] mx-auto p-[28px] pt-0">
           {/* breadcrumbs container */}

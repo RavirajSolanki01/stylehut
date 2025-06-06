@@ -51,7 +51,7 @@ export const HomePage: React.FC = () => {
 
   return (
     <div>
-      <div className="flex justify-center max-w-[1300px] w-full mx-auto items-center overflow-auto">
+      <div className="flex justify-center max-w-[1440px] w-full mx-auto items-center overflow-auto">
         <div className="w-full px-8 responsive-home-page">
           <div className="flex flex-col gap-3 mb-5">
             <img src={FashionCarnivalImage} alt="FashionCarnivalImage" className="cursor-pointer fashion-carnival-image" />
