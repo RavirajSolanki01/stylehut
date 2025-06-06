@@ -236,7 +236,7 @@ export const ProductList = () => {
 
   return (
     <React.Fragment>
-      <div className="px-4 md:px-6 lg:px-8">
+        <div className="px-4 sm:px-0 md:px-4 max-w-[1440px] w-full mx-auto items-center overflow-auto">
         <div className="text-left leading-7 text-gray-400">
           <Link to="/home" className={subcategory || sub_category_type ? "text-gray-400" : "text-black font-semibold"}>
             Home
