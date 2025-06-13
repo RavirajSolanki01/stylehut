@@ -4,10 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 
-import {
-  getProductDetails,
-  getProductList,
-} from "../../services/productService";
+import { getProductDetails, getProductList } from "../../services/productService";
 import { postWishlist } from "../../services/wishlistService";
 import ProductDetailSkeleton from "./skeletonDetails";
 import { postAddToCart } from "../../services/cartService";
@@ -41,15 +38,15 @@ const ProductDetailPage: React.FC = () => {
     category: { name: "", id: 0 },
     name: "",
     id: 0,
+    product_additional_details: [],
+    product_specifications: [],
   });
   const [productsList, setProducts] = useState([]);
   const [isWishlisted, setIsWishlist] = useState<boolean>(false);
   const [isAddedToCart, setIsAddedToCart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [productSizes, setProductSizes] = useState<ProductStockItem[]>([]);
-  const [relatedProductVariants, setRelatedProductVariants] = useState<
-    Product[]
-  >([]);
+  const [relatedProductVariants, setRelatedProductVariants] = useState<Product[]>([]);
 
   const isAuthenticated: boolean = users.isAuthenticated;
 
@@ -112,10 +109,7 @@ const ProductDetailPage: React.FC = () => {
       setIsAddedToCart(true);
     } catch (error: unknown) {
       const errorMessage =
-        typeof error === "object" &&
-        error !== null &&
-        "response" in error &&
-        typeof (error as any).response?.data?.message === "string"
+        typeof error === "object" && error !== null && "response" in error && typeof (error as any).response?.data?.message === "string"
           ? (error as any).response.data.message
           : "";
 
@@ -132,7 +126,7 @@ const ProductDetailPage: React.FC = () => {
     fetchProducts();
   }, [id]);
   return (
-    <div>
+    <div className="px-4 sm:px-0 md:px-4 max-w-[1440px] w-full mx-auto items-center overflow-auto">
       {!isLoading ? (
         <div className="w-full max-w-[1600px] mx-auto p-[28px] pt-0">
           {/* breadcrumbs container */}
@@ -185,9 +179,7 @@ const ProductDetailPage: React.FC = () => {
                 brandName={productData?.brand?.name}
                 price={productData?.price as number}
                 discount={productData?.discount as number}
-                averageRating={
-                  productData?.ratingStats?.averageRating as number
-                }
+                averageRating={productData?.ratingStats?.averageRating as number}
                 totalRatings={productData?.ratingStats?.totalRatings as number}
                 productRatingClick={() =>
                   ratingRef?.current?.scrollIntoView({
@@ -204,13 +196,15 @@ const ProductDetailPage: React.FC = () => {
               />
               <BestOffers />
               <hr className="border-t-[0px] w-full border-[#d2d2d2] mt-[0px]" />
-              <ProductDetail description={productData?.description as string} />
+              <ProductDetail
+                description={productData?.description as string}
+                productAdditionalDetails={productData?.product_additional_details as []}
+                productSpecifications={productData?.product_specifications as []}
+              />
               <hr className="border-t-[0px] w-full border-[#d2d2d2] mt-[0px]" />
               <div ref={ratingRef}>
                 <ProductRating
-                  averageRating={
-                    productData.ratingStats?.averageRating as number
-                  }
+                  averageRating={productData.ratingStats?.averageRating as number}
                   totalRating={productData.ratingStats?.totalRatings as number}
                   distribution={productData.ratingStats?.distribution!}
                 />
@@ -222,11 +216,7 @@ const ProductDetailPage: React.FC = () => {
           </div>
           {/* product details container */}
           {/* similar product */}
-          <SimilarProduct
-            similarProducts={productsList}
-            sub_category_id={productData?.sub_category?.id}
-            product_id={Number(id)}
-          />
+          <SimilarProduct similarProducts={productsList} sub_category_id={productData?.sub_category?.id} product_id={Number(id)} />
           {/* end similar product */}
         </div>
       ) : (

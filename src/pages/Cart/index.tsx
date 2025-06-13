@@ -178,7 +178,7 @@ export const ProductCart: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-col max-w-[1050px] w-full mx-auto justify-center mb-4 responsive-cart-page">
+      <div className="flex flex-col max-w-[1050px] pt-[60px] w-full mx-auto justify-center mb-4 responsive-cart-page">
         {activeStep === 0 ? (
           <CartItemsList
             cartItems={cartItems}
@@ -254,10 +254,15 @@ const PriceSummary: React.FC<Props> = ({
     setOpenCouponDialog(true);
   };
 
-  const handleApplyCoupon = (coupon: typeof appliedCoupon) => {
+  const handleApplyCoupon = (
+    coupon: typeof appliedCoupon,
+    isRemove?: boolean
+  ) => {
     setAppliedCoupon(coupon);
     dispatch(addAppliedCoupon(coupon as Coupon));
-    handleCloseCouponDialog();
+    if (!isRemove) {
+      handleCloseCouponDialog();
+    }
   };
 
   const selectedItems = cartItems?.filter(
@@ -277,10 +282,11 @@ const PriceSummary: React.FC<Props> = ({
     .toFixed(0);
 
   const couponDiscount =
-    appliedCoupon && Number(totalMRP) >= Number(appliedCoupon.min_order_amount)
+    selectedCoupon &&
+    Number(totalMRP) >= Number(selectedCoupon.min_order_amount)
       ? Math.min(
-          Number(appliedCoupon.max_savings_amount),
-          (Number(totalMRP) * Number(appliedCoupon.discount)) / 100
+          Number(selectedCoupon.max_savings_amount),
+          (Number(totalMRP) * Number(selectedCoupon.discount)) / 100
         )
       : 0;
 
@@ -321,7 +327,8 @@ const PriceSummary: React.FC<Props> = ({
         (coupon: { code: string }) =>
           coupon.code.toLowerCase() === appliedCoupon?.code.toLowerCase()
       );
-    setAppliedCoupon(coupon as Coupon);
+    const newCoupon = selectedItems.length > 0 ? coupon : undefined;
+    setAppliedCoupon(newCoupon as Coupon);
   }, []);
 
   return (
@@ -332,14 +339,14 @@ const PriceSummary: React.FC<Props> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <SellOutlinedIcon fontSize="small" />
-          {appliedCoupon?.id && selectedItems.length > 0 ? (
+          {selectedCoupon?.id && selectedItems.length > 0 ? (
             <>
               <div>
-                <p className="font-bold text-[#282c3f]  text-xs sm:text-sm ml-3">
+                <p className="font-bold text-[#282c3f] text-xs sm:text-sm ml-3">
                   1 Coupon Applied
                 </p>
                 <p className="font-normal text-[#28a02e] text-[12px] ml-4">
-                  You saved ₹{" "}
+                  You saved ₹
                   {formatPrice(
                     Number(couponDiscount ? couponDiscount.toFixed(0) : 0)
                   )}
@@ -352,16 +359,20 @@ const PriceSummary: React.FC<Props> = ({
             </p>
           )}
         </div>
-        <button
-          onClick={handleOpenCouponDialog}
-          disabled={cartItems.length <= 0 || selectedItems.length <= 0}
-          className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
-            px-[10px] max-w-[80px] w-full py-[5px] text-xs sm:text-sm font-[700] uppercase 
-            hover:font-[700] transition-colors duration-300
-            hover:border-[#3880FF] hover:bg-[#eaebff] focus:outline-none disabled:cursor-not-allowed"
-        >
-          Apply
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleOpenCouponDialog}
+            disabled={cartItems.length <= 0 || selectedItems.length <= 0}
+            className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
+        px-[10px] max-w-[80px] w-full py-[5px] text-xs sm:text-sm font-[700] uppercase 
+        hover:font-[700] transition-colors duration-300
+        hover:border-[#3880FF] hover:bg-[#eaebff] focus:outline-none disabled:cursor-not-allowed"
+          >
+            {selectedItems.length > 0 && selectedCoupon?.id
+              ? "Change"
+              : "Apply"}
+          </button>
+        </div>
       </div>
 
       <hr className="my-4 text-[#eaeaec]" />
@@ -469,13 +480,21 @@ const CartItemsList: React.FC<Props> = ({
       const updatedCartItems = prev.map((item) =>
         item.id === id ? { ...item, isSelected: !item.isSelected } : item
       );
+      const selectedItemsCount = updatedCartItems.filter(
+        (item) => item.isSelected
+      ).length;
+      if (selectedItemsCount <= 0) {
+        dispatch(addAppliedCoupon(null));
+      }
       return updatedCartItems;
     });
   };
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-
+    if (!isChecked) {
+      dispatch(addAppliedCoupon(null));
+    }
     setCartItems((prev) => {
       const updatedCartItems = prev.map((item) =>
         item.isAvailable ? { ...item, isSelected: isChecked } : item
@@ -568,31 +587,6 @@ const CartItemsList: React.FC<Props> = ({
   return (
     <div className="flex flex-col lg:flex-row gap-2">
       <div className="w-full lg:w-[70%] md:w-[100%]">
-        {defaultAddress && Object.keys(defaultAddress).length > 0 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#8bc7ff46] border border-[#eaeaec] rounded-md">
-            <div>
-              <p className="text-[#282c3f] text-xs font-normal">
-                Deliver to :{" "}
-                <span className="text-[#282c3f] font-bold">
-                  {defaultAddress?.full_name}, {defaultAddress?.postal_code}
-                </span>
-              </p>
-              <p className="text-[#282c3f] text-xs font-normal">
-                {defaultAddress?.address_line1}, {defaultAddress?.address_line2}
-                , {defaultAddress?.city} , {defaultAddress?.state}
-              </p>
-            </div>
-            <button
-              onClick={handleOpenChangeAddressDialog}
-              className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
-              px-[10px] w-full sm:max-w-[160px] py-[7px] my-2 sm:my-[15px] text-xs sm:text-md font-[700] rounded-md capitalize 
-             hover:font-[700] transition-colors duration-300
-              hover:border-[#3880FF]  focus:outline-none sm:uppercase"
-            >
-              Change address
-            </button>
-          </div>
-        )}
         {loading ? (
           <div className="flex flex-wrap">
             {[...Array(2)].map((_, i) => (
@@ -601,6 +595,32 @@ const CartItemsList: React.FC<Props> = ({
           </div>
         ) : (
           <>
+            {defaultAddress && Object.keys(defaultAddress).length > 0 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#8bc7ff46] border border-[#eaeaec] rounded-md">
+                <div>
+                  <p className="text-[#282c3f] text-xs font-normal">
+                    Deliver to :{" "}
+                    <span className="text-[#282c3f] font-bold">
+                      {defaultAddress?.full_name}, {defaultAddress?.postal_code}
+                    </span>
+                  </p>
+                  <p className="text-[#282c3f] text-xs font-normal">
+                    {defaultAddress?.address_line1},{" "}
+                    {defaultAddress?.address_line2}, {defaultAddress?.city} ,{" "}
+                    {defaultAddress?.state}
+                  </p>
+                </div>
+                <button
+                  onClick={handleOpenChangeAddressDialog}
+                  className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
+              px-[10px] w-full sm:max-w-[160px] py-[7px] my-2 sm:my-[15px] text-xs sm:text-md font-[700] rounded-md capitalize 
+             hover:font-[700] transition-colors duration-300
+              hover:border-[#3880FF]  focus:outline-none sm:uppercase"
+                >
+                  Change address
+                </button>
+              </div>
+            )}
             <div className="flex flex-col md:flex-row justify-center items-center sm:justify-between sm:items-center my-2 sm:my-3">
               {cartItems.length > 0 && (
                 <>
