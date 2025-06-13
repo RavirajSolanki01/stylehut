@@ -22,9 +22,13 @@ export const DELETE_FROM_CART_API_ENDPOINT = "/api/cart";
 export const REMOVE_All_FROM_CART_API_ENDPOINT = "/api/cart/clear";
 export const MOVE_All_FROM_CART_TO_WISHLIST_API_ENDPOINT = "/api/cart/wishlist";
 export const GET_COUPONS_API_ENDPOINT = "api/coupon/offer";
+export const PLACE_ORDER_API_ENDPOINT = "api/orders";
 
 export const GET_TERMS_API_ENDPOINT = "/api/terms";
 export const GET_PRIVACY_POLICY_API_ENDPOINT = "/api/policy";
 export const GET_LANDING_PAGE_SHOP_BY_CATEGORY_API_ENDPOINT = "/api/landing/shop-by-category";
 
 export const GET_ORDERS_API_ENDPOINT = "/api/orders";
+export const RESEND_OTP_API_ENDPOINT = "/api/resend-otp";
+export const FETCH_OTP_EXPIRY_LIMIT = "/api/time-limit-otp"
+

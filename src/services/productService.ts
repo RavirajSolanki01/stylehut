@@ -17,6 +17,7 @@ export const getProductList = (params: {
   pageSize?: number;
   sortBy?: string;
   order?: string;
+  minPrice?: number;
   maxPrice?: number;
   category_id?: number;
   sub_category_id?: number;

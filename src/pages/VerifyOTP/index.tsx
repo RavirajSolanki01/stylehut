@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { OutlinedInput, styled, Typography } from "@mui/material";
+import { CircularProgress, OutlinedInput, styled, Typography } from "@mui/material";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
 import { RootState } from "../../store";
-import { registerUser, verifyOtp } from "../../services/userService";
+import { resendOtp, resendOtpWithPayload, verifyOtp } from "../../services/userService";
 import { addAuthToken } from "../../store/slice/auth.slice";
 import { setLoading } from "../../store/slice/loading.slice";
 import { Verify_Otp } from "../../assets";
+import OtpTimer from "../../components/OtpTimer";
 
 type FormData = {
   digit1: string;
@@ -28,57 +29,41 @@ export const VerifyOtpPage: React.FC = () => {
     users: state.users.user,
   }));
 
-  const [timer, setTimer] = useState<number>(30);
-  const [isResendDisabled, setIsResendDisabled] = useState<boolean>(true);
-  const [otpAttempts, setOtpAttempts] = useState<number>(0);
+  const [resendOtpLimitExpiry, setResendOtpLimitExpiry] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    let countdown: number | null = null;
-
-    if (isResendDisabled && timer > 0) {
-      countdown = window.setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      setIsResendDisabled(false);
+  const handleResendOtp = async () => {
+    try {
+      setIsLoading(true);
+      const res = await resendOtpWithPayload({ email: users.email });
+      if (res.status === 200) {
+        toast.success(res.data.message);
+      }
+    } catch (err: any) {
+      if (err.response?.status === 404) {
+        setResendOtpLimitExpiry(err.response.data.data.resend_opt_limit);
+        toast.error(err.response.data.message);
+      } else {
+        toast.error("Something went wrong, please try again later.");
+      }
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    return () => {
-      if (countdown) window.clearInterval(countdown);
-    };
-  }, [timer, isResendDisabled]);
-
-  const handleResendOtp = () => {
-    if (otpAttempts >= 3) {
-      toast.error("You have exceeded the maximum number of OTP attempts.");
-      return;
-    } else {
-      registerUser({ email: users.email })
-        .then((res) => {
-          if (res.status === 200 && res.data.message === "OTP sent to email.") {
-            toast.success(res.data.message);
-            navigate("/verify-otp");
-          }
-        })
-        .catch((err) => {
-          const errorMessage =
-            err?.response?.data?.message ||
-            err?.response?.data ||
-            "Something went wrong.";
-
-          toast.error(`${errorMessage}`);
-          if (
-            err?.response?.data?.message &&
-            err?.response?.data?.data?.resend_opt_limit &&
-            err?.response.status === 429
-          ) {
-            navigate("/login");
-          }
-        });
-
-      setOtpAttempts((prev) => prev + 1);
-      setTimer(30);
-      setIsResendDisabled(true);
+  const fetchResendOtpExpiryLimit = async () => {
+    try {
+      setIsLoading(true);
+      const res = await resendOtp({ email: users.email });
+      if (res.status === 200) {
+        setResendOtpLimitExpiry(res.data.data.resend_otp_limit_expires_at);
+      }
+    } catch (err: any) {
+      if (!err) return;
+      const errorMessage = err?.response?.data?.message || err?.response?.data || "Something went wrong.";
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -103,10 +88,7 @@ export const VerifyOtpPage: React.FC = () => {
         }
       })
       .catch((err) => {
-        const errorMessage =
-          err?.response?.data?.message ||
-          err?.response?.data ||
-          "Something went wrong.";
+        const errorMessage = err?.response?.data?.message || err?.response?.data || "Something went wrong.";
 
         toast.error(`Verification Failed: ${errorMessage}`);
       })
@@ -158,22 +140,23 @@ export const VerifyOtpPage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    fetchResendOtpExpiryLimit();
+  }, []);
+
   return (
     <React.Fragment>
+      {isLoading && (
+        <div className="absolute inset-0 z-50 top-[80px] flex items-center justify-center bg-black opacity-30">
+          <CircularProgress size={60} color="secondary" />
+        </div>
+      )}
       <div className="flex flex-col h-full justify-center items-center bottom-container">
         <div className="flex flex-col m-[30px] max-h-[497px] w-full max-w-[400px] p-[40px] bg-white overflow-y-auto">
           <div className="flex flex-col justify-start ">
-            <img
-              src={Verify_Otp}
-              alt="offers_banner"
-              className="h-full w-full max-h-[90px] max-w-[90px] text-start"
-            />
-            <CustomTypography className="text-start pt-[20px] font-bold font-assistant text-lg">
-              Verify with OTP
-            </CustomTypography>
-            <p className="text-[#787878] text-justify text-xs pb-[20px]">
-              Sent to {users.email}
-            </p>
+            <img src={Verify_Otp} alt="offers_banner" className="h-full w-full max-h-[90px] max-w-[90px] text-start" />
+            <CustomTypography className="text-start pt-[20px] font-bold font-assistant text-lg">Verify with OTP</CustomTypography>
+            <p className="text-[#787878] text-justify text-xs pb-[20px]">Sent to {users.email}</p>
 
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex gap-x-[18px]">
@@ -183,35 +166,19 @@ export const VerifyOtpPage: React.FC = () => {
                     maxLength={1}
                     type="text"
                     {...register(`digit${index + 1}` as any)}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      handleChange(e.target.value.replace(/[^0-9]/g, ""), index)
-                    }
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e.target.value.replace(/[^0-9]/g, ""), index)}
                     onKeyDown={(e) => handleKeyDown(e, index)}
                     inputRef={(el) => (inputRefs.current[index] = el)}
                     className="text-center text-2xl max-w-12 max-h-14 w-full h-full"
                   />
                 ))}
               </div>
-              {!isResendDisabled ? (
-                <p
-                  onClick={handleResendOtp}
-                  className="text-[#3880FF] text-justify font-[700] text-xs hover:text-[#3880FF] cursor-pointer uppercase"
-                >
-                  Resend OTP
-                </p>
-              ) : (
-                <p
-                  className={`text-[#787878] text-justify font-[500] text-xs cursor-pointer opacity-70`}
-                  onClick={!isResendDisabled ? handleResendOtp : undefined}
-                >
-                  {`Resend OTP in 00:${timer.toString().padStart(2, "0")}`}
-                </p>
-              )}
+
+              <OtpTimer otpLimitExpiry={resendOtpLimitExpiry} handleResendOtp={handleResendOtp} />
+
               <p className="py-[5px] text-start text-xs text-[#424553] font-normal">
                 Having trouble logging in? {""}
-                <span className="text-[#3880FF] text-justify font-[700] text-xs hover:text-[#3880FF] cursor-pointer">
-                  Get Help
-                </span>
+                <span className="text-[#3880FF] text-justify font-[700] text-xs hover:text-[#3880FF] cursor-pointer">Get Help</span>
               </p>
             </form>
           </div>

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Checkbox } from "@mui/material";
+import { Checkbox, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-
 import {
   getCartProducts,
   moveAllFromCartToWishlist,
   removeAllFromCart,
   removeFromCart,
+  placeOrderApiCall,
 } from "../../services/cartService";
 import { CartItems, Coupon, FormAddressData, Product } from "../../utils/types";
 import { postWishlist } from "../../services/wishlistService";
@@ -50,10 +50,27 @@ export const ProductCart: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [maxAllowedStep, setMaxAllowedStep] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<string>("");
+  const [orderSuccess, setOrderSuccess] = useState<boolean>(false);
 
   const handleStepClick = (index: number) => {
     if (index <= maxAllowedStep) {
       setActiveStep(index);
+    }
+  };
+
+  const placeOrder = async (method: string) => {
+    const response = await placeOrderApiCall({
+      shipping_address_id: selectedIndex,
+      billing_address_id: selectedIndex,
+      payment_method: method,
+    });
+
+    if (response?.data && response?.status === 200) {
+      setOrderSuccess(true);
+      setTimeout(() => {
+        setOrderSuccess(false);
+        navigate("/profile/orders");
+      }, 4000);
     }
   };
 
@@ -82,49 +99,86 @@ export const ProductCart: React.FC = () => {
     withLoading(dispatch, "refresh-cart", refreshCart);
   }, []);
 
+  if (orderSuccess) {
+    return (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-r from-blue-100 to-blue-200">
+        <div className="bg-white shadow-lg rounded-xl p-8 max-w-md text-center animate-fade-in">
+          <div className="flex justify-center mb-4">
+            <div className="w-20 h-20 rounded-full bg-[#8bb2f741] flex items-center justify-center">
+              <svg
+                className="w-10 h-10 text-[#3880ff] animate-bounce"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+          </div>
+          <Typography
+            variant="h5"
+            className="!text-[#3880ff] font-semibold mb-2"
+          >
+            Order Successful!
+          </Typography>
+          <Typography className="text-sm text-gray-600 mb-4">
+            Thank you for placing order.
+          </Typography>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="fixed w-full top-0 z-50 bg-white flex justify-between items-center shadow-md px-[20px] py-[10px] flex-col  gap-3 sm:flex-row sm:px-[30px]">
-        <div className="flex items-center">
-          <img
-            onClick={() => navigate("/home")}
-            src={Logo}
-            alt="myntra_logo"
-            className="max-h-[60px] max-w-[60px] h-full w-full cursor-pointer"
-          />
-        </div>
+        <div className="flex w-full justify-center sm:justify-between ">
+          <div className="flex items-center">
+            <img
+              onClick={() => navigate("/home")}
+              src={Logo}
+              alt="myntra_logo"
+              className="max-h-[50px] max-w-[50px] h-full w-full cursor-pointer mr-5"
+            />
+          </div>
 
-        <ol className="flex items-center font-semibold tracking-[3px] sm:flex-row gap-5 text-[12px] md:text-[14px]">
-          {steps.map((step, index) => (
-            <React.Fragment key={step}>
-              <li
-                onClick={() => handleStepClick(index)}
-                className={`${getStepStyle(
-                  index
-                )} transition duration-200 text-[12px] md:text-[14px]`}
-              >
-                {step}
-              </li>
-              {index < steps.length - 1 && (
-                <li className="mx-2 text-[#d3d3d3] select-none hidden sm:block">
-                  ---------
+          <ol className="flex items-center font-semibold tracking-[3px] sm:flex-row gap-5 text-[12px] md:text-[14px]">
+            {steps.map((step, index) => (
+              <React.Fragment key={step}>
+                <li
+                  onClick={() => handleStepClick(index)}
+                  className={`${getStepStyle(
+                    index
+                  )} transition duration-200 text-[12px] md:text-[14px]`}
+                >
+                  {step}
                 </li>
-              )}
-            </React.Fragment>
-          ))}
-        </ol>
+                {index < steps.length - 1 && (
+                  <li className="mx-2 text-[#d3d3d3] select-none hidden sm:block">
+                    ---------
+                  </li>
+                )}
+              </React.Fragment>
+            ))}
+          </ol>
 
-        <div className="hidden items-center sm:flex">
-          <img
-            src="https://constant.myntassets.com/checkout/assets/img/sprite-secure.png"
-            alt="secure_icon"
-            className="max-h-[28px] max-w-[26px] h-full w-full cursor-pointer mr-3"
-          />
-          <p className="text-[#535766] text-xs tracking-[3px]">100% SECURE</p>
+          <div className="hidden items-center sm:flex">
+            <img
+              src="https://constant.myntassets.com/checkout/assets/img/sprite-secure.png"
+              alt="secure_icon"
+              className="max-h-[28px] max-w-[26px] h-full w-full cursor-pointer mr-3"
+            />
+            <p className="text-[#535766] text-xs tracking-[3px]">100% SECURE</p>
+          </div>
         </div>
       </div>
 
-      <div className="flex flex-col max-w-[1050px] w-full mx-auto justify-center mb-4 responsive-cart-page">
+      <div className="flex flex-col max-w-[1050px] pt-[60px] w-full mx-auto justify-center mb-4 responsive-cart-page">
         {activeStep === 0 ? (
           <CartItemsList
             cartItems={cartItems}
@@ -155,8 +209,17 @@ export const ProductCart: React.FC = () => {
         ) : (
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-[70%]">
-              <CheckoutScreen totalPrice={totalPrice} />
+              <CheckoutScreen totalPrice={totalPrice} placeOrder={placeOrder} />
             </div>
+            <PriceSummary
+              setTotalPrice={setTotalPrice}
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              setMaxAllowedStep={setMaxAllowedStep}
+              setCartItems={setCartItems}
+              cartItems={cartItems}
+              disabled={!selectedIndex}
+            />
           </div>
         )}
       </div>
@@ -191,10 +254,15 @@ const PriceSummary: React.FC<Props> = ({
     setOpenCouponDialog(true);
   };
 
-  const handleApplyCoupon = (coupon: typeof appliedCoupon) => {
+  const handleApplyCoupon = (
+    coupon: typeof appliedCoupon,
+    isRemove?: boolean
+  ) => {
     setAppliedCoupon(coupon);
     dispatch(addAppliedCoupon(coupon as Coupon));
-    handleCloseCouponDialog();
+    if (!isRemove) {
+      handleCloseCouponDialog();
+    }
   };
 
   const selectedItems = cartItems?.filter(
@@ -214,10 +282,11 @@ const PriceSummary: React.FC<Props> = ({
     .toFixed(0);
 
   const couponDiscount =
-    appliedCoupon && Number(totalMRP) >= Number(appliedCoupon.min_order_amount)
+    selectedCoupon &&
+    Number(totalMRP) >= Number(selectedCoupon.min_order_amount)
       ? Math.min(
-          Number(appliedCoupon.max_savings_amount),
-          (Number(totalMRP) * Number(appliedCoupon.discount)) / 100
+          Number(selectedCoupon.max_savings_amount),
+          (Number(totalMRP) * Number(selectedCoupon.discount)) / 100
         )
       : 0;
 
@@ -258,7 +327,8 @@ const PriceSummary: React.FC<Props> = ({
         (coupon: { code: string }) =>
           coupon.code.toLowerCase() === appliedCoupon?.code.toLowerCase()
       );
-    setAppliedCoupon(coupon as Coupon);
+    const newCoupon = selectedItems.length > 0 ? coupon : undefined;
+    setAppliedCoupon(newCoupon as Coupon);
   }, []);
 
   return (
@@ -269,15 +339,17 @@ const PriceSummary: React.FC<Props> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <SellOutlinedIcon fontSize="small" />
-          {appliedCoupon?.id && selectedItems.length > 0 ? (
+          {selectedCoupon?.id && selectedItems.length > 0 ? (
             <>
               <div>
-                <p className="font-bold text-[#282c3f]  text-xs sm:text-sm ml-3">
+                <p className="font-bold text-[#282c3f] text-xs sm:text-sm ml-3">
                   1 Coupon Applied
                 </p>
                 <p className="font-normal text-[#28a02e] text-[12px] ml-4">
-                  You saved ₹{" "}
-                  {formatPrice(Number(appliedCoupon.max_savings_amount))}{" "}
+                  You saved ₹
+                  {formatPrice(
+                    Number(couponDiscount ? couponDiscount.toFixed(0) : 0)
+                  )}
                 </p>
               </div>
             </>
@@ -287,16 +359,20 @@ const PriceSummary: React.FC<Props> = ({
             </p>
           )}
         </div>
-        <button
-          onClick={handleOpenCouponDialog}
-          disabled={cartItems.length <= 0 || selectedItems.length <= 0}
-          className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
-            px-[10px] max-w-[80px] w-full py-[5px] text-xs sm:text-sm font-[700] uppercase 
-            hover:font-[700] transition-colors duration-300
-            hover:border-[#3880FF] hover:bg-[#eaebff] focus:outline-none disabled:cursor-not-allowed"
-        >
-          Apply
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleOpenCouponDialog}
+            disabled={cartItems.length <= 0 || selectedItems.length <= 0}
+            className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
+        px-[10px] max-w-[80px] w-full py-[5px] text-xs sm:text-sm font-[700] uppercase 
+        hover:font-[700] transition-colors duration-300
+        hover:border-[#3880FF] hover:bg-[#eaebff] focus:outline-none disabled:cursor-not-allowed"
+          >
+            {selectedItems.length > 0 && selectedCoupon?.id
+              ? "Change"
+              : "Apply"}
+          </button>
+        </div>
       </div>
 
       <hr className="my-4 text-[#eaeaec]" />
@@ -403,13 +479,21 @@ const CartItemsList: React.FC<Props> = ({
       const updatedCartItems = prev.map((item) =>
         item.id === id ? { ...item, isSelected: !item.isSelected } : item
       );
+      const selectedItemsCount = updatedCartItems.filter(
+        (item) => item.isSelected
+      ).length;
+      if (selectedItemsCount <= 0) {
+        dispatch(addAppliedCoupon(null));
+      }
       return updatedCartItems;
     });
   };
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-
+    if (!isChecked) {
+      dispatch(addAppliedCoupon(null));
+    }
     setCartItems((prev) => {
       const updatedCartItems = prev.map((item) =>
         item.isAvailable ? { ...item, isSelected: isChecked } : item
@@ -502,31 +586,6 @@ const CartItemsList: React.FC<Props> = ({
   return (
     <div className="flex flex-col lg:flex-row gap-2">
       <div className="w-full lg:w-[70%] md:w-[100%]">
-        {defaultAddress && Object.keys(defaultAddress).length > 0 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#8bc7ff46] border border-[#eaeaec] rounded-md">
-            <div>
-              <p className="text-[#282c3f] text-xs font-normal">
-                Deliver to :{" "}
-                <span className="text-[#282c3f] font-bold">
-                  {defaultAddress?.full_name}, {defaultAddress?.postal_code}
-                </span>
-              </p>
-              <p className="text-[#282c3f] text-xs font-normal">
-                {defaultAddress?.address_line1}, {defaultAddress?.address_line2}
-                , {defaultAddress?.city} , {defaultAddress?.state}
-              </p>
-            </div>
-            <button
-              onClick={handleOpenChangeAddressDialog}
-              className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
-              px-[10px] w-full sm:max-w-[160px] py-[7px] my-2 sm:my-[15px] text-xs sm:text-md font-[700] rounded-md capitalize 
-             hover:font-[700] transition-colors duration-300
-              hover:border-[#3880FF]  focus:outline-none sm:uppercase"
-            >
-              Change address
-            </button>
-          </div>
-        )}
         {loading ? (
           <div className="flex flex-wrap">
             {[...Array(2)].map((_, i) => (
@@ -535,6 +594,32 @@ const CartItemsList: React.FC<Props> = ({
           </div>
         ) : (
           <>
+            {defaultAddress && Object.keys(defaultAddress).length > 0 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between max-h-[250px] py-2 px-4 bg-[#8bc7ff46] border border-[#eaeaec] rounded-md">
+                <div>
+                  <p className="text-[#282c3f] text-xs font-normal">
+                    Deliver to :{" "}
+                    <span className="text-[#282c3f] font-bold">
+                      {defaultAddress?.full_name}, {defaultAddress?.postal_code}
+                    </span>
+                  </p>
+                  <p className="text-[#282c3f] text-xs font-normal">
+                    {defaultAddress?.address_line1},{" "}
+                    {defaultAddress?.address_line2}, {defaultAddress?.city} ,{" "}
+                    {defaultAddress?.state}
+                  </p>
+                </div>
+                <button
+                  onClick={handleOpenChangeAddressDialog}
+                  className="cursor-pointer bg-transparent border border-[#3880FF] text-[#3880FF] text-center 
+              px-[10px] w-full sm:max-w-[160px] py-[7px] my-2 sm:my-[15px] text-xs sm:text-md font-[700] rounded-md capitalize 
+             hover:font-[700] transition-colors duration-300
+              hover:border-[#3880FF]  focus:outline-none sm:uppercase"
+                >
+                  Change address
+                </button>
+              </div>
+            )}
             <div className="flex flex-col md:flex-row justify-center items-center sm:justify-between sm:items-center my-2 sm:my-3">
               {cartItems.length > 0 && (
                 <>
@@ -575,7 +660,7 @@ const CartItemsList: React.FC<Props> = ({
               )}
             </div>
             {cartItems.length > 0 ? (
-              cartItems.map((item) => (
+              cartItems.map((item: { [key: string]: any }) => (
                 <div
                   key={item.id}
                   className="border border-[#eaeaec] rounded-md p-4 mb-2"
@@ -623,9 +708,11 @@ const CartItemsList: React.FC<Props> = ({
                         <div className="flex items-center my-4 justify-center sm:justify-start">
                           <div
                             onClick={() => handleOpenSizeDialog(item.product)}
-                            className="max-w-[70px] w-full bg-[#f5f5f6] px-2 py-1 flex items-center justify-between text-xs sm:text-sm cursor-pointer"
+                            className="max-w-[80px] w-full bg-[#f5f5f6] px-2 py-1 flex items-center justify-between text-xs sm:text-sm cursor-pointer"
                           >
-                            <span>Size: {selectedSize || "S"}</span>
+                            <span>
+                              Size: {item.size_quantity.size_data.size || "S"}
+                            </span>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 10 6"

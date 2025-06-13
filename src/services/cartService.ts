@@ -6,6 +6,7 @@ import {
   GET_CART_PRODUCTS_API_ENDPOINT,
   GET_COUPONS_API_ENDPOINT,
   MOVE_All_FROM_CART_TO_WISHLIST_API_ENDPOINT,
+  PLACE_ORDER_API_ENDPOINT,
   POST_CART_API_ENDPOINT,
   REMOVE_All_FROM_CART_API_ENDPOINT,
 } from "./endpoints";
@@ -20,6 +21,14 @@ export const getCartProducts = (params: {
   pageSize?: number;
 }) => {
   return api.get(GET_CART_PRODUCTS_API_ENDPOINT, { params, withAuth: true });
+};
+
+export const placeOrderApiCall = (payload: {
+  shipping_address_id: number;
+  billing_address_id: number;
+  payment_method: string;
+}) => {
+  return api.post(PLACE_ORDER_API_ENDPOINT, payload, { withAuth: true });
 };
 
 export const postAddToCart = (payload: {
