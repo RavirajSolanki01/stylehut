@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, IconButton, Divider, Drawer } from "@mui/material";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
@@ -9,7 +9,8 @@ import { formatPrice } from "../../../utils/reusable-functions";
 import { postAddToCart } from "../../../services/cartService";
 import { setLoading } from "../../../store/slice/loading.slice";
 import { SimilarProducts } from "../../../utils/constants";
-import { WishlistItem } from "../../../utils/types";
+import { Product } from "../../../utils/types";
+import { SizeModal } from "../../Cart/Dialogs/SizeModal";
 interface ProductCardProps {
   product: any;
   onRemove: (product_id: number) => void;
@@ -31,6 +32,23 @@ const ProductCardBase = ({
   const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState<boolean>(false);
+  const [openSizeDialog, setOpenSizeDialog] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedSize, setSelectedSize] = useState<number>(0);
+
+  const handleOpenSizeDialog = (product: Product) => {
+    setOpenSizeDialog(true);
+    setSelectedProduct(product);
+  };
+
+  const handleDoneClick = () => {
+    handleAddToCart();
+    setOpenSizeDialog(false);
+  };
+
+  const handleCloseSizeDialog = () => {
+    setOpenSizeDialog(false);
+  };
 
   const productData = product.products;
 
@@ -45,14 +63,13 @@ const ProductCardBase = ({
     navigate(`/product-detail/${product_id}`);
   };
 
-  const handleAddToCard = async (product: WishlistItem) => {
+  const handleAddToCart = async () => {
     try {
       dispatch(setLoading({ key: "Add-to-cart", value: true }));
       await postAddToCart({
-        product_id: Number(product.product_id),
+        product_id: Number(selectedProduct?.id),
         quantity: 1,
-        // size_quantity_id: 0,
-        // color: "black",
+        size_quantity_id: selectedSize,
       });
       toast.success("Product added to cart");
       fetchWishlist();
@@ -187,7 +204,8 @@ const ProductCardBase = ({
             className="text-center font-bold text-sm text-[#3880FF] cursor-pointer"
             onClick={() => {
               if (bottomLabel !== "Show Similar") {
-                handleAddToCard(product);
+                handleOpenSizeDialog(product?.products);
+                // handleAddToCart(product);
               } else {
                 toggleDrawer(true)();
               }
@@ -197,6 +215,14 @@ const ProductCardBase = ({
           </button>
         </Box>
       </Box>
+      <SizeModal
+        handleCloseSizeDialog={handleCloseSizeDialog}
+        openSizeDialog={openSizeDialog}
+        selectedProduct={selectedProduct as Product}
+        selectedSize={selectedSize}
+        setSelectedSize={setSelectedSize}
+        handleDoneClick={handleDoneClick}
+      />
       <Drawer anchor={"right"} open={open} onClose={toggleDrawer(false)}>
         <div className="w-full max-w-[500px] flex flex-col justify-center relative mx-auto">
           <IconButton
