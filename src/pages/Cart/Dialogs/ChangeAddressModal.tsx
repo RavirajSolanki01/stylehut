@@ -9,7 +9,6 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useForm, useWatch } from "react-hook-form";
@@ -399,7 +398,6 @@ const AddressCard: React.FC<AddressCardProps> = ({
   handleSelect,
   handleDeliverHere,
   handleEdit,
-  handleDelete,
 }) => {
   return (
     <label
@@ -474,19 +472,6 @@ const AddressCard: React.FC<AddressCardProps> = ({
                   </button>
                 </Tooltip>
               </div>
-
-              <Tooltip title="Delete">
-                <IconButton
-                  size="small"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(Number(address.id));
-                  }}
-                  className="cursor-pointer"
-                >
-                  <DeleteIcon sx={{ color: "#3880FF", fontSize: "1.5rem" }} />
-                </IconButton>
-              </Tooltip>
             </div>
           )}
         </div>

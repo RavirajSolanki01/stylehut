@@ -187,14 +187,14 @@ export const ProfileMenuItems = [
     path: "/contact-us",
   },
   {
-    title: "Myntra Insider",
+    title: "Stylehut Insider",
     path: "/insider",
   },
 ];
 
 export const ProfileDataItems = [
   {
-    title: "Myntra Credit",
+    title: "Stylehut Credit",
     path: "/credit",
   },
   {
@@ -237,7 +237,7 @@ export const accountSections = [
   {
     icon: Collections,
     title: "Collections & Wishlist",
-    path: "orders",
+    path: "wishlist",
     subtitle: "All your curated product collections",
   },
   {
@@ -248,7 +248,7 @@ export const accountSections = [
   },
   {
     icon: Credits,
-    title: "Myntra Credit",
+    title: "Stylehut Credit",
     path: "credit",
     subtitle: "Manage all your refunds & gift cards",
   },
@@ -297,7 +297,7 @@ export const ordersAndCollection = [
   {
     icon: Collections,
     title: "Collections & Wishlist",
-    path: "orders",
+    path: "wishlist",
     subtitle: "All your curated product collections",
   },
 ];
@@ -305,7 +305,7 @@ export const ordersAndCollection = [
 export const PaymentSections = [
   {
     icon: Credits,
-    title: "Myntra Credit",
+    title: "Stylehut Credit",
     path: "credit",
     subtitle: "Manage all your refunds & gift cards",
   },
@@ -932,7 +932,7 @@ export const PRODUCT_DETAIL_CONSTANTS = {
     },
     {
       id: 4,
-      title: "7.5% Discount on Myntra Kotak Credit Card",
+      title: "7.5% Discount on Stylehut Kotak Credit Card",
       minSpend: null,
       maxDiscount: "750",
     },
@@ -1199,12 +1199,12 @@ export const offers_list = [
   "10% Instant Discount on Canara Bank Credit Cards on a min spend of ₹3,500. TCA",
   "10% Instant Discount on DBS Bank Credit Cards & Credit Card EMI on a min spend of ₹3,000. TCA",
   "10% Instant Discount on Federal Bank Credit Cards on a min spend of ₹3,000. TCA",
-  "10% Instant Discount on IDFC FIRST SWYP Credit Card on a min spend of ₹850 (Applicable only on Myntra FWD offer Products). TCA",
+  "10% Instant Discount on IDFC FIRST SWYP Credit Card on a min spend of ₹850 (Applicable only on Stylehut FWD offer Products). TCA",
   "10% Instant Discount on HDFC Bank Credit & Debit Cards EMI on a min spend of ₹3,500. TCA",
   "10% Instant Discount on HSBC Credit Cards on a min spend of ₹5,000. TCA",
-  "7.5% Instant Discount up to ₹750 on every spend with Myntra Kotak Credit Card. TCA",
+  "7.5% Instant Discount up to ₹750 on every spend with Stylehut Kotak Credit Card. TCA",
   "Flat ₹40 Cashback on BAJAJ UPI Transactions on a min spend of ₹999. TCA",
-  "Upto ₹500 Cashback on RuPay Credit card via PhonePe UPI on Myntra on a min spend of ₹1,000. TCA",
+  "Upto ₹500 Cashback on RuPay Credit card via PhonePe UPI on Stylehut on a min spend of ₹1,000. TCA",
   "Assured up to ₹300 Cashbackon Paytm UPI transaction on a min spend of ₹500. TCA",
   "Get ₹5–₹500 Assured Cashback on minimum transaction of ₹1000 on RuPay Credit Card with Paytm UPI. TCA",
   "Get up to ₹399 Cashback on CRED UPI on a min spend of ₹500. TCA",

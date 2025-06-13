@@ -1682,7 +1682,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
               color="#424553"
               sx={{ mb: 2, fontSize: "12px" }}
             >
-              Gift card value will be added to your Myntra Credit.
+              Gift card value will be added to your Stylehut Credit.
             </Typography>
             <TextField
               fullWidth
@@ -1725,7 +1725,7 @@ const PaymentScreen: React.FC<Props> = ({ totalPrice }) => {
                 },
               }}
             >
-              Add to Myntra Credit
+              Add to Stylehut Credit
             </Button>
           </DialogActions>
         </Dialog>

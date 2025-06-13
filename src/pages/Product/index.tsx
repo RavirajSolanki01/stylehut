@@ -34,8 +34,12 @@ const ProductDetailPage: React.FC = () => {
       id: 0,
       sub_category: { name: "", id: 0, category: { name: "", id: 0 } },
     },
+    sub_category: { name: "", id: 0 },
+    category: { name: "", id: 0 },
     name: "",
     id: 0,
+    product_additional_details: [],
+    product_specifications: [],
   });
   const [productsList, setProducts] = useState([]);
   const [isWishlisted, setIsWishlist] = useState<boolean>(false);
@@ -94,11 +98,12 @@ const ProductDetailPage: React.FC = () => {
     }
   };
 
-  const handleAddToCard = async () => {
+  const handleAddToCard = async (selectedSize: number | undefined) => {
     try {
       await postAddToCart({
         product_id: Number(id),
         quantity: 1,
+        size_quantity_id: selectedSize,
       });
       toast.success("Product added to cart");
       setIsAddedToCart(true);
@@ -120,9 +125,8 @@ const ProductDetailPage: React.FC = () => {
     fetchProductDetail();
     fetchProducts();
   }, [id]);
-
   return (
-    <div>
+    <div className="px-4 sm:px-0 md:px-4 max-w-[1440px] w-full mx-auto items-center overflow-auto">
       {!isLoading ? (
         <div className="w-full max-w-[1600px] mx-auto p-[28px] pt-0">
           {/* breadcrumbs container */}
@@ -135,21 +139,21 @@ const ProductDetailPage: React.FC = () => {
                 {" / "}
                 <Link
                   className="text-gray-400 capitalize"
-                  to={`/product-list?category=${productData.sub_category_type.sub_category.category.name}requestid${productData.sub_category_type.sub_category.category.id}`}
+                  to={`/product-list?category=${productData.category.name}requestid${productData.category.id}`}
                 >
-                  {productData.sub_category_type.sub_category.category.name.toLocaleLowerCase()}
+                  {productData.category.name.toLocaleLowerCase()}
                 </Link>
                 {" / "}
                 <Link
                   className="text-gray-400 capitalize"
-                  to={`/product-list?category=${productData.sub_category_type.sub_category.category.name}requestid${productData.sub_category_type.sub_category.category.id}&subcategory=${productData.sub_category_type.sub_category.name}requestid${productData.sub_category_type.sub_category.id}`}
+                  to={`/product-list?category=${productData.category.name}requestid${productData.category.id}&subcategory=${productData.sub_category.name}requestid${productData.sub_category.id}`}
                 >
-                  {productData.sub_category_type.sub_category.name.toLocaleLowerCase()}
+                  {productData.sub_category.name.toLocaleLowerCase()}
                 </Link>
                 {" / "}
                 <Link
                   className="text-gray-400 capitalize"
-                  to={`/product-list?category=${productData.sub_category_type.sub_category.category.name}requestid${productData.sub_category_type.sub_category.category.id}&subcategory=${productData.sub_category_type.sub_category.name}requestid${productData.sub_category_type.sub_category.id}&sub_category_type=${productData.sub_category_type.name}requestid${productData.sub_category_type.id}`}
+                  to={`/product-list?category=${productData.category.name}requestid${productData.category.id}&subcategory=${productData.sub_category.name}requestid${productData.sub_category.id}&sub_category_type=${productData.sub_category_type.name}requestid${productData.sub_category_type.id}`}
                 >
                   {productData.sub_category_type.name}
                 </Link>{" "}
@@ -169,7 +173,7 @@ const ProductDetailPage: React.FC = () => {
             <div className="col-span-12 md:col-span-2 ">
               <ProductPrice
                 productName={productData.name}
-                category={productData.sub_category_type.sub_category.category}
+                category={productData.category}
                 availableSize={productSizes}
                 relatedProductVariants={relatedProductVariants}
                 brandName={productData?.brand?.name}
@@ -188,10 +192,15 @@ const ProductDetailPage: React.FC = () => {
                 addToCart={handleAddToCard}
                 isAddedToCart={isAddedToCart}
                 images={productData.image as []}
+                subCategory={productData.sub_category}
               />
               <BestOffers />
               <hr className="border-t-[0px] w-full border-[#d2d2d2] mt-[0px]" />
-              <ProductDetail description={productData?.description as string} />
+              <ProductDetail
+                description={productData?.description as string}
+                productAdditionalDetails={productData?.product_additional_details as []}
+                productSpecifications={productData?.product_specifications as []}
+              />
               <hr className="border-t-[0px] w-full border-[#d2d2d2] mt-[0px]" />
               <div ref={ratingRef}>
                 <ProductRating
@@ -207,7 +216,7 @@ const ProductDetailPage: React.FC = () => {
           </div>
           {/* product details container */}
           {/* similar product */}
-          <SimilarProduct similarProducts={productsList} sub_category_id={productData?.sub_category_type?.sub_category?.id} product_id={Number(id)} />
+          <SimilarProduct similarProducts={productsList} sub_category_id={productData?.sub_category?.id} product_id={Number(id)} />
           {/* end similar product */}
         </div>
       ) : (

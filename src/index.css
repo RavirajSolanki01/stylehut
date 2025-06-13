@@ -222,6 +222,7 @@ button.default{
 
 .swiper-slide {
   height: 100%;
+  width: auto !important;
 }
 
 .image-zoom figure {

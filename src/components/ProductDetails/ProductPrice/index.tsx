@@ -29,6 +29,7 @@ const ProductPrice = ({
   availableSize,
   relatedProductVariants,
   category,
+  subCategory
 }: {
   productName: string;
   brandName: string;
@@ -38,19 +39,24 @@ const ProductPrice = ({
   totalRatings: number;
   productRatingClick?: () => void;
   addToWishlist?: () => void;
-  addToCart?: () => void;
+  addToCart?: (id: number | undefined) => void;
   isWishlisted?: boolean;
   isAddedToCart?: boolean;
   images: string[];
   availableSize: ProductStockItem[];
   relatedProductVariants: Product[];
   category: { id: number; name: string };
+  subCategory: { id: number; name: string };
 }) => {
   const navigate = useNavigate();
 
   const [isOpenSizeChart, setIsOpenSizeChart] = useState<boolean>(false);
-  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<number | undefined>(0);
   const [sizeError, setSizeError] = useState<string>("");
+
+  const has_size_chart =
+    availableSize.length > 0 &&
+    availableSize.every((size) => size.size_data.has_size_chart === true);
 
   const handleSizeChartClick = () => {
     setIsOpenSizeChart(!isOpenSizeChart);
@@ -85,7 +91,7 @@ const ProductPrice = ({
     });
   };
 
-  const isBeautyProducts = category.name.toLocaleLowerCase() === "beauty";
+  const isBeautyProducts = category?.name?.toLocaleLowerCase() === "beauty";
 
   return (
     <div className="flex flex-col items-start">
@@ -162,30 +168,32 @@ const ProductPrice = ({
       {/* product size */}
       <div className="flex gap-[30px] items-center my-[12px]">
         <div className="font-[700] text-[16px] m-[0px]">SELECT SIZE</div>
-        <div
-          className="font-[700] text-[14px] cursor-pointer text-[#3880FF] leading-[16px] m-[0px] flex items-center"
-          onClick={handleSizeChartClick}
-        >
-          SIZE CHART
-          <NavigateNextIcon />
-        </div>
+        {has_size_chart && (
+          <div
+            className="font-[700] text-[14px] cursor-pointer text-[#3880FF] leading-[16px] m-[0px] flex items-center"
+            onClick={handleSizeChartClick}
+          >
+            SIZE CHART
+            <NavigateNextIcon />
+          </div>
+        )}
       </div>
 
-      {category.name.toLowerCase() === "beauty" ? (
-        <div className="flex gap-[10px] mb-[10px]">
+      {availableSize.every((size) => size.price > 0) ? (
+        <div className="flex flex-wrap gap-[10px] mb-[10px]">
           {sortSizes(
             availableSize.map((sizeInfo) => sizeInfo.size_data.size)
           ).map((size) => {
             const sizeInfo = availableSize.find(
               (item) => item.size_data.size === size
             );
-            const isSelected = sizeInfo?.size_data?.size === selectedSize;
+            const isSelected = sizeInfo?.id === selectedSize;
 
             return (
-              <div className="relative w-[85px]" key={sizeInfo?.id}>
+              <div className="relative" key={sizeInfo?.id}>
                 <button
                   onClick={() => {
-                    setSelectedSize(size);
+                    setSelectedSize(sizeInfo?.id);
                     setSizeError("");
                   }}
                   className={`${
@@ -194,7 +202,11 @@ const ProductPrice = ({
                     isSelected ? "!border-2 !border-[#3880FF]" : ""
                   }`}
                 >
-                  <p className={`${Number(sizeInfo?.price) <= 0 ? "p-1.5" : ""}`}>{size}</p>
+                  <p
+                    className={`${Number(sizeInfo?.price) <= 0 ? "p-1.5" : ""}`}
+                  >
+                    {size}
+                  </p>
                   {Number(sizeInfo?.price) > 0 && (
                     <p className="font-normal">Rs.{sizeInfo?.price}</p>
                   )}
@@ -216,20 +228,20 @@ const ProductPrice = ({
           })}
         </div>
       ) : (
-        <div className="flex gap-[10px] mb-[10px]">
+        <div className="flex flex-wrap gap-[10px] mb-[10px]">
           {sortSizes(
             availableSize.map((sizeInfo) => sizeInfo.size_data.size)
           ).map((size) => {
             const sizeInfo = availableSize.find(
               (item) => item.size_data.size === size
             );
-            const isSelected = sizeInfo?.size_data?.size === selectedSize;
+            const isSelected = sizeInfo?.id === selectedSize;
 
             return (
               <div className="relative w-[50px]" key={sizeInfo?.id}>
                 <button
                   onClick={() => {
-                    setSelectedSize(size);
+                    setSelectedSize(sizeInfo?.id);
                     setSizeError("");
                   }}
                   className={`${
@@ -273,11 +285,11 @@ const ProductPrice = ({
         ) : (
           <button
             onClick={() => {
-              if (!selectedSize) {
+              if (availableSize.length > 0 && !selectedSize) {
                 setSizeError("Please select a size");
                 return;
               }
-              addToCart?.();
+              addToCart?.(selectedSize);
             }}
             className="cursor-pointer bg-[#3880FF] w-full text-[#fff] font-bold text-[14px] rounded-[4px] flex items-center justify-center gap-[6px] hover:bg-[#3880FF] hover:border-transparent h-10"
           >
@@ -349,8 +361,22 @@ const ProductPrice = ({
       {/* Size chart */}
       {isOpenSizeChart && (
         <SizeChart
+          price={price}
           images={images}
+          discount={discount}
+          brandName={brandName}
+          productName={productName}
+          isWishlisted={isWishlisted}
+          isAddedToCart={isAddedToCart}
+          sizesData={availableSize}
+          selectedSize={selectedSize}
+          setSelectedSize={setSelectedSize}
+          addToCart={(selectedSize: number | undefined) =>
+            addToCart?.(selectedSize)
+          }
+          addToWishlist={addToWishlist}
           handleSizeChartClick={handleSizeChartClick}
+          subCategory={subCategory}
         />
       )}
     </div>

@@ -27,7 +27,7 @@ export const DeleteAccount: React.FC = () => {
           </p>
           <ul className="list-disc pl-5 space-y-2 text-[14px]">
             <li className="text-[14px] font-[700] text-start py-[8px]">
-              You'll lose your order history, saved details, Myntra Credit,
+              You'll lose your order history, saved details, Stylehut Credit,
               MynCash, SuperCoins and all other coupons and benefits.
             </li>
             <p className="text-start text-xs">
@@ -44,21 +44,21 @@ export const DeleteAccount: React.FC = () => {
               be accessible via your account.
             </li>
             <p className="flex justify-start text-start text-xs">
-              Myntra will try to complete the open transactions in the next 30
+              Stylehut will try to complete the open transactions in the next 30
               days on a best effort basis. However, we cannot ensure tracking &
               traceability of transactions once the account is deleted.
             </p>
             <li className="text-[14px] font-[700] text-start py-[8px]">
-              Myntra may not extend New User coupon if an account is created
+              Stylehut may not extend New User coupon if an account is created
               with the same mobile number or email id.
             </li>
             <li className="text-[14px] font-[700] text-start py-[8px]">
-              Myntra may refuse or delay deletion in case there are any pending
+              Stylehut may refuse or delay deletion in case there are any pending
               grievances related to orders, shipments, cancellations or any
-              other services offered by Myntra.
+              other services offered by Stylehut.
             </li>
             <li className="text-[14px] font-[700] text-start py-[8px]">
-              Myntra may retain certain data for legitimate reasons such as
+              Stylehut may retain certain data for legitimate reasons such as
               security, fraud prevention, future abuse, regulatory compliance
               including exercise of legal rights or comply with legal orders
               under applicable laws.

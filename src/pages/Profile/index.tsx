@@ -83,7 +83,7 @@ export const Profile: React.FC = () => {
                       }`
                     }
                   >
-                    Myntra Credit
+                    Stylehut Credit
                   </NavLink>
                   <NavLink
                     to="myncash"
@@ -176,7 +176,7 @@ export const Profile: React.FC = () => {
                       }`
                     }
                   >
-                    Myntra Insider
+                    Stylehut Insider
                   </NavLink>
                   <NavLink
                     to="delete-account"
@@ -226,7 +226,7 @@ export const Profile: React.FC = () => {
               </div>
 
               <hr className="w-[1px] mt-[0px] h-auto bg-[#d2d2d2] border-0 mx-[20px] profile-sidebar" />
-              <div className="flex w-full">
+              <div className="flex w-full justify-center sm:justify-start">
                 <Outlet />
               </div>
             </div>

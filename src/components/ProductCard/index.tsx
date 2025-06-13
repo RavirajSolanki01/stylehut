@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Star, FavoriteBorder, Favorite } from "@mui/icons-material";
+import { formatPrice } from "../../utils/reusable-functions";
 interface ProductCardProps {
   imageUrl: string;
   brand: string;
@@ -27,7 +28,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   isWishlisted = false,
   totalReviews = 0,
 }) => {
-
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -61,7 +61,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <div
-      className="relative max-w-[210px] mx-[10px] mb-[20px] w-auto hover:shadow-lg cursor-pointer group h-full"
+      className="relative max-w-[220px] mx-0 mb-0 sm:mx-[10px] sm:mb-[20px] w-auto hover:shadow-lg cursor-pointer group h-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -91,7 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       <div className="relative group-hover:block hidden">
-        <div className="absolute top-[-13px] left-0 w-full h-full bg-white z-[50] bg-opacity-100">
+        <div className="absolute top-[-10px] left-0 w-full h-full bg-white z-[50] bg-opacity-100">
           <div className="bg-white p-1">
             <div className="flex gap-1 justify-center">
               {allImages.map((_, index) => (
@@ -139,9 +139,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {brand}
       </div>
       <div className="text-left text-[14px] text-[#000] px-[10px]">
-        Rs.{price}
+        Rs.{formatPrice(price)}
         <span className="line-through text-[#7e818c] text-[12px] mx-[5px]">
-          Rs. {originalPrice}
+          Rs. {formatPrice(originalPrice)}
         </span>
         <span className="text-[#ff905a] text-[12px]"> ({discount}% OFF)</span>
       </div>

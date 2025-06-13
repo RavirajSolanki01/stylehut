@@ -54,6 +54,9 @@ import PaymentMethods from "./Home/Payments.gif";
 import CouponsTitle from "./Home/coupons.png";
 import Coupon1 from "./Home/coupon1.png";
 import Coupon2 from "./Home/coupon2.png";
+import BottomWearSizeChart from "./Product/bottom_wear_size.png";
+import TopWearSizeChart from "./Product/topwear_size.jpg";
+import FootWearSizeChart from "./Product/footwear_size.png";
 
 export {
   Logo,
@@ -111,5 +114,8 @@ export {
   PaymentMethods,
   CouponsTitle,
   Coupon1,
-  Coupon2
+  Coupon2,
+  TopWearSizeChart,
+  BottomWearSizeChart,
+  FootWearSizeChart
 };
