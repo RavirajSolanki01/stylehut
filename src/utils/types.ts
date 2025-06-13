@@ -125,6 +125,34 @@ export interface Product {
   sub_category: SubCategory;
   sub_category_type: SubCategoryType;
   brand: Brand;
+  product_additional_details: ProductAdditionalDetails[];
+  product_specifications: ProductSpecifications[];
+}
+
+export interface ProductAdditionalDetails {
+  id: number;
+  value: string;
+  product_id: number;
+  additional_key_id: number;
+  created_at: string;
+  updated_at: string;
+  product_additional_detail_key: {
+    id: number;
+    name: string;
+  };
+}
+
+export interface ProductSpecifications {
+  id: number;
+  value: string;
+  product_id: number;
+  specification_id: number;
+  created_at: string;
+  updated_at: string;
+  product_specification_key: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface Category {
@@ -236,6 +264,8 @@ export interface ProductDetails {
       5: number;
     };
   };
+  product_additional_details: ProductAdditionalDetails[];
+  product_specifications: ProductSpecifications[];
 }
 
 export interface AdminSettingsCategory {
