@@ -119,10 +119,10 @@ export const ProfileDetails: React.FC = () => {
 
   return (
     <div className="max-w-[810px] w-full h-fit border border-[#d2d2d2] p-[40px] pt-0 sm:pt-[40px] mt-0 sm:mt-[20px] custom-box-shadow">
-      <p className="flex justify-start text text-[20px] font-[700] text-[#282C3F] pb-[10px] ml-[20px]">
+      <p className="flex justify-start text text-lg sm:text-[20px] font-[700] text-[#282C3F] pb-0 sm:pb-[10px] ml-[20px]">
         Edit Details
       </p>
-      <hr className="border-t-[1px] w-full border-[#d2d2d2] mt-[15px] mb-[15px]" />
+      <hr className="border-t-[1px] w-full border-[#d2d2d2] mt-[10px] sm:mt-[15px] mb-[15px]" />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="flex flex-col gap-[20px] mx-[20px] py-[20px] justify-center">

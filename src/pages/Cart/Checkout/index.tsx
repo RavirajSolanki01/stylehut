@@ -1,6 +1,7 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Box, Paper, Typography } from "@mui/material";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { CustomRadioButton } from "../../../components/UserProfile/Addresses";
 
 declare global {
   interface Window {
@@ -10,24 +11,21 @@ declare global {
 
 type Props = {
   totalPrice: string;
+  placeOrder: (method: string) => void;
 };
 
-const CheckoutScreen: React.FC<Props> = ({ totalPrice }) => {
-  const navigate = useNavigate();
+const CheckoutScreen: React.FC<Props> = ({ totalPrice, placeOrder }) => {
+  const [paymentMethod, setPaymentMethod] =
+    useState<string>("CASH_ON_DELIVERY");
+  const [loader, setLoader] = useState<boolean>(false);
 
   const getMethodOptions = () => {
-    const all = {
+    return {
       upi: true,
       card: true,
       netbanking: true,
       wallet: true,
-      emi: true,
-      cod: true,
     };
-
-    const methodOptions: any = { ...all };
-
-    return methodOptions;
   };
 
   const loadRazorpayScript = (): Promise<boolean> => {
@@ -40,7 +38,7 @@ const CheckoutScreen: React.FC<Props> = ({ totalPrice }) => {
     });
   };
 
-  const handlePayment = async () => {
+  const handleRazorpayPayment = async () => {
     const isLoaded = await loadRazorpayScript();
     if (!isLoaded) {
       toast.error("Razorpay SDK failed to load.");
@@ -59,11 +57,8 @@ const CheckoutScreen: React.FC<Props> = ({ totalPrice }) => {
         email: "",
         contact: "",
       },
-      handler: (response: any) => {
-        toast.success(
-          `Payment successful. Payment ID: ${response.razorpay_payment_id}`
-        );
-        navigate("/home");
+      handler: () => {
+        placeOrder("ONLINE");
       },
       theme: { color: "#3880ff" },
       method: getMethodOptions(),
@@ -73,11 +68,102 @@ const CheckoutScreen: React.FC<Props> = ({ totalPrice }) => {
     rzp.open();
   };
 
-  useEffect(() => {
-    handlePayment();
-  });
+  const handleSubmit = () => {
+    if (paymentMethod === "CASH_ON_DELIVERY") {
+      setLoader(true);
+      placeOrder("CASH_ON_DELIVERY");
+      setLoader(false);
+    } else {
+      handleRazorpayPayment();
+    }
+  };
 
-  return <div>Checkout Page</div>;
+  const handlePaymentMethodChange = (value: "CASH_ON_DELIVERY" | "ONLINE") => {
+    setPaymentMethod(value);
+  };
+
+  return (
+    <Box className="p-4 flex flex-col md:flex-row gap-6">
+      <Box className="flex-1">
+        <Paper className="p-4 !border-none !shadow-none">
+          <Box className="mb-4 border border-gray-200 rounded p-4">
+            <Box
+              sx={{
+                width: "80%",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <CustomRadioButton
+                size="small"
+                value={"CASH_ON_DELIVERY"}
+                sx={{
+                  fontFamily: "Assistant,Helvetica,Arial,sans-serif !important",
+                }}
+                checked={paymentMethod === "CASH_ON_DELIVERY"}
+                onChange={(event) =>
+                  handlePaymentMethodChange(
+                    event.target.value as "CASH_ON_DELIVERY" | "ONLINE"
+                  )
+                }
+              />
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: "14px !important",
+                    color: "#000",
+                  }}
+                >
+                  Cash on Delivery (Cash/UPI)
+                </Typography>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                width: "80%",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <CustomRadioButton
+                size="small"
+                value={"ONLINE"}
+                sx={{
+                  fontFamily: "Assistant,Helvetica,Arial,sans-serif !important",
+                }}
+                checked={paymentMethod === "ONLINE"}
+                onChange={(event) =>
+                  handlePaymentMethodChange(
+                    event.target.value as "CASH_ON_DELIVERY" | "ONLINE"
+                  )
+                }
+              />
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: "14px !important",
+                    color: "#000",
+                  }}
+                >
+                  Online Payment
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+          <button
+            disabled={loader}
+            onClick={handleSubmit}
+            className="w-full max-w-sm mt-4 cursor-pointer rounded-[4px] bg-[#3880FF] text-white text-xs sm:text-sm font-semibold py-2 disabled:bg-[#ffeaef]"
+          >
+            {paymentMethod === "CASH_ON_DELIVERY" && "Place Order"}
+            {paymentMethod === "ONLINE" && "Pay Now"}
+          </button>
+        </Paper>
+      </Box>
+    </Box>
+  );
 };
 
 export default CheckoutScreen;
