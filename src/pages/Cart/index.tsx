@@ -452,7 +452,7 @@ const CartItemsList: React.FC<Props> = ({
   const [selectedItemId, setSelectedItemId] = useState<number>(0);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedQuantity, setSelectedQuantity] = useState<number | null>(null);
-  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<number>(0);
   const [defaultAddress, setDefaultAddress] = useState<FormAddressData | null>(
     null
   );
@@ -465,6 +465,7 @@ const CartItemsList: React.FC<Props> = ({
     setSelectedProduct(product);
   };
   const handleCloseSizeDialog = () => setOpenSizeDialog(false);
+  const handleDoneClick = () => setOpenSizeDialog(false);
   const handleCloseChangeAddressDialog = () => setOpenAddressDialog(false);
   const handleOpenChangeAddressDialog = () => setOpenAddressDialog(true);
 
@@ -878,6 +879,7 @@ const CartItemsList: React.FC<Props> = ({
         selectedProduct={selectedProduct as Product}
         selectedSize={selectedSize}
         setSelectedSize={setSelectedSize}
+        handleDoneClick={handleDoneClick}
       />
       <QuantityModal
         handleCloseQuantityDialog={handleCloseQuantityDialog}
